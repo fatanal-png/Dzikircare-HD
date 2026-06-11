@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daftar Akun — DzikirCare HD</title>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    :root{
+      --hijau-tua:#0d3b2e;
+      --hijau-gelap:#1a5c45;
+      --hijau-mid:#2e8b63;
+      --hijau-soft:#3dab7a;
+      --hijau-terang:#5ec995;
+      --hijau-pucat:#e8f7f0;
+      --emas:#c9a84c;
+      --emas-terang:#e8c96b;
+      --emas-muda:#faf0d7;
+    }
+    body{
+      font-family:'Plus Jakarta Sans',sans-serif;
+      background:linear-gradient(135deg,#0d3b2e 0%,#1a5c45 50%,#2e8b63 100%);
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      position:relative;
+      overflow:hidden;
+    }
+    .bg-ornament{position:fixed;inset:0;pointer-events:none;}
+    .bg-ornament::before{content:'';position:absolute;width:500px;height:500px;border-radius:50%;border:1px solid rgba(201,168,76,0.07);top:-150px;right:-150px;}
+    .bg-ornament::after{content:'';position:absolute;width:350px;height:350px;border-radius:50%;border:1px solid rgba(201,168,76,0.05);bottom:-100px;left:-80px;}
+    .dot-pattern{position:absolute;width:100%;height:100%;background-image:radial-gradient(circle,rgba(201,168,76,0.05) 1px,transparent 1px);background-size:32px 32px;}
+
+    .wrapper{position:relative;z-index:10;width:100%;max-width:460px;}
+
+    /* STEPPER */
+    .stepper{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:20px;}
+    .step{display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(255,255,255,0.4);}
+    .step.active{color:#fff;font-weight:700;}
+    .step.done{color:var(--emas-terang);}
+    .step-dot{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,0.1);border:2px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;transition:all .3s;}
+    .step.active .step-dot{background:var(--emas);border-color:var(--emas);color:var(--hijau-tua);}
+    .step.done .step-dot{background:var(--hijau-soft);border-color:var(--hijau-soft);color:#fff;}
+    .step-line{width:40px;height:1px;background:rgba(255,255,255,0.15);margin:0 6px;}
+    .step.done + .step-line{background:var(--emas);opacity:.5;}
+
+    /* CARD */
+    .card{background:rgba(255,255,255,0.97);border-radius:24px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,0.3);}
+
+    .card-header{background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-gelap),var(--hijau-mid));padding:22px 28px 18px;position:relative;overflow:hidden;}
+    .card-header::before{content:'';position:absolute;right:-30px;top:-30px;width:120px;height:120px;border-radius:50%;background:rgba(201,168,76,0.07);}
+    .logo-row{display:flex;align-items:center;gap:10px;position:relative;z-index:1;}
+    .logo-icon{width:40px;height:40px;background:linear-gradient(135deg,var(--emas),var(--emas-terang));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 3px 12px rgba(201,168,76,0.4);}
+    .logo-txt .t1{font-family:'Amiri',serif;font-size:20px;color:#fff;font-weight:700;line-height:1;}
+    .logo-txt .t2{font-size:10px;color:var(--emas-terang);letter-spacing:.08em;opacity:.8;}
+    .emas-line{height:1.5px;background:linear-gradient(90deg,transparent,var(--emas),transparent);margin-top:14px;position:relative;z-index:1;}
+
+    .card-body{padding:24px 28px 20px;}
+
+    /* STEP PAGES */
+    .step-page{display:none;}
+    .step-page.active{display:block;animation:fadeIn .35s ease;}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+    .step-title{font-size:16px;font-weight:700;color:var(--hijau-tua);margin-bottom:4px;}
+    .step-sub{font-size:12px;color:#888;margin-bottom:20px;}
+
+    /* FORM */
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    .form-group{margin-bottom:0;}
+    .form-group.full{grid-column:1/-1;}
+    .form-label{font-size:11px;font-weight:700;color:var(--hijau-gelap);margin-bottom:5px;display:block;text-transform:uppercase;letter-spacing:.04em;}
+    .form-input{width:100%;padding:10px 14px;border:1.5px solid #e0ede5;border-radius:10px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--hijau-tua);outline:none;transition:all .2s;background:#fafff8;}
+    .form-input:focus{border-color:var(--hijau-soft);box-shadow:0 0 0 3px rgba(46,139,99,0.1);}
+    select.form-input{cursor:pointer;}
+    .form-input.error{border-color:#f87171;background:#fff5f5;}
+    .err-msg{font-size:11px;color:#ef4444;margin-top:4px;display:none;}
+
+    /* PASSWORD */
+    .pw-wrap{position:relative;}
+    .pw-wrap .form-input{padding-right:40px;}
+    .pw-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:16px;color:#bbb;background:none;border:none;}
+
+    /* SYARAT */
+    .syarat-box{background:var(--hijau-pucat);border:1px solid #b7e4c7;border-radius:12px;padding:14px 16px;margin-bottom:16px;}
+    .syarat-title{font-size:12px;font-weight:700;color:var(--hijau-tua);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+    .syarat-item{font-size:11.5px;color:#52796f;display:flex;align-items:flex-start;gap:6px;margin-bottom:5px;line-height:1.4;}
+    .syarat-item:last-child{margin-bottom:0;}
+    .syarat-icon{color:var(--hijau-soft);font-size:13px;flex-shrink:0;margin-top:1px;}
+
+    /* CHECKBOX */
+    .checkbox-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:14px;}
+    .checkbox-row input[type=checkbox]{width:16px;height:16px;accent-color:var(--hijau-mid);flex-shrink:0;margin-top:2px;cursor:pointer;}
+    .checkbox-label{font-size:12px;color:#555;line-height:1.5;}
+    .checkbox-label a{color:var(--hijau-mid);text-decoration:none;font-weight:600;}
+
+    /* TOMBOL */
+    .btn-next{width:100%;padding:13px;background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-mid));color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+    .btn-next:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(13,59,46,0.3);}
+    .btn-back{width:100%;padding:11px;background:transparent;color:#888;border:1.5px solid #e0e0e0;border-radius:12px;font-size:13px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;margin-top:8px;transition:all .2s;}
+    .btn-back:hover{border-color:#b7e4c7;color:var(--hijau-mid);}
+
+    /* SUCCESS */
+    .success-wrap{text-align:center;padding:10px 0;}
+    .success-icon{width:70px;height:70px;background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-mid));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 16px;}
+    .success-title{font-family:'Amiri',serif;font-size:22px;font-weight:700;color:var(--hijau-tua);margin-bottom:6px;}
+    .success-desc{font-size:13px;color:#666;line-height:1.6;margin-bottom:20px;}
+
+    /* LOGIN LINK */
+    .login-link{text-align:center;font-size:12px;color:rgba(255,255,255,0.5);margin-top:14px;}
+    .login-link a{color:var(--emas-terang);font-weight:600;text-decoration:none;}
+    .login-link a:hover{text-decoration:underline;}
+
+    /* PROGRESS BAR STEP */
+    .step-progress{height:3px;background:rgba(255,255,255,0.1);margin-bottom:20px;border-radius:99px;overflow:hidden;}
+    .step-progress-fill{height:100%;background:linear-gradient(90deg,var(--emas),var(--emas-terang));border-radius:99px;transition:width .4s ease;}
+  </style>
+</head>
+<body>
+<div class="bg-ornament"><div class="dot-pattern"></div></div>
+
+<div class="wrapper">
+  <!-- STEPPER -->
+  <div class="stepper" id="stepper-ui">
+    <div class="step active" id="st1"><div class="step-dot">1</div><span>Data Diri</span></div>
+    <div class="step-line"></div>
+    <div class="step" id="st2"><div class="step-dot">2</div><span>Akun</span></div>
+    <div class="step-line"></div>
+    <div class="step" id="st3"><div class="step-dot">3</div><span>Selesai</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="logo-row">
+        <div class="logo-icon">☪</div>
+        <div class="logo-txt">
+          <div class="t1">DzikirCare HD</div>
+          <div class="t2">DAFTAR AKUN BARU</div>
+        </div>
+      </div>
+      <div class="emas-line"></div>
+    </div>
+
+    <div class="card-body">
+      <!-- Progress bar -->
+      <div class="step-progress"><div class="step-progress-fill" id="prog-fill" style="width:33%"></div></div>
+
+      <!-- ===== STEP 1: DATA DIRI ===== -->
+      <div class="step-page active" id="page-1">
+        <div class="step-title">Data Diri Pasien</div>
+        <div class="step-sub">Masukkan informasi dasar Anda sebagai pasien HD</div>
+        <div class="form-grid">
+          <div class="form-group full">
+            <label class="form-label">Nama Lengkap *</label>
+            <input type="text" class="form-input" id="reg-nama" placeholder="Contoh: Ahmad Fauzi">
+            <div class="err-msg" id="err-nama">Nama wajib diisi</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tanggal Lahir *</label>
+            <input type="date" class="form-input" id="reg-ttl">
+            <div class="err-msg" id="err-ttl">Tanggal lahir wajib diisi</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Jenis Kelamin *</label>
+            <select class="form-input" id="reg-jk">
+              <option value="">-- Pilih --</option>
+              <option value="L">Laki-laki</option>
+              <option value="P">Perempuan</option>
+            </select>
+            <div class="err-msg" id="err-jk">Pilih jenis kelamin</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">No. HP / WhatsApp *</label>
+            <input type="tel" class="form-input" id="reg-hp" placeholder="08xx-xxxx-xxxx">
+            <div class="err-msg" id="err-hp">No. HP wajib diisi</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Jadwal Hemodialisa *</label>
+            <select class="form-input" id="reg-jadwal">
+              <option value="">-- Pilih --</option>
+              <option>Senin & Kamis</option>
+              <option>Selasa & Jumat</option>
+              <option>Rabu & Sabtu</option>
+              <option>Lainnya</option>
+            </select>
+            <div class="err-msg" id="err-jadwal">Pilih jadwal HD</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Rumah Sakit HD *</label>
+            <input type="text" class="form-input" id="reg-rs" placeholder="Contoh: RSUD Wonosobo">
+            <div class="err-msg" id="err-rs">Nama RS wajib diisi</div>
+          </div>
+        </div>
+        <br>
+        <button class="btn-next" onclick="nextStep(1)">Lanjut — Buat Akun →</button>
+      </div>
+
+      <!-- ===== STEP 2: AKUN ===== -->
+      <div class="step-page" id="page-2">
+        <div class="step-title">Buat Akun Login</div>
+        <div class="step-sub">Username dan password untuk masuk ke DzikirCare HD</div>
+        <div class="form-grid">
+          <div class="form-group full">
+            <label class="form-label">Username *</label>
+            <input type="text" class="form-input" id="reg-user" placeholder="Contoh: ahmad123">
+            <div class="err-msg" id="err-user">Username wajib diisi (min. 4 karakter)</div>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Password *</label>
+            <div class="pw-wrap">
+              <input type="password" class="form-input" id="reg-pw" placeholder="Min. 6 karakter">
+              <button class="pw-toggle" onclick="togglePw('reg-pw',this)" type="button">👁</button>
+            </div>
+            <div class="err-msg" id="err-pw">Password min. 6 karakter</div>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Konfirmasi Password *</label>
+            <div class="pw-wrap">
+              <input type="password" class="form-input" id="reg-pw2" placeholder="Ulangi password">
+              <button class="pw-toggle" onclick="togglePw('reg-pw2',this)" type="button">👁</button>
+            </div>
+            <div class="err-msg" id="err-pw2">Password tidak cocok</div>
+          </div>
+        </div>
+
+        <br>
+        <div class="syarat-box">
+          <div class="syarat-title">🔒 Keamanan & Privasi</div>
+          <div class="syarat-item"><span class="syarat-icon">✓</span> Data Anda aman & hanya untuk kepentingan kesehatan</div>
+          <div class="syarat-item"><span class="syarat-icon">✓</span> Privasi terjamin sesuai regulasi kesehatan</div>
+          <div class="syarat-item"><span class="syarat-icon">✓</span> Data dienkripsi & tidak dibagikan pihak ketiga</div>
+        </div>
+
+        <div class="checkbox-row">
+          <input type="checkbox" id="reg-setuju">
+          <label class="checkbox-label" for="reg-setuju">Saya menyetujui <a href="#">Syarat & Ketentuan</a> dan <a href="#">Kebijakan Privasi</a> DzikirCare HD</label>
+        </div>
+
+        <button class="btn-next" onclick="nextStep(2)">✓ Daftarkan Akun Saya</button>
+        <button class="btn-back" onclick="backStep(2)">← Kembali</button>
+      </div>
+
+      <!-- ===== STEP 3: SUKSES ===== -->
+      <div class="step-page" id="page-3">
+        <div class="success-wrap">
+          <div class="success-icon">✓</div>
+          <div class="success-title">Pendaftaran Berhasil!</div>
+          <div class="success-desc">
+            Alhamdulillah, akun Anda telah berhasil dibuat.<br>
+            Selamat bergabung di <b>DzikirCare HD</b>.<br><br>
+            Lengkapi data diri Anda di halaman <b>Profil</b> setelah login.
+          </div>
+          <div style="background:var(--hijau-pucat);border-radius:12px;padding:14px 16px;margin-bottom:20px;text-align:left;">
+            <div style="font-size:11px;font-weight:700;color:var(--hijau-tua);margin-bottom:8px;">Info Akun Anda:</div>
+            <div style="font-size:13px;color:#333;display:flex;flex-direction:column;gap:4px;">
+              <span>👤 Nama: <b id="sukses-nama"></b></span>
+              <span>🔑 Username: <b id="sukses-user"></b></span>
+              <span>💧 Jadwal HD: <b id="sukses-jadwal"></b></span>
+              <span>🏥 RS: <b id="sukses-rs"></b></span>
+            </div>
+          </div>
+          <button class="btn-next" onclick="goLogin()">Masuk Sekarang →</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="login-link">Sudah punya akun? <a href="index.html">Masuk di sini</a></div>
+</div>
+
+<script>
+let currentStep = 1;
+let userData = {};
+
+function nextStep(from) {
+  if(from === 1) {
+    // Validasi step 1
+    let valid = true;
+    const fields = [
+      {id:'reg-nama', err:'err-nama', min:2},
+      {id:'reg-ttl', err:'err-ttl'},
+      {id:'reg-jk', err:'err-jk'},
+      {id:'reg-hp', err:'err-hp', min:10},
+      {id:'reg-jadwal', err:'err-jadwal'},
+      {id:'reg-rs', err:'err-rs', min:3},
+    ];
+    fields.forEach(f => {
+      const el = document.getElementById(f.id);
+      const err = document.getElementById(f.err);
+      if(!el.value || (f.min && el.value.length < f.min)) {
+        el.classList.add('error');
+        err.style.display = 'block';
+        valid = false;
+      } else {
+        el.classList.remove('error');
+        err.style.display = 'none';
+      }
+    });
+    if(!valid) return;
+
+    userData.nama = document.getElementById('reg-nama').value.trim();
+    userData.ttl = document.getElementById('reg-ttl').value;
+    userData.jk = document.getElementById('reg-jk').value;
+    userData.hp = document.getElementById('reg-hp').value.trim();
+    userData.jadwal = document.getElementById('reg-jadwal').value;
+    userData.rs = document.getElementById('reg-rs').value.trim();
+    goToStep(2);
+
+  } else if(from === 2) {
+    // Validasi step 2
+    let valid = true;
+    const user = document.getElementById('reg-user').value.trim();
+    const pw = document.getElementById('reg-pw').value;
+    const pw2 = document.getElementById('reg-pw2').value;
+    const setuju = document.getElementById('reg-setuju').checked;
+
+    if(user.length < 4) {
+      document.getElementById('reg-user').classList.add('error');
+      document.getElementById('err-user').style.display = 'block';
+      valid = false;
+    } else {
+      document.getElementById('reg-user').classList.remove('error');
+      document.getElementById('err-user').style.display = 'none';
+    }
+    if(pw.length < 6) {
+      document.getElementById('reg-pw').classList.add('error');
+      document.getElementById('err-pw').style.display = 'block';
+      valid = false;
+    } else {
+      document.getElementById('reg-pw').classList.remove('error');
+      document.getElementById('err-pw').style.display = 'none';
+    }
+    if(pw !== pw2) {
+      document.getElementById('reg-pw2').classList.add('error');
+      document.getElementById('err-pw2').style.display = 'block';
+      valid = false;
+    } else {
+      document.getElementById('reg-pw2').classList.remove('error');
+      document.getElementById('err-pw2').style.display = 'none';
+    }
+    if(!setuju) { alert('Harap centang persetujuan syarat & ketentuan.'); valid = false; }
+    if(!valid) return;
+
+    userData.username = user;
+    userData.password = pw;
+
+    // Simpan ke localStorage
+    localStorage.setItem('dzikircare_user', userData.nama.split(' ')[0]);
+    localStorage.setItem('dzikircare_userdata', JSON.stringify(userData));
+
+    // Tampilkan sukses
+    document.getElementById('sukses-nama').textContent = userData.nama;
+    document.getElementById('sukses-user').textContent = userData.username;
+    document.getElementById('sukses-jadwal').textContent = userData.jadwal;
+    document.getElementById('sukses-rs').textContent = userData.rs;
+
+    goToStep(3);
+  }
+}
+
+function backStep(from) {
+  if(from === 2) goToStep(1);
+}
+
+function goToStep(n) {
+  currentStep = n;
+  document.querySelectorAll('.step-page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-'+n).classList.add('active');
+
+  // Update stepper
+  for(let i=1;i<=3;i++){
+    const st = document.getElementById('st'+i);
+    st.classList.remove('active','done');
+    if(i < n) st.classList.add('done');
+    else if(i === n) st.classList.add('active');
+  }
+
+  // Update progress bar
+  const pcts = {1:'33%', 2:'66%', 3:'100%'};
+  document.getElementById('prog-fill').style.width = pcts[n];
+
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function goLogin() {
+  localStorage.setItem('dzikircare_login', 'true');
+  window.location.href = 'dashboard.html';
+}
+
+function togglePw(id, btn) {
+  const el = document.getElementById(id);
+  el.type = el.type === 'password' ? 'text' : 'password';
+}
+</script>
+</body>
+</html>
+HTMLEOF
+Keluaran
+exit code 0
+Selesai
+
+v

@@ -1,0 +1,459 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jadwal Sholat — DzikirCare HD</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    :root{
+      --hijau-tua:#0d3b2e;
+      --hijau-gelap:#1a5c45;
+      --hijau-mid:#2e8b63;
+      --hijau-soft:#3dab7a;
+      --hijau-terang:#5ec995;
+      --hijau-pucat:#e8f7f0;
+      --emas:#c9a84c;
+      --emas-terang:#e8c96b;
+      --emas-muda:#faf0d7;
+      --text-dark:#1a3a1a;
+      --text-mid:#52796f;
+      --sidebar-w:224px;
+    }
+    body{font-family:'Plus Jakarta Sans',sans-serif;background:linear-gradient(135deg,#e8f5e9 0%,#f1f8e9 50%,#e0f2f1 100%);min-height:100vh;color:var(--text-dark);}
+
+    .sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--sidebar-w);background:linear-gradient(180deg,#0d3b2e 0%,#1a5c45 60%,#2e8b63 100%);display:flex;flex-direction:column;padding:24px 0;z-index:100;box-shadow:4px 0 32px rgba(13,59,46,0.3);}
+    .logo{padding:0 20px 20px;border-bottom:.5px solid rgba(255,255,255,0.13);margin-bottom:12px;}
+    .logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--emas),var(--emas-terang));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:8px;}
+    .logo-title{font-family:'Amiri',serif;font-size:20px;color:#d8f3dc;font-weight:700;}
+    .logo-sub{font-size:10px;color:var(--emas-terang);letter-spacing:.08em;opacity:.8;}
+    .nav{display:flex;flex-direction:column;gap:2px;padding:0 12px;flex:1;overflow-y:auto;}
+    .nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;font-size:13px;color:#b7e4c7;cursor:pointer;transition:all .15s;text-decoration:none;width:100%;}
+    .nav-item:hover{background:rgba(255,255,255,0.1);color:#d8f3dc;}
+    .nav-item.active{background:linear-gradient(90deg,rgba(255,255,255,0.18),rgba(255,255,255,0.06));color:#d8f3dc;font-weight:600;border-left:3px solid var(--emas);}
+    .nav-item i{font-size:17px;flex-shrink:0;}
+    .nav-section{font-size:10px;color:var(--emas);letter-spacing:.1em;text-transform:uppercase;padding:10px 12px 4px;margin-top:6px;opacity:.8;}
+    .user-area{padding:14px 20px 0;border-top:.5px solid rgba(255,255,255,0.13);margin-top:auto;}
+    .avatar-sm{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--emas),var(--emas-terang));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#0d3b2e;flex-shrink:0;}
+    .username{font-size:13px;color:#d8f3dc;font-weight:600;}
+    .usertag{font-size:11px;color:var(--emas-terang);opacity:.8;}
+
+    .main{margin-left:var(--sidebar-w);padding:28px 28px 60px;min-height:100vh;}
+    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+    .page-title{font-size:22px;font-weight:700;color:var(--hijau-tua);}
+    .page-sub{font-size:12.5px;color:var(--text-mid);margin-top:2px;}
+
+    .layout{display:grid;grid-template-columns:1fr 300px;gap:20px;align-items:start;}
+
+    .card{background:linear-gradient(135deg,#fff,#f6fbf7);border-radius:16px;border:.5px solid #c8e6c9;padding:20px 22px;box-shadow:0 2px 14px rgba(27,67,50,0.07);margin-bottom:16px;}
+    .card:last-child{margin-bottom:0;}
+    .card-title{font-size:14px;font-weight:700;color:var(--hijau-tua);display:flex;align-items:center;gap:8px;margin-bottom:16px;}
+    .card-title i{color:var(--hijau-mid);font-size:16px;}
+
+    /* BANNER WAKTU SHOLAT */
+    .sholat-banner{background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-gelap),var(--hijau-mid));border-radius:20px;padding:24px 28px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;position:relative;overflow:hidden;}
+    .sholat-banner::before{content:'';position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;background:rgba(201,168,76,0.07);}
+    .sholat-banner::after{content:'';position:absolute;left:40%;bottom:-50px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,0.03);}
+    .banner-left{position:relative;z-index:1;}
+    .banner-tag{font-size:10px;font-weight:700;color:var(--emas-terang);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;}
+    .banner-sholat{font-family:'Amiri',serif;font-size:28px;color:#fff;font-weight:700;line-height:1;}
+    .banner-countdown{font-size:12px;color:rgba(255,255,255,0.6);margin-top:6px;}
+    .banner-clock{font-size:12px;color:var(--hijau-terang);margin-top:3px;}
+    .banner-time{font-size:48px;font-weight:700;color:#fff;letter-spacing:-2px;position:relative;z-index:1;}
+
+    /* PILLS SHOLAT */
+    .sholat-pills{display:flex;gap:10px;margin-bottom:16px;}
+    .pill{background:#fff;border-radius:12px;border:.5px solid #b7e4c7;padding:12px 14px;text-align:center;flex:1;transition:all .2s;}
+    .pill-nama{font-size:10px;color:var(--text-mid);font-weight:600;text-transform:uppercase;letter-spacing:.04em;}
+    .pill-waktu{font-size:14px;font-weight:700;color:var(--hijau-tua);margin-top:4px;}
+    .pill-rakaat{font-size:10px;color:#b0b0b0;margin-top:2px;}
+    .pill.done{background:linear-gradient(135deg,#d8f3dc,#b7e4c7);}
+    .pill.done .pill-waktu{color:var(--hijau-gelap);text-decoration:line-through;opacity:.6;}
+    .pill.next{border-color:var(--emas);box-shadow:0 0 0 2px rgba(201,168,76,0.2);}
+    .pill.next .pill-nama{color:var(--emas);}
+
+    /* CHECKLIST SHOLAT */
+    .sholat-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:.5px solid #f0faf2;}
+    .sholat-row:last-child{border-bottom:none;}
+    .sholat-info{display:flex;align-items:center;gap:12px;}
+    .sholat-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+    .sholat-icon.done{background:linear-gradient(135deg,#d8f3dc,#b7e4c7);}
+    .sholat-icon.next{background:linear-gradient(135deg,var(--emas-muda),#f5e0a0);}
+    .sholat-icon.upcoming{background:#f5f5f5;}
+    .sholat-nama{font-size:14px;font-weight:700;color:var(--hijau-tua);}
+    .sholat-waktu-txt{font-size:12px;color:var(--text-mid);margin-top:2px;}
+    .sholat-rakaat-txt{font-size:11px;color:#b0b0b0;margin-top:1px;}
+    .sholat-actions{display:flex;align-items:center;gap:8px;}
+    .btn-check{width:32px;height:32px;border-radius:8px;border:1.5px solid #c8e6c9;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-mid);font-size:15px;transition:all .2s;}
+    .btn-check.checked{background:linear-gradient(135deg,var(--hijau-soft),var(--hijau-terang));border-color:var(--hijau-soft);color:#fff;}
+    .sholat-status{font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;}
+    .status-done{background:#d8f3dc;color:#1a5c45;}
+    .status-next{background:var(--emas-muda);color:#7a6030;}
+    .status-upcoming{background:#f5f5f5;color:#888;}
+
+    /* KOTA PICKER */
+    .kota-wrap{display:flex;gap:8px;align-items:center;margin-bottom:16px;flex-wrap:wrap;}
+    .kota-label{font-size:12px;color:var(--text-mid);font-weight:600;}
+    .kota-select{padding:8px 14px;border:1.5px solid #c8e6c9;border-radius:10px;font-size:12.5px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--hijau-tua);background:#fff;outline:none;cursor:pointer;}
+    .kota-select:focus{border-color:var(--hijau-soft);}
+
+    /* DZIKIR SETELAH SHOLAT */
+    .dzikir-after{background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-gelap));border-radius:14px;padding:16px 18px;margin-top:0;}
+    .dzikir-after-title{font-size:11px;font-weight:700;color:var(--emas-terang);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;}
+    .dzikir-after-item{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+    .dzikir-after-item:last-child{margin-bottom:0;}
+    .dzikir-after-arab{font-family:'Amiri',serif;font-size:16px;color:#fff;min-width:100px;}
+    .dzikir-after-info{flex:1;}
+    .dzikir-after-latin{font-size:12px;color:rgba(255,255,255,0.8);font-weight:600;}
+    .dzikir-after-target{font-size:10px;color:var(--emas-terang);}
+
+    /* PROGRESS MINGGU */
+    .week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:8px;}
+    .week-day{text-align:center;}
+    .week-label{font-size:9px;color:var(--text-mid);font-weight:600;margin-bottom:4px;text-transform:uppercase;}
+    .week-dot{width:100%;aspect-ratio:1;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;}
+    .week-dot.full{background:linear-gradient(135deg,var(--hijau-soft),var(--hijau-terang));color:#fff;}
+    .week-dot.partial{background:var(--emas-muda);color:var(--emas);}
+    .week-dot.empty{background:#f0f0f0;color:#ccc;}
+    .week-dot.today{box-shadow:0 0 0 2px var(--emas);}
+
+    ::-webkit-scrollbar{width:4px;}
+    ::-webkit-scrollbar-track{background:transparent;}
+    ::-webkit-scrollbar-thumb{background:#b7e4c7;border-radius:99px;}
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="logo">
+    <div class="logo-icon">☪</div>
+    <div class="logo-title">DzikirCare HD</div>
+    <div class="logo-sub">HEMODIALISA & DZIKIR</div>
+  </div>
+  <nav class="nav">
+    <div class="nav-section">Utama</div>
+    <a class="nav-item" href="dashboard.html"><i class="ti ti-layout-dashboard"></i> Dashboard</a>
+    <a class="nav-item" href="dzikir.html"><i class="ti ti-rosette"></i> Dzikir Digital</a>
+    <a class="nav-item active" href="sholat.html"><i class="ti ti-clock"></i> Jadwal Sholat</a>
+    <div class="nav-section">Evaluasi Psikologis</div>
+    <a class="nav-item" href="screening.html"><i class="ti ti-heart-rate-monitor"></i> Screening Stres</a>
+    <a class="nav-item" href="selfefficacy.html"><i class="ti ti-brain"></i> Self-Efikasi</a>
+    <a class="nav-item" href="mood.html"><i class="ti ti-mood-smile"></i> Mood Tracker</a>
+    <div class="nav-section">Lainnya</div>
+    <a class="nav-item" href="edukasi.html"><i class="ti ti-book"></i> Edukasi</a>
+    <a class="nav-item" href="statistik.html"><i class="ti ti-chart-bar"></i> Statistik</a>
+    <a class="nav-item" href="pengingat.html"><i class="ti ti-bell"></i> Pengingat</a>
+    <a class="nav-item" href="profil.html"><i class="ti ti-user-circle"></i> Profil Saya</a>
+  </nav>
+  <div class="user-area">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="avatar-sm" id="sidebar-avatar">A</div>
+      <div>
+        <div class="username" id="sidebar-name">Pengguna</div>
+        <div class="usertag">Pasien Hemodialisa</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main class="main">
+  <div class="topbar">
+    <div>
+      <div class="page-title">🕌 Jadwal Sholat</div>
+      <div class="page-sub" id="user-greeting">Memuat jadwal...</div>
+    </div>
+  </div>
+
+  <!-- KOTA PICKER -->
+  <div class="kota-wrap">
+    <span class="kota-label">📍 Kota:</span>
+    <select class="kota-select" id="kota-select" onchange="gantiKota()">
+      <option value="wonosobo">Wonosobo</option>
+      <option value="jakarta">Jakarta</option>
+      <option value="surabaya">Surabaya</option>
+      <option value="bandung">Bandung</option>
+      <option value="yogyakarta">Yogyakarta</option>
+      <option value="semarang">Semarang</option>
+      <option value="malang">Malang</option>
+      <option value="medan">Medan</option>
+      <option value="makassar">Makassar</option>
+    </select>
+    <span style="font-size:11px;color:var(--text-mid);" id="tgl-label"></span>
+  </div>
+
+  <div class="layout">
+    <!-- KIRI -->
+    <div>
+      <!-- BANNER SHOLAT BERIKUTNYA -->
+      <div class="sholat-banner">
+        <div class="banner-left">
+          <div class="banner-tag">Sholat Berikutnya</div>
+          <div class="banner-sholat" id="next-nama">—</div>
+          <div class="banner-countdown" id="next-countdown">Memuat...</div>
+          <div class="banner-clock" id="live-clock"></div>
+        </div>
+        <div class="banner-time" id="next-time">—</div>
+      </div>
+
+      <!-- PILLS -->
+      <div class="sholat-pills" id="sholat-pills"></div>
+
+      <!-- CHECKLIST SHOLAT -->
+      <div class="card">
+        <div class="card-title"><i class="ti ti-check"></i> Checklist Sholat Hari Ini — <span id="nama-checklist" style="color:var(--emas);"></span></div>
+        <div id="sholat-list"></div>
+      </div>
+
+      <!-- PROGRESS MINGGUAN -->
+      <div class="card">
+        <div class="card-title"><i class="ti ti-calendar-week"></i> Kepatuhan Sholat Minggu Ini</div>
+        <div class="week-grid" id="week-grid"></div>
+        <div style="display:flex;gap:12px;margin-top:8px;font-size:11px;color:var(--text-mid);">
+          <span style="display:flex;align-items:center;gap:4px;"><span style="width:12px;height:12px;border-radius:3px;background:var(--hijau-soft);display:inline-block;"></span> Lengkap</span>
+          <span style="display:flex;align-items:center;gap:4px;"><span style="width:12px;height:12px;border-radius:3px;background:var(--emas-muda);display:inline-block;"></span> Sebagian</span>
+          <span style="display:flex;align-items:center;gap:4px;"><span style="width:12px;height:12px;border-radius:3px;background:#f0f0f0;display:inline-block;"></span> Tidak ada</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- KANAN -->
+    <div>
+      <!-- JADWAL LENGKAP -->
+      <div class="card">
+        <div class="card-title"><i class="ti ti-clock"></i> Jadwal <span id="kota-label-card">Wonosobo</span></div>
+        <div id="jadwal-detail"></div>
+      </div>
+
+      <!-- DZIKIR SETELAH SHOLAT -->
+      <div class="card">
+        <div class="card-title"><i class="ti ti-rosette"></i> Dzikir Setelah Sholat</div>
+        <div class="dzikir-after">
+          <div class="dzikir-after-title">🤲 Amalkan setelah setiap sholat</div>
+          <div class="dzikir-after-item">
+            <div class="dzikir-after-arab">سُبْحَانَ اللَّهِ</div>
+            <div class="dzikir-after-info">
+              <div class="dzikir-after-latin">Subhanallah</div>
+              <div class="dzikir-after-target">33x</div>
+            </div>
+          </div>
+          <div class="dzikir-after-item">
+            <div class="dzikir-after-arab">اَلْحَمْدُ لِلّٰهِ</div>
+            <div class="dzikir-after-info">
+              <div class="dzikir-after-latin">Alhamdulillah</div>
+              <div class="dzikir-after-target">33x</div>
+            </div>
+          </div>
+          <div class="dzikir-after-item">
+            <div class="dzikir-after-arab">اللَّهُ أَكْبَرُ</div>
+            <div class="dzikir-after-info">
+              <div class="dzikir-after-latin">Allahuakbar</div>
+              <div class="dzikir-after-target">33x</div>
+            </div>
+          </div>
+          <div class="dzikir-after-item">
+            <div class="dzikir-after-arab">أَسْتَغْفِرُ اللَّهَ</div>
+            <div class="dzikir-after-info">
+              <div class="dzikir-after-latin">Astaghfirullah</div>
+              <div class="dzikir-after-target">3x</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MOTIVASI -->
+      <div class="card" style="background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-gelap));">
+        <div style="height:1.5px;background:linear-gradient(90deg,transparent,var(--emas),transparent);margin-bottom:12px;"></div>
+        <div style="font-family:'Amiri',serif;font-size:18px;color:#fff;line-height:1.7;">"Sesungguhnya sholat itu mencegah dari perbuatan keji dan mungkar."</div>
+        <div style="font-size:11px;color:#74c69d;margin-top:8px;">— QS. Al-Ankabut: 45</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+const JADWAL_KOTA = {
+  wonosobo: {Subuh:'04:27',Dzuhur:'11:38',Ashar:'14:57',Maghrib:'17:34',Isya:'18:47'},
+  jakarta:  {Subuh:'04:32',Dzuhur:'11:52',Ashar:'15:12',Maghrib:'17:55',Isya:'19:05'},
+  surabaya: {Subuh:'04:15',Dzuhur:'11:30',Ashar:'14:50',Maghrib:'17:22',Isya:'18:32'},
+  bandung:  {Subuh:'04:36',Dzuhur:'11:55',Ashar:'15:14',Maghrib:'17:55',Isya:'19:06'},
+  yogyakarta:{Subuh:'04:26',Dzuhur:'11:40',Ashar:'14:59',Maghrib:'17:36',Isya:'18:48'},
+  semarang: {Subuh:'04:22',Dzuhur:'11:36',Ashar:'14:55',Maghrib:'17:30',Isya:'18:43'},
+  malang:   {Subuh:'04:16',Dzuhur:'11:31',Ashar:'14:51',Maghrib:'17:23',Isya:'18:33'},
+  medan:    {Subuh:'04:50',Dzuhur:'12:18',Ashar:'15:38',Maghrib:'18:25',Isya:'19:33'},
+  makassar: {Subuh:'04:38',Dzuhur:'12:05',Ashar:'15:22',Maghrib:'18:12',Isya:'19:22'},
+};
+
+const SHOLAT_INFO = {
+  Subuh:   {rakaat:2, icon:'🌅', latin:'Fajr'},
+  Dzuhur:  {rakaat:4, icon:'☀️', latin:'Dhuhr'},
+  Ashar:   {rakaat:4, icon:'🌤️', latin:'Asr'},
+  Maghrib: {rakaat:3, icon:'🌆', latin:'Maghrib'},
+  Isya:    {rakaat:4, icon:'🌙', latin:'Isha'},
+};
+
+const NAMES = ['Subuh','Dzuhur','Ashar','Maghrib','Isya'];
+let checked = {};
+let currentKota = 'wonosobo';
+
+window.onload = () => {
+  const nama = localStorage.getItem('dzikircare_user') || 'Pengguna';
+  document.getElementById('sidebar-name').textContent = nama;
+  document.getElementById('sidebar-avatar').textContent = nama.charAt(0).toUpperCase();
+  document.getElementById('user-greeting').textContent = `Jadwal sholat ${nama} hari ini 🕌`;
+  document.getElementById('nama-checklist').textContent = nama;
+
+  setTglLabel();
+  renderAll();
+  renderWeekGrid();
+  tick();
+  setInterval(tick, 1000);
+  setInterval(renderPills, 60000);
+};
+
+function setTglLabel(){
+  const now = new Date();
+  const days=['Ahad','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+  const months=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+  document.getElementById('tgl-label').textContent = days[now.getDay()]+', '+now.getDate()+' '+months[now.getMonth()]+' '+now.getFullYear();
+}
+
+function gantiKota(){
+  currentKota = document.getElementById('kota-select').value;
+  const nama = currentKota.charAt(0).toUpperCase() + currentKota.slice(1);
+  document.getElementById('kota-label-card').textContent = nama;
+  checked = {};
+  renderAll();
+}
+
+function renderAll(){
+  renderPills();
+  renderSholatList();
+  renderJadwalDetail();
+}
+
+function pMins(t){ const s=t.split(':'); return parseInt(s[0])*60+parseInt(s[1]); }
+function nowMins(){ const n=new Date(); return n.getHours()*60+n.getMinutes(); }
+
+function getNext(){
+  const now = nowMins();
+  const times = JADWAL_KOTA[currentKota];
+  return NAMES.find(n => pMins(times[n]) > now) || 'Subuh';
+}
+
+function tick(){
+  const now = nowMins();
+  const nowDate = new Date();
+  const times = JADWAL_KOTA[currentKota];
+  const next = getNext();
+  const diff = Math.max(pMins(times[next]) - now + (pMins(times[next]) <= now ? 24*60 : 0), 0);
+  const h = Math.floor(diff/60), m = diff%60;
+  document.getElementById('next-nama').textContent = next;
+  document.getElementById('next-time').textContent = times[next];
+  document.getElementById('next-countdown').textContent = `dalam ${h>0?h+' jam ':''} ${m} menit lagi`;
+  document.getElementById('live-clock').textContent =
+    `Waktu sekarang: ${String(nowDate.getHours()).padStart(2,'0')}:${String(nowDate.getMinutes()).padStart(2,'0')}:${String(nowDate.getSeconds()).padStart(2,'0')}`;
+}
+
+function renderPills(){
+  const now = nowMins();
+  const times = JADWAL_KOTA[currentKota];
+  const next = getNext();
+  const el = document.getElementById('sholat-pills');
+  el.innerHTML = NAMES.map(n => {
+    const isPast = pMins(times[n]) < now;
+    const isNext = n === next;
+    return `<div class="pill ${isPast?'done':isNext?'next':''}">
+      <div class="pill-nama">${n}</div>
+      <div class="pill-waktu">${times[n]}</div>
+      <div class="pill-rakaat">${SHOLAT_INFO[n].rakaat} rakaat</div>
+    </div>`;
+  }).join('');
+}
+
+function renderSholatList(){
+  const now = nowMins();
+  const times = JADWAL_KOTA[currentKota];
+  const next = getNext();
+  const el = document.getElementById('sholat-list');
+  el.innerHTML = NAMES.map(n => {
+    const isPast = pMins(times[n]) < now;
+    const isNext = n === next;
+    const isDone = checked[n] || false;
+    const info = SHOLAT_INFO[n];
+    const cls = isDone ? 'done' : isNext ? 'next' : isPast ? 'done' : 'upcoming';
+    return `
+    <div class="sholat-row">
+      <div class="sholat-info">
+        <div class="sholat-icon ${cls}">${info.icon}</div>
+        <div>
+          <div class="sholat-nama">${n}</div>
+          <div class="sholat-waktu-txt">${times[n]} WIB · ${info.latin}</div>
+          <div class="sholat-rakaat-txt">${info.rakaat} rakaat</div>
+        </div>
+      </div>
+      <div class="sholat-actions">
+        <span class="sholat-status ${isDone?'status-done':isNext?'status-next':'status-upcoming'}">
+          ${isDone ? '✓ Sudah' : isNext ? 'Berikutnya' : isPast ? 'Terlewat' : 'Menunggu'}
+        </span>
+        <button class="btn-check ${isDone?'checked':''}" onclick="toggleCheck('${n}',this)" title="Tandai sudah sholat">
+          <i class="ti ti-check"></i>
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleCheck(nama, btn){
+  checked[nama] = !checked[nama];
+  btn.classList.toggle('checked');
+  renderSholatList();
+}
+
+function renderJadwalDetail(){
+  const times = JADWAL_KOTA[currentKota];
+  const now = nowMins();
+  const next = getNext();
+  const el = document.getElementById('jadwal-detail');
+  el.innerHTML = NAMES.map(n => {
+    const isPast = pMins(times[n]) < now;
+    const isNext = n === next;
+    const info = SHOLAT_INFO[n];
+    return `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:.5px solid #f0faf2;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:16px;">${info.icon}</span>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--hijau-tua);">${n}</div>
+          <div style="font-size:10.5px;color:var(--text-mid);">${info.rakaat} rakaat</div>
+        </div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:15px;font-weight:700;color:${isNext?'var(--emas)':isPast?'#b0b0b0':'var(--hijau-tua)'};">${times[n]}</div>
+        ${isNext ? '<div style="font-size:10px;color:var(--emas);font-weight:600;">Berikutnya</div>' : ''}
+        ${isPast && !isNext ? '<div style="font-size:10px;color:#b0b0b0;">Sudah lewat</div>' : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderWeekGrid(){
+  const days = ['Sen','Sel','Rab','Kam','Jum','Sab','Min'];
+  const data = [5,5,4,5,3,5,2]; // dummy data sholat per hari
+  const todayIdx = (new Date().getDay() + 6) % 7;
+  const el = document.getElementById('week-grid');
+  el.innerHTML = days.map((d,i) => {
+    const cls = data[i] === 5 ? 'full' : data[i] > 0 ? 'partial' : 'empty';
+    const isToday = i === todayIdx;
+    return `
+    <div class="week-day">
+      <div class="week-label">${d}</div>
+      <div class="week-dot ${cls} ${isToday?'today':''}">${data[i]}</div>
+    </div>`;
+  }).join('');
+}
+</script>
+</body>
+</html>

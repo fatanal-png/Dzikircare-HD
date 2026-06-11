@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pengingat — DzikirCare HD</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    :root{
+      --hijau-tua:#0d3b2e;
+      --hijau-gelap:#1a5c45;
+      --hijau-mid:#2e8b63;
+      --hijau-soft:#3dab7a;
+      --hijau-terang:#5ec995;
+      --hijau-muda:#a8e6c8;
+      --hijau-pucat:#e8f7f0;
+      --emas:#c9a84c;
+      --emas-terang:#e8c96b;
+      --emas-muda:#faf0d7;
+      --text-dark:#1a3a1a;
+      --text-mid:#52796f;
+      --sidebar-w:224px;
+    }
+    body{font-family:'Plus Jakarta Sans',sans-serif;background:linear-gradient(135deg,#e8f5e9 0%,#f1f8e9 50%,#e0f2f1 100%);min-height:100vh;color:var(--text-dark);}
+
+    /* SIDEBAR */
+    .sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--sidebar-w);background:linear-gradient(180deg,#0d3b2e 0%,#1a5c45 60%,#2e8b63 100%);display:flex;flex-direction:column;padding:24px 0;z-index:100;box-shadow:4px 0 32px rgba(13,59,46,0.3);}
+    .logo{padding:0 20px 20px;border-bottom:.5px solid rgba(255,255,255,0.13);margin-bottom:12px;}
+    .logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--emas),var(--emas-terang));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:8px;box-shadow:0 2px 10px rgba(201,168,76,0.4);}
+    .logo-title{font-family:'Amiri',serif;font-size:20px;color:#d8f3dc;font-weight:700;line-height:1.2;}
+    .logo-sub{font-size:10px;color:var(--emas-terang);letter-spacing:.08em;margin-top:2px;opacity:.8;}
+    .nav{display:flex;flex-direction:column;gap:2px;padding:0 12px;flex:1;overflow-y:auto;}
+    .nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;font-size:13px;color:#b7e4c7;cursor:pointer;transition:all .15s;text-decoration:none;width:100%;}
+    .nav-item:hover{background:rgba(255,255,255,0.1);color:#d8f3dc;}
+    .nav-item.active{background:linear-gradient(90deg,rgba(255,255,255,0.18),rgba(255,255,255,0.06));color:#d8f3dc;font-weight:600;border-left:3px solid var(--emas);}
+    .nav-item i{font-size:17px;flex-shrink:0;}
+    .nav-section{font-size:10px;color:var(--emas);letter-spacing:.1em;text-transform:uppercase;padding:10px 12px 4px;margin-top:6px;opacity:.8;}
+    .user-area{padding:14px 20px 0;border-top:.5px solid rgba(255,255,255,0.13);margin-top:auto;}
+    .avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--emas),var(--emas-terang));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#0d3b2e;flex-shrink:0;}
+    .username{font-size:13px;color:#d8f3dc;font-weight:600;}
+    .usertag{font-size:11px;color:var(--emas-terang);opacity:.8;}
+
+    /* MAIN */
+    .main{margin-left:var(--sidebar-w);padding:28px 28px 60px;min-height:100vh;}
+    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px;}
+    .page-title{font-size:22px;font-weight:700;color:var(--hijau-tua);}
+    .page-sub{font-size:12.5px;color:var(--text-mid);margin-top:2px;}
+
+    /* CARD */
+    .card{background:linear-gradient(135deg,#fff,#f6fbf7);border-radius:16px;border:.5px solid #c8e6c9;padding:20px 22px;box-shadow:0 2px 14px rgba(27,67,50,0.07);margin-bottom:18px;}
+    .card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+    .card-title-wrap{display:flex;align-items:center;gap:10px;}
+    .card-icon{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+    .card-icon.green{background:linear-gradient(135deg,#d8f3dc,#b7e4c7);color:#2d6a4f;}
+    .card-icon.gold{background:linear-gradient(135deg,#faf0d7,#f5dfa0);color:#7a6030;}
+    .card-icon.blue{background:linear-gradient(135deg,#dbeafe,#bfdbfe);color:#1d4ed8;}
+    .card-title{font-size:15px;font-weight:700;color:var(--hijau-tua);}
+    .card-subtitle{font-size:11.5px;color:var(--text-mid);margin-top:1px;}
+
+    /* TOGGLE MASTER */
+    .toggle-master{display:flex;align-items:center;gap:8px;}
+    .toggle-label{font-size:12px;color:var(--text-mid);}
+    .toggle{position:relative;width:44px;height:24px;flex-shrink:0;}
+    .toggle input{opacity:0;width:0;height:0;}
+    .toggle-slider{position:absolute;cursor:pointer;inset:0;background:#d1d5db;border-radius:99px;transition:.3s;}
+    .toggle-slider::before{content:'';position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s;}
+    input:checked + .toggle-slider{background:var(--hijau-mid);}
+    input:checked + .toggle-slider::before{transform:translateX(20px);}
+    .toggle-gold input:checked + .toggle-slider{background:var(--emas);}
+    .toggle-blue input:checked + .toggle-slider{background:#3b82f6;}
+
+    /* REMINDER ROWS */
+    .reminder-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:.5px solid #e8f5e9;}
+    .reminder-row:last-child{border-bottom:none;padding-bottom:0;}
+    .reminder-info{display:flex;align-items:center;gap:12px;flex:1;}
+    .reminder-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+    .reminder-dot.green{background:var(--hijau-soft);}
+    .reminder-dot.gold{background:var(--emas);}
+    .reminder-dot.blue{background:#3b82f6;}
+    .reminder-dot.red{background:#ef4444;}
+    .reminder-name{font-size:13.5px;font-weight:600;color:var(--hijau-tua);}
+    .reminder-time{font-size:12px;color:var(--text-mid);margin-top:2px;}
+    .reminder-badge{font-size:10px;padding:2px 8px;border-radius:99px;font-weight:600;margin-top:3px;display:inline-block;}
+    .badge-green{background:#d8f3dc;color:#1a5c45;}
+    .badge-gold{background:var(--emas-muda);color:#7a6030;}
+    .badge-blue{background:#dbeafe;color:#1d4ed8;}
+    .reminder-actions{display:flex;align-items:center;gap:8px;}
+    .btn-edit{width:32px;height:32px;border-radius:8px;border:.5px solid #c8e6c9;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-mid);font-size:15px;transition:all .15s;}
+    .btn-edit:hover{background:var(--hijau-pucat);border-color:var(--hijau-soft);color:var(--hijau-tua);}
+
+    /* TAMBAH PENGINGAT */
+    .btn-tambah{display:flex;align-items:center;gap:8px;padding:10px 16px;background:transparent;border:1.5px dashed #b7e4c7;border-radius:12px;font-size:13px;color:var(--hijau-mid);font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;width:100%;margin-top:4px;transition:all .2s;font-weight:600;}
+    .btn-tambah:hover{background:var(--hijau-pucat);border-color:var(--hijau-soft);}
+    .btn-tambah.gold{border-color:#f5dfa0;color:var(--emas);} 
+    .btn-tambah.gold:hover{background:var(--emas-muda);}
+    .btn-tambah.blue{border-color:#bfdbfe;color:#3b82f6;}
+    .btn-tambah.blue:hover{background:#eff6ff;}
+
+    /* JADWAL HD TABLE */
+    .hd-table{width:100%;border-collapse:collapse;margin-top:4px;}
+    .hd-table th{font-size:11px;font-weight:700;color:var(--text-mid);text-transform:uppercase;letter-spacing:.05em;padding:8px 0;text-align:left;border-bottom:1px solid #e8f5e9;}
+    .hd-table td{padding:12px 0;font-size:13px;border-bottom:.5px solid #f0faf2;vertical-align:middle;}
+    .hd-table tr:last-child td{border-bottom:none;}
+    .hd-hari{font-weight:600;color:var(--hijau-tua);}
+    .hd-tanggal{font-size:11px;color:var(--text-mid);margin-top:2px;}
+    .hd-status{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;}
+    .hd-status.aktif{background:#d8f3dc;color:#1a5c45;}
+    .hd-status.selesai{background:#f0f0f0;color:#888;}
+    .hd-status.mendatang{background:var(--emas-muda);color:#7a6030;}
+    .hd-notif-toggle{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-mid);}
+
+    /* MODAL */
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;display:none;align-items:center;justify-content:center;}
+    .modal-overlay.show{display:flex;}
+    .modal{background:#fff;border-radius:20px;padding:28px;width:100%;max-width:400px;box-shadow:0 20px 60px rgba(0,0,0,0.2);}
+    .modal-title{font-size:16px;font-weight:700;color:var(--hijau-tua);margin-bottom:4px;}
+    .modal-sub{font-size:12px;color:var(--text-mid);margin-bottom:20px;}
+    .form-group{margin-bottom:14px;}
+    .form-label{font-size:11.5px;font-weight:700;color:var(--hijau-gelap);margin-bottom:6px;display:block;text-transform:uppercase;letter-spacing:.04em;}
+    .form-input{width:100%;padding:10px 14px;border:1.5px solid #e0ede5;border-radius:10px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--hijau-tua);outline:none;transition:all .2s;background:#fafff8;}
+    .form-input:focus{border-color:var(--hijau-soft);box-shadow:0 0 0 3px rgba(46,139,99,0.1);}
+    select.form-input{cursor:pointer;}
+    .modal-actions{display:flex;gap:10px;margin-top:20px;}
+    .btn-cancel{flex:1;padding:11px;background:transparent;border:1.5px solid #e0ede5;border-radius:10px;font-size:13px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;color:var(--text-mid);}
+    .btn-save{flex:2;padding:11px;background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-mid));border:none;border-radius:10px;font-size:13px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;color:#fff;}
+    .btn-save:hover{opacity:.9;}
+
+    /* SUMMARY BAR */
+    .summary-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px;}
+    .summary-item{background:#fff;border-radius:12px;border:.5px solid #c8e6c9;padding:14px 16px;text-align:center;}
+    .summary-num{font-size:28px;font-weight:700;color:var(--hijau-tua);line-height:1;}
+    .summary-label{font-size:11px;color:var(--text-mid);margin-top:4px;}
+
+    ::-webkit-scrollbar{width:4px;}
+    ::-webkit-scrollbar-track{background:transparent;}
+    ::-webkit-scrollbar-thumb{background:#b7e4c7;border-radius:99px;}
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="logo">
+    <div class="logo-icon">☪</div>
+    <div class="logo-title">DzikirCare HD</div>
+    <div class="logo-sub">HEMODIALISA & DZIKIR</div>
+  </div>
+  <nav class="nav">
+    <div class="nav-section">Utama</div>
+    <a class="nav-item" href="dashboard.html"><i class="ti ti-layout-dashboard"></i> Dashboard</a>
+    <a class="nav-item" href="dzikir.html"><i class="ti ti-rosette"></i> Dzikir Digital</a>
+    <a class="nav-item" href="sholat.html"><i class="ti ti-clock"></i> Jadwal Sholat</a>
+    <div class="nav-section">Evaluasi Psikologis</div>
+    <a class="nav-item" href="screening.html"><i class="ti ti-heart-rate-monitor"></i> Screening Stres</a>
+    <a class="nav-item" href="selfefficacy.html"><i class="ti ti-brain"></i> Self-Efikasi</a>
+    <a class="nav-item" href="mood.html"><i class="ti ti-mood-smile"></i> Mood Tracker</a>
+    <div class="nav-section">Lainnya</div>
+    <a class="nav-item" href="statistik.html"><i class="ti ti-chart-bar"></i> Statistik</a>
+    <a class="nav-item active" href="pengingat.html"><i class="ti ti-bell"></i> Pengingat</a>
+    <a class="nav-item" href="profil.html"><i class="ti ti-user-circle"></i> Profil Saya</a>
+  </nav>
+  <div class="user-area">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="avatar">A</div>
+      <div>
+        <div class="username">Ahmad</div>
+        <div class="usertag">Pasien Hemodialisa</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <div>
+      <div class="page-title">🔔 Pengingat</div>
+      <div class="page-sub">Kelola notifikasi dzikir, skrining, dan jadwal hemodialisa</div>
+    </div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="summary-bar">
+    <div class="summary-item">
+      <div class="summary-num" style="color:var(--hijau-mid);" id="count-dzikir">3</div>
+      <div class="summary-label">Pengingat Dzikir</div>
+    </div>
+    <div class="summary-item">
+      <div class="summary-num" style="color:var(--emas);" id="count-skrining">2</div>
+      <div class="summary-label">Pengingat Skrining</div>
+    </div>
+    <div class="summary-item">
+      <div class="summary-num" style="color:#3b82f6;" id="count-hd">4</div>
+      <div class="summary-label">Jadwal HD</div>
+    </div>
+  </div>
+
+  <!-- ===== PENGINGAT DZIKIR ===== -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title-wrap">
+        <div class="card-icon green"><i class="ti ti-rosette"></i></div>
+        <div>
+          <div class="card-title">Pengingat Dzikir</div>
+          <div class="card-subtitle">Atur waktu dzikir harian Anda</div>
+        </div>
+      </div>
+      <div class="toggle-master">
+        <span class="toggle-label">Semua</span>
+        <label class="toggle">
+          <input type="checkbox" checked onchange="toggleAll(this,'dzikir')">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div id="list-dzikir">
+      <div class="reminder-row">
+        <div class="reminder-info">
+          <div class="reminder-dot green"></div>
+          <div>
+            <div class="reminder-name">Dzikir Pagi</div>
+            <div class="reminder-time">05:00 WIB · Setiap hari</div>
+            <span class="reminder-badge badge-green">Aktif</span>
+          </div>
+        </div>
+        <div class="reminder-actions">
+          <button class="btn-edit" onclick="openModal('dzikir','Dzikir Pagi','05:00','daily')"><i class="ti ti-edit"></i></button>
+          <label class="toggle">
+            <input type="checkbox" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div class="reminder-row">
+        <div class="reminder-info">
+          <div class="reminder-dot green"></div>
+          <div>
+            <div class="reminder-name">Dzikir Siang</div>
+            <div class="reminder-time">13:00 WIB · Setiap hari</div>
+            <span class="reminder-badge badge-green">Aktif</span>
+          </div>
+        </div>
+        <div class="reminder-actions">
+          <button class="btn-edit" onclick="openModal('dzikir','Dzikir Siang','13:00','daily')"><i class="ti ti-edit"></i></button>
+          <label class="toggle">
+            <input type="checkbox" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div class="reminder-row">
+        <div class="reminder-info">
+          <div class="reminder-dot green"></div>
+          <div>
+            <div class="reminder-name">Dzikir Malam</div>
+            <div class="reminder-time">20:00 WIB · Setiap hari</div>
+            <span class="reminder-badge badge-green">Aktif</span>
+          </div>
+        </div>
+        <div class="reminder-actions">
+          <button class="btn-edit" onclick="openModal('dzikir','Dzikir Malam','20:00','daily')"><i class="ti ti-edit"></i></button>
+          <label class="toggle">
+            <input type="checkbox" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-tambah" onclick="openModal('dzikir','','','daily')" style="margin-top:12px;">
+      <i class="ti ti-plus"></i> Tambah Pengingat Dzikir
+    </button>
+  </div>
+
+  <!-- ===== PENGINGAT SKRINING ===== -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title-wrap">
+        <div class="card-icon gold"><i class="ti ti-heart-rate-monitor"></i></div>
+        <div>
+          <div class="card-title">Pengingat Skrining</div>
+          <div class="card-subtitle">Stres (DASS-21) & Self-Efikasi (GSE)</div>
+        </div>
+      </div>
+      <div class="toggle-master">
+        <span class="toggle-label">Semua</span>
+        <label class="toggle toggle-gold">
+          <input type="checkbox" checked onchange="toggleAll(this,'skrining')">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div id="list-skrining">
+      <div class="reminder-row">
+        <div class="reminder-info">
+          <div class="reminder-dot gold"></div>
+          <div>
+            <div class="reminder-name">Skrining Stres DASS-21</div>
+            <div class="reminder-time">08:00 WIB · Setiap Senin</div>
+            <span class="reminder-badge badge-gold">Mingguan</span>
+          </div>
+        </div>
+        <div class="reminder-actions">
+          <button class="btn-edit" onclick="openModal('skrining','Skrining Stres DASS-21','08:00','weekly')"><i class="ti ti-edit"></i></button>
+          <label class="toggle toggle-gold">
+            <input type="checkbox" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div class="reminder-row">
+        <div class="reminder-info">
+          <div class="reminder-dot gold"></div>
+          <div>
+            <div class="reminder-name">Skrining Self-Efikasi GSE</div>
+            <div class="reminder-time">08:00 WIB · Setiap Senin</div>
+            <span class="reminder-badge badge-gold">Mingguan</span>
+          </div>
+        </div>
+        <div class="reminder-actions">
+          <button class="btn-edit" onclick="openModal('skrining','Skrining Self-Efikasi GSE','08:00','weekly')"><i class="ti ti-edit"></i></button>
+          <label class="toggle toggle-gold">
+            <input type="checkbox" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-tambah gold" onclick="openModal('skrining','','','weekly')" style="margin-top:12px;">
+      <i class="ti ti-plus"></i> Tambah Pengingat Skrining
+    </button>
+  </div>
+
+  <!-- ===== JADWAL HEMODIALISA ===== -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title-wrap">
+        <div class="card-icon blue"><i class="ti ti-droplet"></i></div>
+        <div>
+          <div class="card-title">Jadwal Hemodialisa</div>
+          <div class="card-subtitle">Notifikasi H-1 dan 2 jam sebelum sesi HD</div>
+        </div>
+      </div>
+      <div class="toggle-master">
+        <span class="toggle-label">Semua</span>
+        <label class="toggle toggle-blue">
+          <input type="checkbox" checked onchange="toggleAll(this,'hd')">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <table class="hd-table">
+      <thead>
+        <tr>
+          <th>Hari / Tanggal</th>
+          <th>Waktu</th>
+          <th>Status</th>
+          <th style="text-align:center;">Notif</th>
+        </tr>
+      </thead>
+      <tbody id="tabel-hd">
+        <tr>
+          <td><div class="hd-hari">Senin</div><div class="hd-tanggal">2 Juni 2025</div></td>
+          <td>07:00 WIB</td>
+          <td><span class="hd-status selesai"><i class="ti ti-check" style="font-size:11px;"></i> Selesai</span></td>
+          <td style="text-align:center;"><label class="toggle toggle-blue" style="margin:0 auto;"><input type="checkbox"><span class="toggle-slider"></span></label></td>
+        </tr>
+        <tr>
+          <td><div class="hd-hari">Kamis</div><div class="hd-tanggal">5 Juni 2025</div></td>
+          <td>07:00 WIB</td>
+          <td><span class="hd-status aktif"><i class="ti ti-clock" style="font-size:11px;"></i> Hari Ini</span></td>
+          <td style="text-align:center;"><label class="toggle toggle-blue" style="margin:0 auto;"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+        </tr>
+        <tr>
+          <td><div class="hd-hari">Senin</div><div class="hd-tanggal">9 Juni 2025</div></td>
+          <td>07:00 WIB</td>
+          <td><span class="hd-status mendatang"><i class="ti ti-calendar" style="font-size:11px;"></i> Mendatang</span></td>
+          <td style="text-align:center;"><label class="toggle toggle-blue" style="margin:0 auto;"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+        </tr>
+        <tr>
+          <td><div class="hd-hari">Kamis</div><div class="hd-tanggal">12 Juni 2025</div></td>
+          <td>07:00 WIB</td>
+          <td><span class="hd-status mendatang"><i class="ti ti-calendar" style="font-size:11px;"></i> Mendatang</span></td>
+          <td style="text-align:center;"><label class="toggle toggle-blue" style="margin:0 auto;"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <button class="btn-tambah blue" onclick="openModalHD()" style="margin-top:14px;">
+      <i class="ti ti-plus"></i> Tambah Jadwal HD
+    </button>
+  </div>
+
+</main>
+
+<!-- MODAL PENGINGAT -->
+<div class="modal-overlay" id="modal-pengingat">
+  <div class="modal">
+    <div class="modal-title" id="modal-title">Atur Pengingat</div>
+    <div class="modal-sub" id="modal-sub">Sesuaikan waktu dan frekuensi pengingat</div>
+    <div class="form-group">
+      <label class="form-label">Nama Pengingat</label>
+      <input type="text" class="form-input" id="input-nama" placeholder="Contoh: Dzikir Pagi">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Waktu</label>
+      <input type="time" class="form-input" id="input-waktu">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Frekuensi</label>
+      <select class="form-input" id="input-frekuensi">
+        <option value="daily">Setiap Hari</option>
+        <option value="weekly">Setiap Minggu</option>
+        <option value="monthly">Setiap Bulan</option>
+        <option value="custom">Hari Tertentu</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Batal</button>
+      <button class="btn-save" onclick="saveReminder()">Simpan Pengingat</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL JADWAL HD -->
+<div class="modal-overlay" id="modal-hd">
+  <div class="modal">
+    <div class="modal-title">Tambah Jadwal HD</div>
+    <div class="modal-sub">Masukkan jadwal sesi hemodialisa Anda</div>
+    <div class="form-group">
+      <label class="form-label">Tanggal Sesi HD</label>
+      <input type="date" class="form-input" id="input-tgl-hd">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Waktu Mulai</label>
+      <input type="time" class="form-input" id="input-jam-hd" value="07:00">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Lokasi / RS</label>
+      <input type="text" class="form-input" id="input-lokasi-hd" placeholder="Contoh: RSUD Wonosobo">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Pengingat H-1</label>
+      <select class="form-input" id="input-notif-hd">
+        <option value="h1">H-1 (1 hari sebelumnya)</option>
+        <option value="h0_2jam">2 Jam sebelumnya</option>
+        <option value="both" selected>Keduanya (H-1 & 2 jam)</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModalHD()">Batal</button>
+      <button class="btn-save" style="background:linear-gradient(135deg,#1d4ed8,#3b82f6);" onclick="saveHD()">Simpan Jadwal</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let currentModalType = '';
+
+  function openModal(type, nama, waktu, frekuensi) {
+    currentModalType = type;
+    const titles = {dzikir:'Atur Pengingat Dzikir', skrining:'Atur Pengingat Skrining'};
+    document.getElementById('modal-title').textContent = titles[type] || 'Atur Pengingat';
+    document.getElementById('input-nama').value = nama || '';
+    document.getElementById('input-waktu').value = waktu || '';
+    document.getElementById('input-frekuensi').value = frekuensi || 'daily';
+    document.getElementById('modal-pengingat').classList.add('show');
+  }
+
+  function closeModal() {
+    document.getElementById('modal-pengingat').classList.remove('show');
+  }
+
+  function openModalHD() {
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('input-tgl-hd').value = today;
+    document.getElementById('modal-hd').classList.add('show');
+  }
+
+  function closeModalHD() {
+    document.getElementById('modal-hd').classList.remove('show');
+  }
+
+  function saveReminder() {
+    const nama = document.getElementById('input-nama').value.trim();
+    const waktu = document.getElementById('input-waktu').value;
+    const frekuensi = document.getElementById('input-frekuensi').value;
+    if (!nama || !waktu) { alert('Nama dan waktu wajib diisi!'); return; }
+
+    const frekLabel = {daily:'Setiap hari', weekly:'Setiap Senin', monthly:'Setiap bulan', custom:'Hari tertentu'};
+    const badgeClass = currentModalType === 'skrining' ? 'badge-gold' : 'badge-green';
+    const dotClass = currentModalType === 'skrining' ? 'gold' : 'green';
+    const toggleClass = currentModalType === 'skrining' ? 'toggle-gold' : '';
+    const badgeText = frekuensi === 'weekly' ? 'Mingguan' : frekuensi === 'monthly' ? 'Bulanan' : 'Aktif';
+
+    const list = document.getElementById('list-' + currentModalType);
+    const row = document.createElement('div');
+    row.className = 'reminder-row';
+    row.innerHTML = `
+      <div class="reminder-info">
+        <div class="reminder-dot ${dotClass}"></div>
+        <div>
+          <div class="reminder-name">${nama}</div>
+          <div class="reminder-time">${waktu} WIB · ${frekLabel[frekuensi]}</div>
+          <span class="reminder-badge ${badgeClass}">${badgeText}</span>
+        </div>
+      </div>
+      <div class="reminder-actions">
+        <button class="btn-edit"><i class="ti ti-edit"></i></button>
+        <label class="toggle ${toggleClass}"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+      </div>`;
+    list.appendChild(row);
+
+    // Update count
+    const countEl = document.getElementById('count-' + currentModalType);
+    countEl.textContent = parseInt(countEl.textContent) + 1;
+
+    closeModal();
+  }
+
+  function saveHD() {
+    const tgl = document.getElementById('input-tgl-hd').value;
+    const jam = document.getElementById('input-jam-hd').value;
+    const lokasi = document.getElementById('input-lokasi-hd').value || 'RS Umum';
+    if (!tgl || !jam) { alert('Tanggal dan waktu wajib diisi!'); return; }
+
+    const d = new Date(tgl);
+    const days = ['Ahad','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+    const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+    const hariStr = days[d.getDay()];
+    const tglStr = d.getDate()+' '+months[d.getMonth()]+' '+d.getFullYear();
+
+    const tbody = document.getElementById('tabel-hd');
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><div class="hd-hari">${hariStr}</div><div class="hd-tanggal">${tglStr}</div></td>
+      <td>${jam} WIB</td>
+      <td><span class="hd-status mendatang"><i class="ti ti-calendar" style="font-size:11px;"></i> Mendatang</span></td>
+      <td style="text-align:center;"><label class="toggle toggle-blue" style="margin:0 auto;"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>`;
+    tbody.appendChild(tr);
+
+    const countEl = document.getElementById('count-hd');
+    countEl.textContent = parseInt(countEl.textContent) + 1;
+
+    closeModalHD();
+  }
+
+  function toggleAll(masterToggle, type) {
+    const container = type === 'hd'
+      ? document.getElementById('tabel-hd')
+      : document.getElementById('list-' + type);
+    const toggles = container.querySelectorAll('input[type=checkbox]');
+    toggles.forEach(t => t.checked = masterToggle.checked);
+  }
+
+  // Tutup modal kalau klik overlay
+  document.getElementById('modal-pengingat').addEventListener('click', function(e){
+    if(e.target === this) closeModal();
+  });
+  document.getElementById('modal-hd').addEventListener('click', function(e){
+    if(e.target === this) closeModalHD();
+  });
+</script>
+</body>
+</html>

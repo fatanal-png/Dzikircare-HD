@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mood Tracker — DzikirCare HD</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    :root{
+      --hijau-tua:#0d3b2e;
+      --hijau-gelap:#1a5c45;
+      --hijau-mid:#2e8b63;
+      --hijau-soft:#3dab7a;
+      --hijau-terang:#5ec995;
+      --hijau-pucat:#e8f7f0;
+      --emas:#c9a84c;
+      --emas-terang:#e8c96b;
+      --emas-muda:#faf0d7;
+      --text-dark:#1a3a1a;
+      --text-mid:#52796f;
+      --sidebar-w:224px;
+    }
+    body{font-family:'Plus Jakarta Sans',sans-serif;background:linear-gradient(135deg,#e8f5e9 0%,#f1f8e9 50%,#e0f2f1 100%);min-height:100vh;color:var(--text-dark);}
+
+    /* SIDEBAR */
+    .sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--sidebar-w);background:linear-gradient(180deg,#0d3b2e 0%,#1a5c45 60%,#2e8b63 100%);display:flex;flex-direction:column;padding:24px 0;z-index:100;box-shadow:4px 0 32px rgba(13,59,46,0.3);}
+    .logo{padding:0 20px 20px;border-bottom:.5px solid rgba(255,255,255,0.13);margin-bottom:12px;}
+    .logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--emas),var(--emas-terang));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:8px;}
+    .logo-title{font-family:'Amiri',serif;font-size:20px;color:#d8f3dc;font-weight:700;}
+    .logo-sub{font-size:10px;color:var(--emas-terang);letter-spacing:.08em;opacity:.8;}
+    .nav{display:flex;flex-direction:column;gap:2px;padding:0 12px;flex:1;overflow-y:auto;}
+    .nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;font-size:13px;color:#b7e4c7;cursor:pointer;transition:all .15s;text-decoration:none;width:100%;}
+    .nav-item:hover{background:rgba(255,255,255,0.1);color:#d8f3dc;}
+    .nav-item.active{background:linear-gradient(90deg,rgba(255,255,255,0.18),rgba(255,255,255,0.06));color:#d8f3dc;font-weight:600;border-left:3px solid var(--emas);}
+    .nav-item i{font-size:17px;flex-shrink:0;}
+    .nav-section{font-size:10px;color:var(--emas);letter-spacing:.1em;text-transform:uppercase;padding:10px 12px 4px;margin-top:6px;opacity:.8;}
+    .user-area{padding:14px 20px 0;border-top:.5px solid rgba(255,255,255,0.13);margin-top:auto;}
+    .avatar-sm{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--emas),var(--emas-terang));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#0d3b2e;flex-shrink:0;}
+    .username{font-size:13px;color:#d8f3dc;font-weight:600;}
+    .usertag{font-size:11px;color:var(--emas-terang);opacity:.8;}
+
+    .main{margin-left:var(--sidebar-w);padding:28px 28px 60px;min-height:100vh;}
+    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+    .page-title{font-size:22px;font-weight:700;color:var(--hijau-tua);}
+    .page-sub{font-size:12.5px;color:var(--text-mid);margin-top:2px;}
+
+    .layout{display:grid;grid-template-columns:1fr 320px;gap:20px;align-items:start;}
+
+    .card{background:linear-gradient(135deg,#fff,#f6fbf7);border-radius:16px;border:.5px solid #c8e6c9;padding:20px 22px;box-shadow:0 2px 14px rgba(27,67,50,0.07);margin-bottom:16px;}
+    .card:last-child{margin-bottom:0;}
+    .card-title{font-size:14px;font-weight:700;color:var(--hijau-tua);display:flex;align-items:center;gap:8px;margin-bottom:16px;}
+    .card-title i{color:var(--hijau-mid);font-size:16px;}
+
+    /* MOOD PICKER */
+    .mood-banner{background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-gelap),var(--hijau-mid));border-radius:20px;padding:24px;margin-bottom:16px;position:relative;overflow:hidden;}
+    .mood-banner::before{content:'';position:absolute;right:-30px;top:-30px;width:130px;height:130px;border-radius:50%;background:rgba(201,168,76,0.08);}
+    .mood-banner-title{font-size:11px;font-weight:700;color:var(--emas-terang);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;position:relative;z-index:1;}
+    .mood-banner-sub{font-family:'Amiri',serif;font-size:20px;color:#fff;margin-bottom:16px;position:relative;z-index:1;}
+    .mood-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;position:relative;z-index:1;}
+    .mood-btn{display:flex;flex-direction:column;align-items:center;gap:5px;padding:12px 6px;border-radius:14px;border:1.5px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);cursor:pointer;transition:all .2s;}
+    .mood-btn:hover{background:rgba(255,255,255,0.18);border-color:rgba(255,255,255,0.3);}
+    .mood-btn.selected{background:rgba(255,255,255,0.25);border-color:var(--emas);box-shadow:0 0 0 2px rgba(201,168,76,0.3);}
+    .mood-emoji{font-size:26px;}
+    .mood-label{font-size:10px;color:rgba(255,255,255,0.8);font-weight:600;text-align:center;}
+
+    /* CATATAN */
+    .catatan-wrap{margin-top:14px;position:relative;z-index:1;}
+    .catatan-input{width:100%;padding:11px 14px;border:1.5px solid rgba(255,255,255,0.2);border-radius:12px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;color:#fff;background:rgba(255,255,255,0.1);outline:none;resize:none;transition:all .2s;}
+    .catatan-input::placeholder{color:rgba(255,255,255,0.4);}
+    .catatan-input:focus{border-color:var(--emas);background:rgba(255,255,255,0.15);}
+    .btn-simpan{margin-top:10px;width:100%;padding:11px;background:linear-gradient(135deg,var(--emas),var(--emas-terang));color:var(--hijau-tua);border:none;border-radius:12px;font-size:13.5px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;transition:all .2s;position:relative;z-index:1;}
+    .btn-simpan:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(201,168,76,0.4);}
+
+    /* MOOD RESPONSE */
+    .mood-response{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:12px 14px;margin-top:10px;font-size:12.5px;color:rgba(255,255,255,0.85);line-height:1.6;display:none;position:relative;z-index:1;}
+
+    /* RIWAYAT */
+    .riwayat-item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:.5px solid #f0faf2;}
+    .riwayat-item:last-child{border-bottom:none;}
+    .riwayat-emoji-wrap{width:40px;height:40px;border-radius:12px;background:var(--hijau-pucat);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+    .riwayat-mood{font-size:13px;font-weight:700;color:var(--hijau-tua);}
+    .riwayat-tgl{font-size:11px;color:var(--text-mid);margin-top:2px;}
+    .riwayat-catatan{font-size:12px;color:#555;margin-top:4px;font-style:italic;}
+
+    /* CHART */
+    .chart-wrap canvas{max-height:180px;}
+
+    /* STATISTIK MOOD */
+    .mood-stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+    .mood-stat-item{background:#fff;border-radius:10px;border:.5px solid #c8e6c9;padding:10px;text-align:center;}
+    .mood-stat-emoji{font-size:20px;}
+    .mood-stat-num{font-size:18px;font-weight:700;color:var(--hijau-tua);}
+    .mood-stat-label{font-size:10px;color:var(--text-mid);margin-top:2px;}
+
+    ::-webkit-scrollbar{width:4px;}
+    ::-webkit-scrollbar-track{background:transparent;}
+    ::-webkit-scrollbar-thumb{background:#b7e4c7;border-radius:99px;}
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="logo">
+    <div class="logo-icon">☪</div>
+    <div class="logo-title">DzikirCare HD</div>
+    <div class="logo-sub">HEMODIALISA & DZIKIR</div>
+  </div>
+  <nav class="nav">
+    <div class="nav-section">Utama</div>
+    <a class="nav-item" href="dashboard.html"><i class="ti ti-layout-dashboard"></i> Dashboard</a>
+    <a class="nav-item" href="dzikir.html"><i class="ti ti-rosette"></i> Dzikir Digital</a>
+    <a class="nav-item" href="sholat.html"><i class="ti ti-clock"></i> Jadwal Sholat</a>
+    <div class="nav-section">Evaluasi Psikologis</div>
+    <a class="nav-item" href="screening.html"><i class="ti ti-heart-rate-monitor"></i> Screening Stres</a>
+    <a class="nav-item" href="selfefficacy.html"><i class="ti ti-brain"></i> Self-Efikasi</a>
+    <a class="nav-item active" href="mood.html"><i class="ti ti-mood-smile"></i> Mood Tracker</a>
+    <div class="nav-section">Lainnya</div>
+    <a class="nav-item" href="edukasi.html"><i class="ti ti-book"></i> Edukasi</a>
+    <a class="nav-item" href="statistik.html"><i class="ti ti-chart-bar"></i> Statistik</a>
+    <a class="nav-item" href="pengingat.html"><i class="ti ti-bell"></i> Pengingat</a>
+    <a class="nav-item" href="profil.html"><i class="ti ti-user-circle"></i> Profil Saya</a>
+  </nav>
+  <div class="user-area">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="avatar-sm" id="sidebar-avatar">A</div>
+      <div>
+        <div class="username" id="sidebar-name">Pengguna</div>
+        <div class="usertag">Pasien Hemodialisa</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main class="main">
+  <div class="topbar">
+    <div>
+      <div class="page-title">😊 Mood Tracker</div>
+      <div class="page-sub" id="user-greeting">Bagaimana perasaan Anda hari ini?</div>
+    </div>
+  </div>
+
+  <div class="layout">
+    <!-- KIRI -->
+    <div>
+      <!-- MOOD PICKER -->
+      <div class="mood-banner">
+        <div class="mood-banner-title">✦ Catat Suasana Hati</div>
+        <div class="mood-banner-sub" id="banner-nama">Bagaimana perasaan Anda setelah sesi HD?</div>
+
+        <div class="mood-grid">
+          <div class="mood-btn" onclick="pilihMood(this,'Tenang','😌','Hati yang tenang adalah anugerah dari Allah. Pertahankan dengan dzikir pagi dan petang.')">
+            <span class="mood-emoji">😌</span><span class="mood-label">Tenang</span>
+          </div>
+          <div class="mood-btn" onclick="pilihMood(this,'Bahagia','😊','Alhamdulillah! Semoga kebahagiaan ini terus hadir. Jangan lupa bersyukur kepada Allah SWT.')">
+            <span class="mood-emoji">😊</span><span class="mood-label">Bahagia</span>
+          </div>
+          <div class="mood-btn" onclick="pilihMood(this,'Bersyukur','🤲','MasyaAllah, rasa syukur adalah kunci bertambahnya nikmat. Perbanyak Alhamdulillah hari ini.')">
+            <span class="mood-emoji">🤲</span><span class="mood-label">Bersyukur</span>
+          </div>
+          <div class="mood-btn" onclick="pilihMood(this,'Lelah','😔','Wajar merasa lelah setelah sesi HD. Istirahat yang cukup dan baca dzikir untuk memulihkan energi.')">
+            <span class="mood-emoji">😔</span><span class="mood-label">Lelah</span>
+          </div>
+          <div class="mood-btn" onclick="pilihMood(this,'Cemas','😟','Ambil napas dalam, baca Astaghfirullah 100x. Allah selalu bersama hamba yang sabar.')">
+            <span class="mood-emoji">😟</span><span class="mood-label">Cemas</span>
+          </div>
+          <div class="mood-btn" onclick="pilihMood(this,'Sedih','😢','Ingatlah, setelah hujan pasti ada pelangi. Baca QS. Al-Insyirah: Allah bersama kesabaranmu.')">
+            <span class="mood-emoji">😢</span><span class="mood-label">Sedih</span>
+          </div>
+          <div class="mood-btn" onclick="pilihMood(this,'Semangat','💪','Masya Allah! Semangat yang luar biasa. Manfaatkan untuk dzikir dan kegiatan positif hari ini.')">
+            <span class="mood-emoji">💪</span><span class="mood-label">Semangat</span>
+          </div>
+          <div class="mood-btn" onclick="pilihMood(this,'Khawatir','😰','Serahkan semua kekhawatiran kepada Allah. Baca Hasbunallah wa ni\'mal wakeel berulang kali.')">
+            <span class="mood-emoji">😰</span><span class="mood-label">Khawatir</span>
+          </div>
+          <div class="mood-btn" onclick="pilihMood(this,'Nyeri','🤕','Semoga Allah segera memberikan kesembuhan. Sakit adalah penghapus dosa — tetap sabar ya.')">
+            <span class="mood-emoji">🤕</span><span class="mood-label">Nyeri</span>
+          </div>
+          <div class="mood-btn" onclick="pilihMood(this,'Pasrah','🌿','Tawakkal yang indah. Setelah ikhtiar, serahkan semuanya kepada Allah Yang Maha Kuasa.')">
+            <span class="mood-emoji">🌿</span><span class="mood-label">Pasrah</span>
+          </div>
+        </div>
+
+        <div class="mood-response" id="mood-response"></div>
+
+        <div class="catatan-wrap">
+          <textarea class="catatan-input" id="catatan-input" rows="2" placeholder="Tambahkan catatan... (opsional)"></textarea>
+          <button class="btn-simpan" onclick="simpanMood()">💾 Simpan Mood Hari Ini</button>
+        </div>
+      </div>
+
+      <!-- RIWAYAT -->
+      <div class="card">
+        <div class="card-title"><i class="ti ti-history"></i> Riwayat Suasana Hati</div>
+        <div id="riwayat-mood">
+          <div style="font-size:12px;color:#b0b0b0;text-align:center;padding:16px;">Belum ada catatan mood</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KANAN -->
+    <div>
+      <!-- MOOD HARI INI -->
+      <div class="card">
+        <div class="card-title"><i class="ti ti-mood-smile"></i> Mood Hari Ini</div>
+        <div id="mood-hari-ini" style="text-align:center;padding:16px;">
+          <div style="font-size:40px;margin-bottom:8px;">❓</div>
+          <div style="font-size:13px;color:var(--text-mid);">Belum dipilih</div>
+        </div>
+      </div>
+
+      <!-- GRAFIK MOOD MINGGUAN -->
+      <div class="card">
+        <div class="card-title"><i class="ti ti-chart-line"></i> Mood Mingguan</div>
+        <div class="chart-wrap"><canvas id="chartMood"></canvas></div>
+      </div>
+
+      <!-- STATISTIK MOOD -->
+      <div class="card">
+        <div class="card-title"><i class="ti ti-chart-pie"></i> Statistik Mood</div>
+        <div class="mood-stat-grid" id="mood-stats">
+          <div class="mood-stat-item"><div class="mood-stat-emoji">😌</div><div class="mood-stat-num">4</div><div class="mood-stat-label">Tenang</div></div>
+          <div class="mood-stat-item"><div class="mood-stat-emoji">😊</div><div class="mood-stat-num">3</div><div class="mood-stat-label">Bahagia</div></div>
+          <div class="mood-stat-item"><div class="mood-stat-emoji">🤲</div><div class="mood-stat-num">5</div><div class="mood-stat-label">Bersyukur</div></div>
+          <div class="mood-stat-item"><div class="mood-stat-emoji">😔</div><div class="mood-stat-num">2</div><div class="mood-stat-label">Lelah</div></div>
+          <div class="mood-stat-item"><div class="mood-stat-emoji">😟</div><div class="mood-stat-num">1</div><div class="mood-stat-label">Cemas</div></div>
+          <div class="mood-stat-item"><div class="mood-stat-emoji">💪</div><div class="mood-stat-num">3</div><div class="mood-stat-label">Semangat</div></div>
+        </div>
+      </div>
+
+      <!-- MOTIVASI -->
+      <div class="card" style="background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-gelap));">
+        <div style="height:1.5px;background:linear-gradient(90deg,transparent,var(--emas),transparent);margin-bottom:12px;"></div>
+        <div style="font-size:10px;color:var(--emas-terang);font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">✦ Untuk <span id="motivasi-nama">Anda</span></div>
+        <div style="font-family:'Amiri',serif;font-size:18px;color:#fff;line-height:1.7;" id="motivasi-text">"Sesungguhnya bersama kesulitan ada kemudahan."</div>
+        <div style="font-size:11px;color:#74c69d;margin-top:6px;">— QS. Al-Insyirah: 6</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+const MOTIVASI = [
+  {text:'Sesungguhnya bersama kesulitan ada kemudahan.',src:'QS. Al-Insyirah: 6'},
+  {text:'Ingatlah, hanya dengan mengingat Allah hati menjadi tenteram.',src:'QS. Ar-Ra\'d: 28'},
+  {text:'Allah tidak membebani seseorang melainkan sesuai dengan kesanggupannya.',src:'QS. Al-Baqarah: 286'},
+  {text:'Sakit yang menimpa seorang muslim, Allah jadikan sebagai penghapus dosa-dosanya.',src:'HR. Bukhari & Muslim'},
+];
+
+let selectedMood = null;
+let selectedEmoji = '';
+let riwayat = [];
+
+window.onload = () => {
+  const nama = localStorage.getItem('dzikircare_user') || 'Pengguna';
+  document.getElementById('sidebar-name').textContent = nama;
+  document.getElementById('sidebar-avatar').textContent = nama.charAt(0).toUpperCase();
+  document.getElementById('user-greeting').textContent = `Bagaimana perasaan ${nama} hari ini?`;
+  document.getElementById('banner-nama').textContent = `Bagaimana perasaan ${nama} setelah sesi HD?`;
+  document.getElementById('motivasi-nama').textContent = nama;
+
+  const m = MOTIVASI[Math.floor(Math.random()*MOTIVASI.length)];
+  document.getElementById('motivasi-text').textContent = `"${m.text}"`;
+
+  renderChart();
+};
+
+function pilihMood(el, mood, emoji, pesan){
+  document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedMood = mood;
+  selectedEmoji = emoji;
+
+  const resp = document.getElementById('mood-response');
+  resp.style.display = 'block';
+  resp.innerHTML = `${emoji} <b>${mood}</b> — ${pesan}`;
+
+  document.getElementById('mood-hari-ini').innerHTML = `
+    <div style="font-size:48px;margin-bottom:8px;">${emoji}</div>
+    <div style="font-size:15px;font-weight:700;color:var(--hijau-tua);">${mood}</div>
+    <div style="font-size:11px;color:var(--text-mid);margin-top:4px;">${new Date().toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long'})}</div>
+  `;
+}
+
+function simpanMood(){
+  if(!selectedMood){ alert('Pilih mood terlebih dahulu!'); return; }
+  const catatan = document.getElementById('catatan-input').value.trim();
+  const now = new Date();
+  const tgl = now.toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'});
+  const jam = now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
+
+  riwayat.unshift({mood: selectedMood, emoji: selectedEmoji, catatan, tgl, jam});
+  renderRiwayat();
+
+  // Reset
+  document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+  document.getElementById('catatan-input').value = '';
+  document.getElementById('mood-response').style.display = 'none';
+  selectedMood = null;
+
+  const btn = document.querySelector('.btn-simpan');
+  btn.textContent = '✓ Tersimpan!';
+  setTimeout(()=>{ btn.textContent = '💾 Simpan Mood Hari Ini'; }, 2000);
+}
+
+function renderRiwayat(){
+  const el = document.getElementById('riwayat-mood');
+  if(!riwayat.length){
+    el.innerHTML = '<div style="font-size:12px;color:#b0b0b0;text-align:center;padding:16px;">Belum ada catatan mood</div>';
+    return;
+  }
+  el.innerHTML = riwayat.map(r => `
+    <div class="riwayat-item">
+      <div class="riwayat-emoji-wrap">${r.emoji}</div>
+      <div style="flex:1;">
+        <div class="riwayat-mood">${r.mood}</div>
+        <div class="riwayat-tgl">${r.tgl} · ${r.jam}</div>
+        ${r.catatan ? `<div class="riwayat-catatan">"${r.catatan}"</div>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderChart(){
+  new Chart(document.getElementById('chartMood'), {
+    type: 'line',
+    data: {
+      labels: ['Sen','Sel','Rab','Kam','Jum','Sab','Min'],
+      datasets: [{
+        label: 'Skor Mood',
+        data: [4, 3, 4, 2, 4, 3, 5],
+        borderColor: '#c9a84c',
+        backgroundColor: 'rgba(201,168,76,0.1)',
+        borderWidth: 2.5,
+        pointBackgroundColor: '#c9a84c',
+        pointRadius: 5,
+        tension: 0.4,
+        fill: true,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins:{legend:{display:false}},
+      scales:{
+        y:{min:1,max:5,ticks:{font:{size:11},stepSize:1},grid:{color:'rgba(0,0,0,0.05)'}},
+        x:{grid:{display:false},ticks:{font:{size:11}}}
+      }
+    }
+  });
+}
+</script>
+</body>
+</html>

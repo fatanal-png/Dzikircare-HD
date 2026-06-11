@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profil — DzikirCare HD</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    :root{
+      --hijau-tua:#0d3b2e;
+      --hijau-gelap:#1a5c45;
+      --hijau-mid:#2e8b63;
+      --hijau-soft:#3dab7a;
+      --hijau-terang:#5ec995;
+      --hijau-pucat:#e8f7f0;
+      --emas:#c9a84c;
+      --emas-terang:#e8c96b;
+      --emas-muda:#faf0d7;
+      --text-dark:#1a3a1a;
+      --text-mid:#52796f;
+      --sidebar-w:224px;
+    }
+    body{font-family:'Plus Jakarta Sans',sans-serif;background:linear-gradient(135deg,#e8f5e9 0%,#f1f8e9 50%,#e0f2f1 100%);min-height:100vh;color:var(--text-dark);}
+
+    /* SIDEBAR */
+    .sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--sidebar-w);background:linear-gradient(180deg,#0d3b2e 0%,#1a5c45 60%,#2e8b63 100%);display:flex;flex-direction:column;padding:24px 0;z-index:100;box-shadow:4px 0 32px rgba(13,59,46,0.3);}
+    .logo{padding:0 20px 20px;border-bottom:.5px solid rgba(255,255,255,0.13);margin-bottom:12px;}
+    .logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--emas),var(--emas-terang));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:8px;box-shadow:0 2px 10px rgba(201,168,76,0.4);}
+    .logo-title{font-family:'Amiri',serif;font-size:20px;color:#d8f3dc;font-weight:700;line-height:1.2;}
+    .logo-sub{font-size:10px;color:var(--emas-terang);letter-spacing:.08em;margin-top:2px;opacity:.8;}
+    .nav{display:flex;flex-direction:column;gap:2px;padding:0 12px;flex:1;overflow-y:auto;}
+    .nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;font-size:13px;color:#b7e4c7;cursor:pointer;transition:all .15s;text-decoration:none;width:100%;}
+    .nav-item:hover{background:rgba(255,255,255,0.1);color:#d8f3dc;}
+    .nav-item.active{background:linear-gradient(90deg,rgba(255,255,255,0.18),rgba(255,255,255,0.06));color:#d8f3dc;font-weight:600;border-left:3px solid var(--emas);}
+    .nav-item i{font-size:17px;flex-shrink:0;}
+    .nav-section{font-size:10px;color:var(--emas);letter-spacing:.1em;text-transform:uppercase;padding:10px 12px 4px;margin-top:6px;opacity:.8;}
+    .user-area{padding:14px 20px 0;border-top:.5px solid rgba(255,255,255,0.13);margin-top:auto;}
+    .avatar-sm{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--emas),var(--emas-terang));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#0d3b2e;flex-shrink:0;}
+    .username{font-size:13px;color:#d8f3dc;font-weight:600;}
+    .usertag{font-size:11px;color:var(--emas-terang);opacity:.8;}
+
+    /* MAIN */
+    .main{margin-left:var(--sidebar-w);padding:28px 28px 60px;min-height:100vh;}
+    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px;}
+    .page-title{font-size:22px;font-weight:700;color:var(--hijau-tua);}
+    .page-sub{font-size:12.5px;color:var(--text-mid);margin-top:2px;}
+
+    /* LAYOUT */
+    .profil-grid{display:grid;grid-template-columns:300px 1fr;gap:20px;align-items:start;}
+
+    /* KARTU PROFIL KIRI */
+    .profil-card{background:linear-gradient(135deg,#fff,#f6fbf7);border-radius:20px;border:.5px solid #c8e6c9;box-shadow:0 2px 14px rgba(27,67,50,0.07);overflow:hidden;}
+    .profil-header{background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-gelap),var(--hijau-mid));padding:28px 20px 20px;text-align:center;position:relative;}
+    .profil-header::before{content:'';position:absolute;width:120px;height:120px;border-radius:50%;background:rgba(201,168,76,0.07);top:-40px;right:-30px;}
+    .emas-line{height:2px;background:linear-gradient(90deg,transparent,var(--emas),transparent);margin-bottom:0;}
+    .avatar-wrap{position:relative;display:inline-block;margin-bottom:12px;}
+    .avatar-lg{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--emas),var(--emas-terang));display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:700;color:var(--hijau-tua);border:3px solid rgba(255,255,255,0.3);margin:0 auto;}
+    .avatar-edit{position:absolute;bottom:2px;right:2px;width:24px;height:24px;background:var(--emas);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;cursor:pointer;border:2px solid #fff;color:var(--hijau-tua);}
+    .profil-nama{font-family:'Amiri',serif;font-size:20px;color:#fff;font-weight:700;}
+    .profil-role{font-size:11px;color:var(--emas-terang);margin-top:3px;letter-spacing:.05em;}
+    .profil-body{padding:18px 20px;}
+    .info-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:.5px solid #f0faf2;}
+    .info-row:last-child{border-bottom:none;}
+    .info-icon{width:32px;height:32px;border-radius:8px;background:var(--hijau-pucat);display:flex;align-items:center;justify-content:center;color:var(--hijau-mid);font-size:15px;flex-shrink:0;}
+    .info-label{font-size:10.5px;color:var(--text-mid);text-transform:uppercase;letter-spacing:.04em;}
+    .info-val{font-size:13px;font-weight:600;color:var(--hijau-tua);margin-top:1px;}
+    .btn-edit-profil{width:100%;margin-top:16px;padding:11px;background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-mid));color:#fff;border:none;border-radius:12px;font-size:13px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;}
+    .btn-edit-profil:hover{opacity:.9;transform:translateY(-1px);}
+
+    /* KARTU KANAN */
+    .card{background:linear-gradient(135deg,#fff,#f6fbf7);border-radius:16px;border:.5px solid #c8e6c9;padding:20px 22px;box-shadow:0 2px 14px rgba(27,67,50,0.07);margin-bottom:16px;}
+    .card-title{font-size:14px;font-weight:700;color:var(--hijau-tua);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+    .card-title i{font-size:16px;color:var(--hijau-mid);}
+
+    /* FORM */
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+    .form-group{margin-bottom:0;}
+    .form-group.full{grid-column:1/-1;}
+    .form-label{font-size:11px;font-weight:700;color:var(--hijau-gelap);margin-bottom:6px;display:block;text-transform:uppercase;letter-spacing:.04em;}
+    .form-input{width:100%;padding:10px 14px;border:1.5px solid #e0ede5;border-radius:10px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--hijau-tua);outline:none;transition:all .2s;background:#fafff8;}
+    .form-input:focus{border-color:var(--hijau-soft);box-shadow:0 0 0 3px rgba(46,139,99,0.1);}
+    .form-input[readonly]{background:#f5f5f5;color:#888;cursor:not-allowed;}
+    select.form-input{cursor:pointer;}
+    .btn-save{padding:11px 24px;background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-mid));color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px;}
+    .btn-save:hover{opacity:.9;}
+
+    /* MENU SETTING */
+    .setting-row{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:.5px solid #f0faf2;cursor:pointer;transition:all .15s;}
+    .setting-row:last-child{border-bottom:none;}
+    .setting-row:hover .setting-label{color:var(--hijau-mid);}
+    .setting-left{display:flex;align-items:center;gap:12px;}
+    .setting-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+    .setting-icon.green{background:var(--hijau-pucat);color:var(--hijau-mid);}
+    .setting-icon.gold{background:var(--emas-muda);color:var(--emas);}
+    .setting-icon.red{background:#fde8e8;color:#e05c5c;}
+    .setting-label{font-size:13.5px;font-weight:600;color:var(--hijau-tua);}
+    .setting-desc{font-size:11.5px;color:var(--text-mid);margin-top:2px;}
+    .setting-arrow{color:#c8e6c9;font-size:16px;}
+
+    /* TOGGLE */
+    .toggle{position:relative;width:44px;height:24px;flex-shrink:0;}
+    .toggle input{opacity:0;width:0;height:0;}
+    .toggle-slider{position:absolute;cursor:pointer;inset:0;background:#d1d5db;border-radius:99px;transition:.3s;}
+    .toggle-slider::before{content:'';position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s;}
+    input:checked + .toggle-slider{background:var(--hijau-mid);}
+    input:checked + .toggle-slider::before{transform:translateX(20px);}
+
+    /* STATS MINI */
+    .stats-mini{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
+    .stat-mini-item{background:#fff;border-radius:12px;border:.5px solid #c8e6c9;padding:12px;text-align:center;}
+    .stat-mini-num{font-size:22px;font-weight:700;color:var(--hijau-tua);line-height:1;}
+    .stat-mini-label{font-size:10px;color:var(--text-mid);margin-top:3px;}
+
+    /* BADGE AKUN */
+    .akun-badge{display:inline-flex;align-items:center;gap:6px;background:var(--hijau-pucat);border:1px solid #b7e4c7;border-radius:99px;padding:4px 12px;font-size:11px;color:var(--hijau-gelap);font-weight:600;margin-bottom:14px;}
+
+    ::-webkit-scrollbar{width:4px;}
+    ::-webkit-scrollbar-track{background:transparent;}
+    ::-webkit-scrollbar-thumb{background:#b7e4c7;border-radius:99px;}
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="logo">
+    <div class="logo-icon">☪</div>
+    <div class="logo-title">DzikirCare HD</div>
+    <div class="logo-sub">HEMODIALISA & DZIKIR</div>
+  </div>
+  <nav class="nav">
+    <div class="nav-section">Utama</div>
+    <a class="nav-item" href="dashboard.html"><i class="ti ti-layout-dashboard"></i> Dashboard</a>
+    <a class="nav-item" href="dzikir.html"><i class="ti ti-rosette"></i> Dzikir Digital</a>
+    <a class="nav-item" href="sholat.html"><i class="ti ti-clock"></i> Jadwal Sholat</a>
+    <div class="nav-section">Evaluasi Psikologis</div>
+    <a class="nav-item" href="screening.html"><i class="ti ti-heart-rate-monitor"></i> Screening Stres</a>
+    <a class="nav-item" href="selfefficacy.html"><i class="ti ti-brain"></i> Self-Efikasi</a>
+    <a class="nav-item" href="mood.html"><i class="ti ti-mood-smile"></i> Mood Tracker</a>
+    <div class="nav-section">Lainnya</div>
+    <a class="nav-item" href="statistik.html"><i class="ti ti-chart-bar"></i> Statistik</a>
+    <a class="nav-item" href="pengingat.html"><i class="ti ti-bell"></i> Pengingat</a>
+    <a class="nav-item active" href="profil.html"><i class="ti ti-user-circle"></i> Profil Saya</a>
+  </nav>
+  <div class="user-area">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="avatar-sm">A</div>
+      <div>
+        <div class="username" id="sidebar-name">Ahmad</div>
+        <div class="usertag">Pasien Hemodialisa</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <div>
+      <div class="page-title">👤 Profil Saya</div>
+      <div class="page-sub">Data diri, pengaturan akun, privasi & bantuan</div>
+    </div>
+  </div>
+
+  <div class="profil-grid">
+
+    <!-- KOLOM KIRI -->
+    <div>
+      <!-- Kartu profil -->
+      <div class="profil-card">
+        <div class="profil-header">
+          <div class="avatar-wrap">
+            <div class="avatar-lg" id="avatar-initial">A</div>
+            <div class="avatar-edit" onclick="document.getElementById('foto-input')".click()">
+            </i class="ti ti-camera"></i>
+            </div> 
+            <input type="file" id="foto-input" accept="image/*" style="display:none" onechange="uplodfoto(this)">
+          <div class="profil-nama" id="profil-nama-display">Ahmad Fauzi</div>
+          <div class="profil-role">Pasien Hemodialisa · DzikirCare HD</div>
+        </div>
+        <div class="emas-line"></div>
+        <div class="profil-body">
+          <div class="info-row">
+            <div class="info-icon"><i class="ti ti-id-badge"></i></div>
+            <div>
+              <div class="info-label">No. Rekam Medis</div>
+              <div class="info-val" id="info-rm">HD-2024-0012</div>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-icon"><i class="ti ti-cake"></i></div>
+            <div>
+              <div class="info-label">Tanggal Lahir</div>
+              <div class="info-val" id="info-ttl">12 Maret 1975</div>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-icon"><i class="ti ti-droplet"></i></div>
+            <div>
+              <div class="info-label">Jadwal HD</div>
+              <div class="info-val" id="info-jadwal-hd">Senin & Kamis</div>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-icon"><i class="ti ti-building-hospital"></i></div>
+            <div>
+              <div class="info-label">Rumah Sakit</div>
+              <div class="info-val" id="info-rs">RSUD Wonosobo</div>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-icon"><i class="ti ti-calendar-stats"></i></div>
+            <div>
+              <div class="info-label">Bergabung Sejak</div>
+              <div class="info-val">Januari 2025</div>
+            </div>
+          </div>
+          <button class="btn-edit-profil" onclick="scrollToEdit()">
+            <i class="ti ti-edit"></i> Edit Data Diri
+          </button>
+        </div>
+      </div>
+
+      <!-- Statistik ringkas -->
+      <div class="card" style="margin-top:16px;">
+        <div class="card-title"><i class="ti ti-chart-bar"></i> Ringkasan Aktivitas</div>
+        <div class="stats-mini">
+          <div class="stat-mini-item">
+            <div class="stat-mini-num" style="color:var(--hijau-mid);">124</div>
+            <div class="stat-mini-label">Total Dzikir</div>
+          </div>
+          <div class="stat-mini-item">
+            <div class="stat-mini-num" style="color:var(--emas);">8</div>
+            <div class="stat-mini-label">Skrining</div>
+          </div>
+          <div class="stat-mini-item">
+            <div class="stat-mini-num" style="color:#3b82f6;">12</div>
+            <div class="stat-mini-label">Sesi HD</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KOLOM KANAN -->
+    <div>
+
+      <!-- FORM DATA DIRI -->
+      <div class="card" id="form-edit">
+        <div class="card-title"><i class="ti ti-user"></i> Data Diri Pasien</div>
+        <div class="akun-badge"><i class="ti ti-shield-check" style="font-size:13px;"></i> Data terlindungi & terenkripsi</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Nama Lengkap</label>
+            <input type="text" class="form-input" id="inp-nama" value="Ahmad Fauzi">
+          </div>
+          <div class="form-group">
+            <label class="form-label">No. Rekam Medis</label>
+            <input type="text" class="form-input" id="inp-rm" value="HD-2024-0012" readonly>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tanggal Lahir</label>
+            <input type="date" class="form-input" id="inp-ttl" value="1975-03-12">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Jenis Kelamin</label>
+            <select class="form-input" id="inp-jk">
+              <option value="L" selected>Laki-laki</option>
+              <option value="P">Perempuan</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">No. HP / WhatsApp</label>
+            <input type="tel" class="form-input" id="inp-hp" value="0812-3456-7890">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Golongan Darah</label>
+            <select class="form-input" id="inp-gol">
+              <option>A</option><option>B</option><option selected>O</option><option>AB</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Alamat Lengkap</label>
+            <input type="text" class="form-input" id="inp-alamat" value="Jl. Mawar No. 12, Wonosobo, Jawa Tengah">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Rumah Sakit HD</label>
+            <input type="text" class="form-input" id="inp-rs" value="RSUD Wonosobo">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Jadwal HD</label>
+            <select class="form-input" id="inp-jadwal">
+              <option selected>Senin & Kamis</option>
+              <option>Selasa & Jumat</option>
+              <option>Rabu & Sabtu</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nama Dokter</label>
+            <input type="text" class="form-input" id="inp-dokter" value="dr. Budi Santoso, Sp.PD">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Kontak Darurat</label>
+            <input type="text" class="form-input" id="inp-darurat" value="Siti (Istri) — 0813-xxxx">
+          </div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;margin-top:18px;">
+          <button class="btn-save" onclick="simpanProfil()">
+            <i class="ti ti-device-floppy"></i> Simpan Perubahan
+          </button>
+        </div>
+      </div>
+
+      <!-- PENGATURAN AKUN -->
+      <div class="card">
+        <div class="card-title"><i class="ti ti-settings"></i> Pengaturan Akun</div>
+
+        <div class="setting-row" onclick="gantiPassword()">
+          <div class="setting-left">
+            <div class="setting-icon green"><i class="ti ti-lock"></i></div>
+            <div>
+              <div class="setting-label">Ganti Password</div>
+              <div class="setting-desc">Ubah kata sandi akun Anda</div>
+            </div>
+          </div>
+          <i class="ti ti-chevron-right setting-arrow"></i>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-left">
+            <div class="setting-icon green"><i class="ti ti-bell"></i></div>
+            <div>
+              <div class="setting-label">Notifikasi Push</div>
+              <div class="setting-desc">Pengingat dzikir & jadwal HD</div>
+            </div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-left">
+            <div class="setting-icon green"><i class="ti ti-moon"></i></div>
+            <div>
+              <div class="setting-label">Mode Gelap</div>
+              <div class="setting-desc">Tampilan dark mode</div>
+            </div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-row" onclick="showPrivasi()">
+          <div class="setting-left">
+            <div class="setting-icon gold"><i class="ti ti-shield"></i></div>
+            <div>
+              <div class="setting-label">Privasi & Keamanan Data</div>
+              <div class="setting-desc">Sesuai regulasi kesehatan yang berlaku</div>
+            </div>
+          </div>
+          <i class="ti ti-chevron-right setting-arrow"></i>
+        </div>
+
+        <div class="setting-row" onclick="showBantuan()">
+          <div class="setting-left">
+            <div class="setting-icon gold"><i class="ti ti-help-circle"></i></div>
+            <div>
+              <div class="setting-label">Bantuan & Panduan</div>
+              <div class="setting-desc">Cara penggunaan aplikasi</div>
+            </div>
+          </div>
+          <i class="ti ti-chevron-right setting-arrow"></i>
+        </div>
+
+        <div class="setting-row" onclick="doLogout()" style="margin-top:4px;">
+          <div class="setting-left">
+            <div class="setting-icon red"><i class="ti ti-logout"></i></div>
+            <div>
+              <div class="setting-label" style="color:#e05c5c;">Keluar (Logout)</div>
+              <div class="setting-desc">Keluar dari akun DzikirCare HD</div>
+            </div>
+          </div>
+          <i class="ti ti-chevron-right" style="color:#fca5a5;font-size:16px;"></i>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<script>
+  window.onload = () => {
+    const user = localStorage.getItem('dzikircare_user') || 'Ahmad';
+    document.getElementById('sidebar-name').textContent = user;
+  };
+function uplodfoto(input) {
+  const file = input.fils [0]
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const base64 = e.target. result; // data:image/jpg;base64,.....
+
+    //simpan uplod foto
+    confirm uplodfoto
+  }
+}
+  function simpanProfil() {
+    const nama = document.getElementById('inp-nama').value.trim();
+    const rs = document.getElementById('inp-rs').value.trim();
+    const jadwal = document.getElementById('inp-jadwal').value;
+    const ttlRaw = document.getElementById('inp-ttl').value;
+
+    // Update display
+    document.getElementById('profil-nama-display').textContent = nama;
+    document.getElementById('avatar-initial').textContent = nama.charAt(0).toUpperCase();
+    document.getElementById('info-rs').textContent = rs;
+    document.getElementById('info-jadwal-hd').textContent = jadwal;
+    document.getElementById('sidebar-name').textContent = nama.split(' ')[0];
+
+    if (ttlRaw) {
+      const d = new Date(ttlRaw);
+      const months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+      document.getElementById('info-ttl').textContent = d.getDate()+' '+months[d.getMonth()]+' '+d.getFullYear();
+    }
+
+    localStorage.setItem('dzikircare_user', nama.split(' ')[0]);
+
+    // Notif sukses
+    const btn = document.querySelector('.btn-save');
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<i class="ti ti-check"></i> Tersimpan!';
+    btn.style.background = 'linear-gradient(135deg,#1a5c45,#3dab7a)';
+    setTimeout(() => { btn.innerHTML = orig; btn.style.background = ''; }, 2000);
+  }
+
+  function scrollToEdit() {
+    document.getElementById('form-edit').scrollIntoView({behavior:'smooth', block:'start'});
+    document.getElementById('inp-nama').focus();
+  }
+
+  function gantiPassword() {
+    const np = prompt('Masukkan password baru (min. 6 karakter):');
+    if (np && np.length >= 6) {
+      alert('Password berhasil diperbarui!');
+    } else if (np !== null) {
+      alert('Password minimal 6 karakter.');
+    }
+  }
+
+  function showPrivasi() {
+    alert('🔒 Kebijakan Privasi DzikirCare HD\n\n✓ Data Anda aman dan hanya digunakan untuk kepentingan kesehatan\n✓ Privasi terjamin sesuai regulasi kesehatan yang berlaku\n✓ Data dienkripsi dan tidak dibagikan ke pihak ketiga\n✓ Backup data dilakukan secara berkala');
+  }
+
+  function showBantuan() {
+    alert('📖 Panduan Penggunaan DzikirCare HD\n\n1. Dashboard — lihat ringkasan harian Anda\n2. Dzikir Digital — mulai sesi dzikir\n3. Screening Stres — isi kuesioner DASS-21\n4. Self-Efikasi — isi kuesioner GSE\n5. Pengingat — atur jadwal dzikir & HD\n6. Statistik — lihat perkembangan kondisi Anda\n\nHubungi tenaga kesehatan Anda untuk informasi lebih lanjut.');
+  }
+
+  function doLogout() {
+    if (confirm('Yakin ingin keluar dari DzikirCare HD?')) {
+      localStorage.removeItem('dzikircare_login');
+      localStorage.removeItem('dzikircare_user');
+      window.location.href = 'index.html';
+    }
+  }
+</script>
+</body>
+</html>

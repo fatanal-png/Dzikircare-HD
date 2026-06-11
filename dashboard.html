@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — DzikirCare HD</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    :root{
+      --green-darkest:#1B4332;
+      --green-dark:#2d6a4f;
+      --green-mid:#40916c;
+      --green-soft:#52b788;
+      --green-light:#74c69d;
+      --green-pale:#95d5b2;
+      --green-bg:#d8f3dc;
+      --green-bglite:#f0faf2;
+      --emas:#c9a84c;
+      --emas-terang:#e8c96b;
+      --text-dark:#1a3a1a;
+      --text-mid:#52796f;
+      --white:#fff;
+      --card-bg:linear-gradient(135deg,#fff,#f6fbf7);
+      --sidebar-w:224px;
+    }
+    body{font-family:'Plus Jakarta Sans',sans-serif;background:linear-gradient(135deg,#e8f5e9 0%,#f1f8e9 50%,#e0f2f1 100%);min-height:100vh;color:var(--text-dark);}
+
+    /* SIDEBAR */
+    .sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--sidebar-w);background:linear-gradient(180deg,#0d3b2e 0%,#1a5c45 60%,#2e8b63 100%);display:flex;flex-direction:column;padding:24px 0;z-index:100;box-shadow:4px 0 32px rgba(13,59,46,0.3);}
+    .logo{padding:0 20px 20px;border-bottom:.5px solid rgba(255,255,255,0.13);margin-bottom:12px;}
+    .logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--emas),var(--emas-terang));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:8px;box-shadow:0 2px 10px rgba(201,168,76,0.4);}
+    .logo-title{font-family:'Amiri',serif;font-size:20px;color:#d8f3dc;font-weight:700;line-height:1.2;}
+    .logo-sub{font-size:10px;color:var(--emas-terang);letter-spacing:.08em;margin-top:2px;opacity:.8;}
+    .nav{display:flex;flex-direction:column;gap:2px;padding:0 12px;flex:1;overflow-y:auto;}
+    .nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;font-size:13px;color:#b7e4c7;cursor:pointer;transition:all .15s;text-decoration:none;width:100%;}
+    .nav-item:hover{background:rgba(255,255,255,0.1);color:#d8f3dc;}
+    .nav-item.active{background:linear-gradient(90deg,rgba(255,255,255,0.18),rgba(255,255,255,0.06));color:#d8f3dc;font-weight:600;border-left:3px solid var(--emas);}
+    .nav-item i{font-size:17px;flex-shrink:0;}
+    .nav-section{font-size:10px;color:var(--emas);letter-spacing:.1em;text-transform:uppercase;padding:10px 12px 4px;margin-top:6px;opacity:.8;}
+    .user-area{padding:14px 20px 0;border-top:.5px solid rgba(255,255,255,0.13);margin-top:auto;}
+    .avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--emas),var(--emas-terang));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#0d3b2e;flex-shrink:0;}
+    .username{font-size:13px;color:#d8f3dc;font-weight:600;}
+    .usertag{font-size:11px;color:var(--emas-terang);opacity:.8;}
+
+    /* MAIN */
+    .main{margin-left:var(--sidebar-w);padding:28px 28px 60px;min-height:100vh;}
+    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px;}
+    .greeting{font-size:22px;font-weight:700;color:var(--green-darkest);}
+    .datestr{font-size:12.5px;color:var(--text-mid);margin-top:2px;}
+    .notif-btn{width:38px;height:38px;border-radius:10px;background:#fff;border:.5px solid #b7e4c7;display:flex;align-items:center;justify-content:center;color:#2d6a4f;cursor:pointer;position:relative;}
+    .notif-dot{position:absolute;top:7px;right:7px;width:7px;height:7px;background:#52b788;border-radius:50%;border:1.5px solid #fff;}
+
+    /* CARDS */
+    .card{background:var(--card-bg);border-radius:16px;border:.5px solid #c8e6c9;padding:18px 20px;box-shadow:0 2px 14px rgba(27,67,50,0.07);}
+    .card-title{font-size:13px;color:var(--text-mid);font-weight:600;}
+    .card-icon{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#d8f3dc,#b7e4c7);display:flex;align-items:center;justify-content:center;color:#2d6a4f;font-size:16px;}
+    .card-icon.gold{background:linear-gradient(135deg,#faf0d7,#f5dfa0);color:#7a6030;}
+    .card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+
+    /* GRIDS */
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:18px;}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px;}
+
+    /* STAT */
+    .stat-num{font-size:32px;font-weight:700;color:var(--green-darkest);line-height:1;}
+    .stat-sub{font-size:12px;color:var(--text-mid);margin-top:4px;margin-bottom:8px;}
+    .progress-bar{height:6px;background:#e8f5e9;border-radius:99px;overflow:hidden;}
+    .progress-fill{height:100%;background:linear-gradient(90deg,#52b788,#74c69d);border-radius:99px;transition:width .5s ease;}
+    .progress-fill.gold{background:linear-gradient(90deg,var(--emas),var(--emas-terang));}
+
+    /* BANNER SESI HD */
+    .hd-banner{background:linear-gradient(120deg,#0d3b2e 0%,#1a5c45 40%,#2e8b63 100%);border-radius:18px;padding:22px 28px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 4px 24px rgba(13,59,46,0.25);position:relative;overflow:hidden;}
+    .hd-banner::before{content:'';position:absolute;right:-30px;top:-30px;width:140px;height:140px;border-radius:50%;background:rgba(201,168,76,0.06);}
+    .hd-banner::after{content:'';position:absolute;right:60px;bottom:-40px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,0.04);}
+    .hd-label{font-size:11px;color:#95d5b2;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px;}
+    .hd-title{font-family:'Amiri',serif;font-size:24px;color:#d8f3dc;font-weight:700;}
+    .hd-sub{font-size:12px;color:#95d5b2;margin-top:4px;}
+    .hd-badge{background:rgba(201,168,76,0.2);border:1px solid rgba(201,168,76,0.4);border-radius:12px;padding:10px 20px;text-align:center;position:relative;z-index:1;}
+    .hd-badge-num{font-size:36px;font-weight:700;color:var(--emas-terang);line-height:1;}
+    .hd-badge-label{font-size:10px;color:rgba(255,255,255,0.6);margin-top:2px;letter-spacing:.04em;}
+
+    /* PRAYER BANNER */
+    .prayer-banner{background:linear-gradient(120deg,#1B4332 0%,#2d6a4f 40%,#52b788 100%);border-radius:18px;padding:18px 24px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 4px 24px rgba(27,67,50,0.18);position:relative;overflow:hidden;}
+    .prayer-banner::before{content:'';position:absolute;right:-30px;top:-30px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,0.06);}
+    .prayer-label{font-size:11px;color:#95d5b2;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px;}
+    .prayer-name{font-family:'Amiri',serif;font-size:22px;color:#d8f3dc;font-weight:700;}
+    .prayer-time{font-size:36px;font-weight:700;color:#fff;letter-spacing:-1px;position:relative;z-index:1;}
+    .prayer-countdown{font-size:12px;color:#95d5b2;margin-top:4px;}
+    .live-clock{font-size:12px;color:#74c69d;margin-top:4px;}
+    .prayer-pills{display:flex;gap:10px;margin-bottom:18px;}
+    .pill{background:#fff;border-radius:10px;border:.5px solid #b7e4c7;padding:10px 14px;text-align:center;flex:1;}
+    .pill-name{font-size:10px;color:#74c69d;}
+    .pill-t{font-size:13.5px;font-weight:600;color:#1B4332;margin-top:2px;}
+    .pill.done{background:linear-gradient(135deg,#d8f3dc,#b7e4c7);}
+    .pill.done .pill-t{color:#2d6a4f;text-decoration:line-through;opacity:.7;}
+    .pill.next{border-color:#52b788;box-shadow:0 0 0 2px #52b78830;}
+
+    /* DZIKIR */
+    .dzikir-arab{font-family:'Amiri',serif;font-size:26px;color:#1B4332;text-align:center;margin:10px 0 4px;line-height:1.6;}
+    .dzikir-latin{font-size:13px;color:#40916c;text-align:center;font-weight:500;}
+    .dzikir-arti{font-size:12px;color:#74c69d;text-align:center;margin-top:2px;margin-bottom:14px;}
+    .counter-wrap{display:flex;align-items:center;justify-content:center;gap:16px;margin:10px 0;}
+    .counter-num{font-size:48px;font-weight:700;color:#1B4332;min-width:80px;text-align:center;}
+    .counter-btn{width:44px;height:44px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;transition:all .15s;background:#e8f5e9;color:#2d6a4f;}
+    .counter-btn:hover{background:#d8f3dc;}
+    .counter-btn.main{background:linear-gradient(135deg,#52b788,#40916c);color:#fff;width:56px;height:56px;font-size:22px;box-shadow:0 4px 14px rgba(82,183,136,0.4);}
+    .counter-btn.main:hover{transform:scale(1.07);}
+
+    /* MOOD */
+    .mood-grid{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0;}
+    .mood-btn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 12px;border-radius:12px;border:.5px solid #c8e6c9;background:#fff;cursor:pointer;transition:all .15s;flex:1;min-width:70px;}
+    .mood-btn:hover{background:#f0faf2;border-color:#74c69d;}
+    .mood-btn.active{background:linear-gradient(135deg,#d8f3dc,#f0faf2);border-color:#52b788;}
+    .mood-icon{font-size:22px;}
+    .mood-label{font-size:11px;color:#52796f;font-weight:500;}
+
+    /* QUOTE */
+    .quote-card{background:linear-gradient(120deg,#0d3b2e,#1a5c45);border-radius:16px;padding:20px 24px;margin-top:4px;position:relative;overflow:hidden;}
+    .quote-card::before{content:'\201C';position:absolute;top:-10px;left:16px;font-size:80px;color:rgba(255,255,255,0.07);font-family:'Amiri',serif;line-height:1;}
+    .quote-emas-line{height:2px;background:linear-gradient(90deg,transparent,var(--emas),transparent);margin-bottom:14px;}
+    .quote-label{font-size:10px;color:var(--emas-terang);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;opacity:.8;}
+    .quote-text{font-family:'Amiri',serif;font-size:18px;color:#d8f3dc;line-height:1.6;}
+    .quote-source{font-size:11px;color:#74c69d;margin-top:8px;}
+
+    /* STRESS INDICATOR */
+    .stress-bar-wrap{margin:12px 0;}
+    .stress-level{display:flex;justify-content:space-between;font-size:11px;color:var(--text-mid);margin-bottom:4px;}
+    .stress-bar{height:8px;background:#e8f5e9;border-radius:99px;overflow:hidden;}
+    .stress-fill{height:100%;border-radius:99px;transition:width .5s ease;}
+    .stress-fill.rendah{background:linear-gradient(90deg,#52b788,#74c69d);}
+    .stress-fill.sedang{background:linear-gradient(90deg,#f0a500,#f5c842);}
+    .stress-fill.tinggi{background:linear-gradient(90deg,#e05c5c,#f08080);}
+    .stress-badge{display:inline-block;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:600;margin-top:6px;}
+    .stress-badge.rendah{background:#d8f3dc;color:#1B4332;}
+    .stress-badge.sedang{background:#fff3cd;color:#7a5c00;}
+    .stress-badge.tinggi{background:#fde8e8;color:#a02020;}
+
+    ::-webkit-scrollbar{width:4px;}
+    ::-webkit-scrollbar-track{background:transparent;}
+    ::-webkit-scrollbar-thumb{background:#b7e4c7;border-radius:99px;}
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="logo">
+    <div class="logo-icon">☪</div>
+    <div class="logo-title">DzikirCare HD</div>
+    <div class="logo-sub">HEMODIALISA & DZIKIR</div>
+  </div>
+  <nav class="nav">
+    <div class="nav-section">Utama</div>
+    <a class="nav-item active" href="dashboard.html"><i class="ti ti-layout-dashboard"></i> Dashboard</a>
+    <a class="nav-item" href="dzikir.html"><i class="ti ti-rosette"></i> Dzikir Digital</a>
+    <a class="nav-item" href="sholat.html"><i class="ti ti-clock"></i> Jadwal Sholat</a>
+
+    <div class="nav-section">Evaluasi Psikologis</div>
+    <a class="nav-item" href="screening.html"><i class="ti ti-heart-rate-monitor"></i> Screening Stres</a>
+    <a class="nav-item" href="selfefficacy.html"><i class="ti ti-brain"></i> Self-Efikasi</a>
+    <a class="nav-item" href="mood.html"><i class="ti ti-mood-smile"></i> Mood Tracker</a>
+
+    <div class="nav-section">Lainnya</div>
+    <a class="nav-item" href="statistik.html"><i class="ti ti-chart-bar"></i> Statistik</a>
+    <a class="nav-item" href="profil.html"><i class="ti ti-user-circle"></i> Profil Saya</a>
+  </nav>
+  <div class="user-area">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="avatar">A</div>
+      <div>
+        <div class="username" id="sidebar-name">Ahmad</div>
+        <div class="usertag">Pasien Hemodialisa</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <div>
+      <div class="greeting" id="greeting">Assalamu'alaikum 👋</div>
+      <div class="datestr" id="datestr"></div>
+    </div>
+    <div class="notif-btn"><i class="ti ti-bell"></i><div class="notif-dot"></div></div>
+  </div>
+
+  <!-- BANNER SESI HD -->
+  <div class="hd-banner">
+    <div style="position:relative;z-index:1;">
+      <div class="hd-label">Program Hemodialisa</div>
+      <div class="hd-title">Sesi HD Hari Ini</div>
+      <div class="hd-sub">Tetap semangat, Allah bersamamu 🤲</div>
+      <div style="margin-top:10px;display:flex;gap:8px;">
+        <span style="background:rgba(255,255,255,0.1);border-radius:8px;padding:4px 12px;font-size:11px;color:#95d5b2;">Sesi ke-3 bulan ini</span>
+        <span style="background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.3);border-radius:8px;padding:4px 12px;font-size:11px;color:var(--emas-terang);">Dzikir Aktif ✓</span>
+      </div>
+    </div>
+    <div class="hd-badge">
+      <div class="hd-badge-num" id="hd-streak">7</div>
+      <div class="hd-badge-label">HARI KONSISTEN</div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-header"><span class="card-title">Dzikir Hari Ini</span><div class="card-icon"><i class="ti ti-rosette"></i></div></div>
+      <div class="stat-num" id="dash-dzikir-count">0</div>
+      <div class="stat-sub">target 300x</div>
+      <div class="progress-bar"><div class="progress-fill" id="dash-dzikir-bar" style="width:0%"></div></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">Tingkat Stres</span><div class="card-icon gold"><i class="ti ti-heart-rate-monitor"></i></div></div>
+      <div class="stat-num" style="color:#c9a84c;">42</div>
+      <div class="stat-sub">dari 100 poin</div>
+      <div class="progress-bar"><div class="progress-fill gold" style="width:42%"></div></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">Self-Efikasi</span><div class="card-icon"><i class="ti ti-brain"></i></div></div>
+      <div class="stat-num">78%</div>
+      <div class="stat-sub">tingkat keyakinan diri</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:78%"></div></div>
+    </div>
+  </div>
+
+  <!-- PRAYER BANNER -->
+  <div class="prayer-banner">
+    <div style="position:relative;z-index:1;">
+      <div class="prayer-label">Sholat Berikutnya</div>
+      <div class="prayer-name" id="next-prayer-name">—</div>
+      <div class="prayer-countdown" id="next-prayer-countdown">Memuat...</div>
+      <div class="live-clock" id="live-clock"></div>
+    </div>
+    <div class="prayer-time" id="next-prayer-time" style="position:relative;z-index:1;">—</div>
+  </div>
+
+  <div class="prayer-pills" id="prayer-pills"></div>
+
+  <!-- DZIKIR + MOOD -->
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header"><span class="card-title">Dzikir Sekarang</span><div class="card-icon"><i class="ti ti-player-play"></i></div></div>
+      <div class="dzikir-arab" id="dash-dz-arab">سُبْحَانَ اللَّهِ</div>
+      <div class="dzikir-latin" id="dash-dz-latin">Subhanallah</div>
+      <div class="dzikir-arti" id="dash-dz-arti">Maha Suci Allah</div>
+      <div class="counter-wrap">
+        <button class="counter-btn" onclick="resetDzikir()"><i class="ti ti-refresh"></i></button>
+        <div class="counter-num" id="counter">0</div>
+        <button class="counter-btn main" onclick="tapDzikir()"><i class="ti ti-plus"></i></button>
+      </div>
+      <div id="dzikir-target" style="font-size:12px;color:#74c69d;text-align:center;">33x target • tekan tombol +</div>
+      <div class="progress-bar" style="margin-top:8px;"><div class="progress-fill" id="dz-bar" style="width:0%"></div></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">Kondisi Hari Ini?</span><div class="card-icon"><i class="ti ti-mood-smile"></i></div></div>
+      <div style="font-size:11px;color:var(--text-mid);margin-bottom:8px;">Bagaimana perasaanmu setelah sesi HD?</div>
+      <div class="mood-grid">
+        <div class="mood-btn" onclick="pickMood(this,'Tenang')"><span class="mood-icon">😌</span><span class="mood-label">Tenang</span></div>
+        <div class="mood-btn" onclick="pickMood(this,'Lelah')"><span class="mood-icon">😔</span><span class="mood-label">Lelah</span></div>
+        <div class="mood-btn" onclick="pickMood(this,'Cemas')"><span class="mood-icon">😟</span><span class="mood-label">Cemas</span></div>
+        <div class="mood-btn" onclick="pickMood(this,'Semangat')"><span class="mood-icon">💪</span><span class="mood-label">Semangat</span></div>
+        <div class="mood-btn" onclick="pickMood(this,'Bersyukur')"><span class="mood-icon">🤲</span><span class="mood-label">Syukur</span></div>
+      </div>
+      <div id="dash-mood-msg" style="font-size:12px;color:#74c69d;text-align:center;margin-top:8px;min-height:16px;"></div>
+    </div>
+  </div>
+
+  <!-- QUOTE -->
+  <div class="quote-card">
+    <div class="quote-emas-line"></div>
+    <div class="quote-label">MOTIVASI ISLAMI UNTUK PASIEN HD</div>
+    <div class="quote-text" id="daily-quote"></div>
+    <div class="quote-source" id="daily-quote-src"></div>
+  </div>
+</main>
+
+<script>
+const PRAYERS = ['Subuh','Dzuhur','Ashar','Maghrib','Isya'];
+const PRAYER_TIMES = {Subuh:'04:27',Dzuhur:'11:38',Ashar:'14:57',Maghrib:'17:34',Isya:'18:47'};
+
+const QUOTES = [
+  {text:'Sesungguhnya bersama kesulitan ada kemudahan.',src:'QS. Al-Insyirah: 6'},
+  {text:'Allah tidak membebani seseorang melainkan sesuai dengan kesanggupannya.',src:'QS. Al-Baqarah: 286'},
+  {text:'Ingatlah, hanya dengan mengingat Allah hati menjadi tenteram.',src:'QS. Ar-Ra\'d: 28'},
+  {text:'Dan bertawakkallah kepada Allah. Cukuplah Allah sebagai pelindung.',src:'QS. An-Nisa: 81'},
+  {text:'Boleh jadi kamu membenci sesuatu, padahal itu baik bagimu.',src:'QS. Al-Baqarah: 216'},
+  {text:'Sakit yang menimpa seorang muslim, Allah jadikan sebagai penghapus dosa-dosanya.',src:'HR. Bukhari & Muslim'},
+];
+
+const MOOD_MSG = {
+  Tenang:'Alhamdulillah, ketenangan adalah tanda dzikir yang diterima 🌿',
+  Lelah:'Wajar merasa lelah. Istirahat & dzikir, Allah memberikan kekuatan 💚',
+  Cemas:'Ambil napas, baca istighfar. Serahkan semua pada Allah 🤲',
+  Semangat:'Masya Allah! Semangat ini adalah anugerah. Teruskan! 💪',
+  Bersyukur:'Syukur adalah kunci bertambahnya nikmat dari Allah 🌙',
+};
+
+let dzikirCount = 0;
+const dzikirTarget = 33;
+
+window.onload = () => {
+  // Ambil nama user dari login
+  const user = localStorage.getItem('dzikircare_user') || 'Pasien';
+  document.getElementById('greeting').textContent = `Assalamu'alaikum, ${user} 👋`;
+  document.getElementById('sidebar-name').textContent = user;
+
+  setDate();
+  setQuote();
+  renderPrayerPills();
+  tick();
+  setInterval(tick, 1000);
+};
+
+function tick(){ renderPrayerBanner(); }
+
+function setDate(){
+  const now = new Date();
+  const days = ['Ahad','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+  const months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  document.getElementById('datestr').textContent = days[now.getDay()]+', '+now.getDate()+' '+months[now.getMonth()]+' '+now.getFullYear();
+}
+
+function setQuote(){
+  const q = QUOTES[Math.floor(Math.random()*QUOTES.length)];
+  document.getElementById('daily-quote').textContent = '\u201C'+q.text+'\u201D';
+  document.getElementById('daily-quote-src').textContent = '— '+q.src;
+}
+
+function pMins(name){ const t=PRAYER_TIMES[name].split(':'); return parseInt(t[0])*60+parseInt(t[1]); }
+function nowMins(){ const n=new Date(); return n.getHours()*60+n.getMinutes(); }
+
+function renderPrayerBanner(){
+  const now = nowMins();
+  const nowDate = new Date();
+  let next = PRAYERS.find(p => pMins(p) > now) || 'Subuh';
+  const diff = Math.max(pMins(next) - now + (pMins(next) <= now ? 24*60 : 0), 0);
+  const h = Math.floor(diff/60), m = diff%60;
+  document.getElementById('next-prayer-name').textContent = next;
+  document.getElementById('next-prayer-time').textContent = PRAYER_TIMES[next];
+  document.getElementById('next-prayer-countdown').textContent = `dalam ${h>0?h+' jam ':''} ${m} menit lagi`;
+  document.getElementById('live-clock').textContent =
+    `Waktu sekarang: ${String(nowDate.getHours()).padStart(2,'0')}:${String(nowDate.getMinutes()).padStart(2,'0')}:${String(nowDate.getSeconds()).padStart(2,'0')}`;
+}
+
+function renderPrayerPills(){
+  const now = nowMins();
+  const el = document.getElementById('prayer-pills');
+  el.innerHTML = '';
+  PRAYERS.forEach(p => {
+    const isPast = pMins(p) < now;
+    const isNext = !isPast && PRAYERS.find(x => pMins(x) > now) === p;
+    const div = document.createElement('div');
+    div.className = 'pill'+(isPast?' done':isNext?' next':'');
+    div.innerHTML = `<div class="pill-name">${p}</div><div class="pill-t">${PRAYER_TIMES[p]}</div>`;
+    el.appendChild(div);
+  });
+}
+
+function tapDzikir(){
+  dzikirCount++;
+  document.getElementById('counter').textContent = dzikirCount;
+  const pct = Math.min(Math.round(dzikirCount/dzikirTarget*100),100);
+  document.getElementById('dz-bar').style.width = pct+'%';
+  document.getElementById('dash-dzikir-count').textContent = dzikirCount;
+  document.getElementById('dash-dzikir-bar').style.width = Math.min(Math.round(dzikirCount/300*100),100)+'%';
+  const rem = dzikirTarget - dzikirCount;
+  document.getElementById('dzikir-target').textContent = rem > 0 ? `${dzikirTarget}x target • ${rem} lagi` : 'Alhamdulillah! Target tercapai 🎉';
+}
+
+function resetDzikir(){
+  dzikirCount = 0;
+  document.getElementById('counter').textContent = '0';
+  document.getElementById('dz-bar').style.width = '0%';
+  document.getElementById('dzikir-target').textContent = dzikirTarget+'x target • tekan tombol +';
+}
+
+function pickMood(el, mood){
+  document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('dash-mood-msg').textContent = MOOD_MSG[mood] || '';
+}
+</script>
+</body>
+</html>

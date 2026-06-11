@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edukasi — DzikirCare HD</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    :root{
+      --hijau-tua:#0d3b2e;
+      --hijau-gelap:#1a5c45;
+      --hijau-mid:#2e8b63;
+      --hijau-soft:#3dab7a;
+      --hijau-terang:#5ec995;
+      --hijau-pucat:#e8f7f0;
+      --emas:#c9a84c;
+      --emas-terang:#e8c96b;
+      --emas-muda:#faf0d7;
+      --text-dark:#1a3a1a;
+      --text-mid:#52796f;
+      --sidebar-w:224px;
+    }
+    body{font-family:'Plus Jakarta Sans',sans-serif;background:linear-gradient(135deg,#e8f5e9 0%,#f1f8e9 50%,#e0f2f1 100%);min-height:100vh;color:var(--text-dark);}
+
+    /* SIDEBAR */
+    .sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--sidebar-w);background:linear-gradient(180deg,#0d3b2e 0%,#1a5c45 60%,#2e8b63 100%);display:flex;flex-direction:column;padding:24px 0;z-index:100;box-shadow:4px 0 32px rgba(13,59,46,0.3);}
+    .logo{padding:0 20px 20px;border-bottom:.5px solid rgba(255,255,255,0.13);margin-bottom:12px;}
+    .logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--emas),var(--emas-terang));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:8px;box-shadow:0 2px 10px rgba(201,168,76,0.4);}
+    .logo-title{font-family:'Amiri',serif;font-size:20px;color:#d8f3dc;font-weight:700;}
+    .logo-sub{font-size:10px;color:var(--emas-terang);letter-spacing:.08em;margin-top:2px;opacity:.8;}
+    .nav{display:flex;flex-direction:column;gap:2px;padding:0 12px;flex:1;overflow-y:auto;}
+    .nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;font-size:13px;color:#b7e4c7;cursor:pointer;transition:all .15s;text-decoration:none;width:100%;}
+    .nav-item:hover{background:rgba(255,255,255,0.1);color:#d8f3dc;}
+    .nav-item.active{background:linear-gradient(90deg,rgba(255,255,255,0.18),rgba(255,255,255,0.06));color:#d8f3dc;font-weight:600;border-left:3px solid var(--emas);}
+    .nav-item i{font-size:17px;flex-shrink:0;}
+    .nav-section{font-size:10px;color:var(--emas);letter-spacing:.1em;text-transform:uppercase;padding:10px 12px 4px;margin-top:6px;opacity:.8;}
+    .user-area{padding:14px 20px 0;border-top:.5px solid rgba(255,255,255,0.13);margin-top:auto;}
+    .avatar-sm{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--emas),var(--emas-terang));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#0d3b2e;flex-shrink:0;}
+    .username{font-size:13px;color:#d8f3dc;font-weight:600;}
+    .usertag{font-size:11px;color:var(--emas-terang);opacity:.8;}
+
+    /* MAIN */
+    .main{margin-left:var(--sidebar-w);padding:28px 28px 60px;min-height:100vh;}
+    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+    .page-title{font-size:22px;font-weight:700;color:var(--hijau-tua);}
+    .page-sub{font-size:12.5px;color:var(--text-mid);margin-top:2px;}
+
+    /* SEARCH BAR */
+    .search-wrap{position:relative;margin-bottom:20px;}
+    .search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#b7e4c7;font-size:16px;}
+    .search-input{width:100%;padding:12px 14px 12px 42px;border:1.5px solid #c8e6c9;border-radius:14px;font-size:13.5px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--hijau-tua);background:#fff;outline:none;transition:all .2s;}
+    .search-input:focus{border-color:var(--hijau-soft);box-shadow:0 0 0 3px rgba(46,139,99,0.1);}
+    .search-input::placeholder{color:#b0b0b0;}
+
+    /* KATEGORI TABS */
+    .tabs{display:flex;gap:8px;margin-bottom:22px;flex-wrap:wrap;}
+    .tab{padding:8px 16px;border-radius:99px;font-size:12.5px;font-weight:600;cursor:pointer;border:1.5px solid #c8e6c9;background:#fff;color:var(--text-mid);transition:all .2s;white-space:nowrap;}
+    .tab:hover{border-color:var(--hijau-soft);color:var(--hijau-mid);}
+    .tab.active{background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-mid));color:#fff;border-color:transparent;}
+    .tab.gold.active{background:linear-gradient(135deg,var(--emas),var(--emas-terang));color:var(--hijau-tua);}
+
+    /* FEATURED BANNER */
+    .featured-banner{background:linear-gradient(120deg,var(--hijau-tua) 0%,var(--hijau-gelap) 50%,var(--hijau-mid) 100%);border-radius:20px;padding:24px 28px;margin-bottom:22px;display:flex;align-items:center;justify-content:space-between;position:relative;overflow:hidden;}
+    .featured-banner::before{content:'';position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;background:rgba(201,168,76,0.08);}
+    .featured-banner::after{content:'';position:absolute;right:80px;bottom:-50px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,0.04);}
+    .featured-tag{font-size:10px;font-weight:700;color:var(--emas-terang);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;}
+    .featured-title{font-family:'Amiri',serif;font-size:22px;color:#fff;font-weight:700;line-height:1.3;max-width:320px;}
+    .featured-desc{font-size:12px;color:rgba(255,255,255,0.6);margin-top:6px;max-width:300px;line-height:1.6;}
+    .featured-btn{background:linear-gradient(135deg,var(--emas),var(--emas-terang));color:var(--hijau-tua);border:none;border-radius:10px;padding:10px 20px;font-size:12.5px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;margin-top:14px;display:inline-flex;align-items:center;gap:6px;position:relative;z-index:1;transition:all .2s;}
+    .featured-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(201,168,76,0.4);}
+    .featured-illus{font-size:64px;position:relative;z-index:1;flex-shrink:0;}
+
+    /* GRID ARTIKEL */
+    .section-title{font-size:14px;font-weight:700;color:var(--hijau-tua);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+    .section-title i{color:var(--hijau-mid);font-size:16px;}
+    .artikel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;}
+    .artikel-card{background:#fff;border-radius:16px;border:.5px solid #c8e6c9;overflow:hidden;cursor:pointer;transition:all .2s;box-shadow:0 2px 10px rgba(27,67,50,0.06);}
+    .artikel-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(27,67,50,0.12);border-color:var(--hijau-terang);}
+    .artikel-thumb{height:100px;display:flex;align-items:center;justify-content:center;font-size:40px;position:relative;overflow:hidden;}
+    .artikel-thumb.green{background:linear-gradient(135deg,var(--hijau-pucat),#c8f0dc);}
+    .artikel-thumb.gold{background:linear-gradient(135deg,var(--emas-muda),#f5e0a0);}
+    .artikel-thumb.blue{background:linear-gradient(135deg,#dbeafe,#bfdbfe);}
+    .artikel-thumb.purple{background:linear-gradient(135deg,#ede9fe,#ddd6fe);}
+    .artikel-body{padding:14px;}
+    .artikel-kategori{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
+    .kat-manstres{color:var(--hijau-mid);}
+    .kat-dzikir{color:var(--emas);}
+    .kat-hd{color:#3b82f6;}
+    .kat-selfcare{color:#7c3aed;}
+    .artikel-judul{font-size:13px;font-weight:700;color:var(--hijau-tua);line-height:1.4;margin-bottom:6px;}
+    .artikel-desc{font-size:11.5px;color:var(--text-mid);line-height:1.5;}
+    .artikel-footer{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:.5px solid #f0faf2;}
+    .artikel-meta{font-size:10.5px;color:#b0b0b0;display:flex;align-items:center;gap:4px;}
+    .artikel-baca{font-size:11px;font-weight:700;color:var(--hijau-mid);display:flex;align-items:center;gap:3px;}
+
+    /* VIDEO GRID */
+    .video-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:24px;}
+    .video-card{background:#fff;border-radius:14px;border:.5px solid #c8e6c9;overflow:hidden;cursor:pointer;transition:all .2s;display:flex;gap:0;flex-direction:column;box-shadow:0 2px 10px rgba(27,67,50,0.06);}
+    .video-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(27,67,50,0.1);}
+    .video-thumb{height:80px;background:linear-gradient(135deg,#1a5c45,#2e8b63);display:flex;align-items:center;justify-content:center;position:relative;}
+    .play-btn{width:40px;height:40px;background:rgba(255,255,255,0.9);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--hijau-tua);}
+    .video-dur{position:absolute;bottom:8px;right:10px;background:rgba(0,0,0,0.5);color:#fff;font-size:10px;padding:2px 6px;border-radius:4px;}
+    .video-body{padding:12px 14px;}
+    .video-judul{font-size:12.5px;font-weight:700;color:var(--hijau-tua);line-height:1.4;}
+    .video-meta{font-size:11px;color:var(--text-mid);margin-top:4px;display:flex;align-items:center;gap:6px;}
+
+    /* TIPS CARD */
+    .tips-list{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;}
+    .tips-item{background:#fff;border-radius:14px;border:.5px solid #c8e6c9;padding:14px 16px;display:flex;align-items:flex-start;gap:12px;cursor:pointer;transition:all .2s;}
+    .tips-item:hover{border-color:var(--hijau-terang);background:var(--hijau-pucat);}
+    .tips-num{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-mid));color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .tips-num.gold{background:linear-gradient(135deg,var(--emas),var(--emas-terang));color:var(--hijau-tua);}
+    .tips-judul{font-size:13px;font-weight:700;color:var(--hijau-tua);margin-bottom:3px;}
+    .tips-desc{font-size:12px;color:var(--text-mid);line-height:1.5;}
+
+    /* MODAL ARTIKEL */
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;display:none;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto;}
+    .modal-overlay.show{display:flex;}
+    .modal{background:#fff;border-radius:20px;width:100%;max-width:600px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,0.25);margin:auto;}
+    .modal-header{padding:24px 24px 20px;background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-mid));position:relative;}
+    .modal-close{position:absolute;top:16px;right:16px;width:32px;height:32px;background:rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:16px;border:none;}
+    .modal-kat{font-size:10px;font-weight:700;color:var(--emas-terang);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;}
+    .modal-title{font-family:'Amiri',serif;font-size:22px;color:#fff;line-height:1.3;}
+    .modal-body{padding:24px;}
+    .modal-content{font-size:13.5px;color:#333;line-height:1.8;}
+    .modal-content h4{font-size:14px;font-weight:700;color:var(--hijau-tua);margin:16px 0 8px;}
+    .modal-content p{margin-bottom:12px;}
+    .modal-content ul{padding-left:20px;margin-bottom:12px;}
+    .modal-content ul li{margin-bottom:6px;}
+    .modal-content .ayat{font-family:'Amiri',serif;font-size:20px;color:var(--hijau-tua);text-align:center;margin:16px 0 4px;line-height:1.8;}
+    .modal-content .terjemah{font-size:12px;color:var(--text-mid);text-align:center;font-style:italic;margin-bottom:16px;}
+
+    ::-webkit-scrollbar{width:4px;}
+    ::-webkit-scrollbar-track{background:transparent;}
+    ::-webkit-scrollbar-thumb{background:#b7e4c7;border-radius:99px;}
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="logo">
+    <div class="logo-icon">☪</div>
+    <div class="logo-title">DzikirCare HD</div>
+    <div class="logo-sub">HEMODIALISA & DZIKIR</div>
+  </div>
+  <nav class="nav">
+    <div class="nav-section">Utama</div>
+    <a class="nav-item" href="dashboard.html"><i class="ti ti-layout-dashboard"></i> Dashboard</a>
+    <a class="nav-item" href="dzikir.html"><i class="ti ti-rosette"></i> Dzikir Digital</a>
+    <a class="nav-item" href="sholat.html"><i class="ti ti-clock"></i> Jadwal Sholat</a>
+    <div class="nav-section">Evaluasi Psikologis</div>
+    <a class="nav-item" href="screening.html"><i class="ti ti-heart-rate-monitor"></i> Screening Stres</a>
+    <a class="nav-item" href="selfefficacy.html"><i class="ti ti-brain"></i> Self-Efikasi</a>
+    <a class="nav-item" href="mood.html"><i class="ti ti-mood-smile"></i> Mood Tracker</a>
+    <div class="nav-section">Lainnya</div>
+    <a class="nav-item active" href="edukasi.html"><i class="ti ti-book"></i> Edukasi</a>
+    <a class="nav-item" href="statistik.html"><i class="ti ti-chart-bar"></i> Statistik</a>
+    <a class="nav-item" href="pengingat.html"><i class="ti ti-bell"></i> Pengingat</a>
+    <a class="nav-item" href="profil.html"><i class="ti ti-user-circle"></i> Profil Saya</a>
+  </nav>
+  <div class="user-area">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="avatar-sm">A</div>
+      <div>
+        <div class="username">Ahmad</div>
+        <div class="usertag">Pasien Hemodialisa</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <div>
+      <div class="page-title">📚 Edukasi</div>
+      <div class="page-sub">Artikel, tips, dan video seputar HD, dzikir & kesehatan mental</div>
+    </div>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search-wrap">
+    <i class="ti ti-search search-icon"></i>
+    <input type="text" class="search-input" placeholder="Cari artikel, tips, atau video..." oninput="filterKonten(this.value)">
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <div class="tab active" onclick="filterTab(this,'semua')">Semua</div>
+    <div class="tab" onclick="filterTab(this,'manstres')">Manajemen Stres</div>
+    <div class="tab" onclick="filterTab(this,'dzikir')">Terapi Dzikir</div>
+    <div class="tab" onclick="filterTab(this,'hd')">Self Care HD</div>
+    <div class="tab" onclick="filterTab(this,'kepatuhan')">Kepatuhan Terapi</div>
+  </div>
+
+  <!-- FEATURED -->
+  <div class="featured-banner">
+    <div style="position:relative;z-index:1;">
+      <div class="featured-tag">✦ Artikel Pilihan</div>
+      <div class="featured-title">Dzikir sebagai Terapi Spiritual Pasien Hemodialisa</div>
+      <div class="featured-desc">Bagaimana dzikir dapat menurunkan stres dan meningkatkan self-efikasi pasien yang menjalani HD rutin.</div>
+      <button class="featured-btn" onclick="openArtikel(0)"><i class="ti ti-book-open"></i> Baca Selengkapnya</button>
+    </div>
+    <div class="featured-illus">🤲</div>
+  </div>
+
+  <!-- ARTIKEL -->
+  <div class="section-title"><i class="ti ti-article"></i> Artikel Kesehatan</div>
+  <div class="artikel-grid" id="artikel-grid">
+
+    <div class="artikel-card" data-kat="manstres" onclick="openArtikel(1)">
+      <div class="artikel-thumb green">🧘</div>
+      <div class="artikel-body">
+        <div class="artikel-kategori kat-manstres">Manajemen Stres</div>
+        <div class="artikel-judul">Teknik Relaksasi untuk Pasien HD</div>
+        <div class="artikel-desc">Cara efektif mengelola kecemasan selama sesi hemodialisa berlangsung.</div>
+        <div class="artikel-footer">
+          <span class="artikel-meta"><i class="ti ti-clock" style="font-size:12px;"></i> 5 menit</span>
+          <span class="artikel-baca">Baca <i class="ti ti-arrow-right" style="font-size:11px;"></i></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="artikel-card" data-kat="dzikir" onclick="openArtikel(2)">
+      <div class="artikel-thumb gold">📿</div>
+      <div class="artikel-body">
+        <div class="artikel-kategori kat-dzikir">Terapi Dzikir</div>
+        <div class="artikel-judul">Keutamaan Dzikir bagi Kesehatan Mental</div>
+        <div class="artikel-desc">Bukti ilmiah dan spiritual tentang manfaat dzikir dalam menurunkan kadar kortisol.</div>
+        <div class="artikel-footer">
+          <span class="artikel-meta"><i class="ti ti-clock" style="font-size:12px;"></i> 7 menit</span>
+          <span class="artikel-baca">Baca <i class="ti ti-arrow-right" style="font-size:11px;"></i></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="artikel-card" data-kat="hd" onclick="openArtikel(3)">
+      <div class="artikel-thumb blue">💧</div>
+      <div class="artikel-body">
+        <div class="artikel-kategori kat-hd">Self Care HD</div>
+        <div class="artikel-judul">Menjaga Pola Makan saat Menjalani HD</div>
+        <div class="artikel-desc">Panduan nutrisi dan diet yang tepat untuk pasien hemodialisa agar tetap kuat.</div>
+        <div class="artikel-footer">
+          <span class="artikel-meta"><i class="ti ti-clock" style="font-size:12px;"></i> 6 menit</span>
+          <span class="artikel-baca">Baca <i class="ti ti-arrow-right" style="font-size:11px;"></i></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="artikel-card" data-kat="kepatuhan" onclick="openArtikel(4)">
+      <div class="artikel-thumb purple">💊</div>
+      <div class="artikel-body">
+        <div class="artikel-kategori kat-selfcare" style="color:#7c3aed;">Kepatuhan Terapi</div>
+        <div class="artikel-judul">Pentingnya Konsistensi Sesi HD Rutin</div>
+        <div class="artikel-desc">Mengapa tidak boleh melewatkan sesi HD dan dampaknya bagi kesehatan jangka panjang.</div>
+        <div class="artikel-footer">
+          <span class="artikel-meta"><i class="ti ti-clock" style="font-size:12px;"></i> 4 menit</span>
+          <span class="artikel-baca">Baca <i class="ti ti-arrow-right" style="font-size:11px;"></i></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="artikel-card" data-kat="manstres" onclick="openArtikel(5)">
+      <div class="artikel-thumb green">🌿</div>
+      <div class="artikel-body">
+        <div class="artikel-kategori kat-manstres">Manajemen Stres</div>
+        <div class="artikel-judul">Membangun Self-Efikasi melalui Doa</div>
+        <div class="artikel-desc">Keyakinan diri yang kuat dimulai dari hubungan yang baik dengan Allah SWT.</div>
+        <div class="artikel-footer">
+          <span class="artikel-meta"><i class="ti ti-clock" style="font-size:12px;"></i> 5 menit</span>
+          <span class="artikel-baca">Baca <i class="ti ti-arrow-right" style="font-size:11px;"></i></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="artikel-card" data-kat="hd" onclick="openArtikel(6)">
+      <div class="artikel-thumb blue">🏥</div>
+      <div class="artikel-body">
+        <div class="artikel-kategori kat-hd">Self Care HD</div>
+        <div class="artikel-judul">Aktivitas Fisik Ringan untuk Pasien HD</div>
+        <div class="artikel-desc">Olahraga aman yang direkomendasikan untuk menjaga kebugaran pasien hemodialisa.</div>
+        <div class="artikel-footer">
+          <span class="artikel-meta"><i class="ti ti-clock" style="font-size:12px;"></i> 5 menit</span>
+          <span class="artikel-baca">Baca <i class="ti ti-arrow-right" style="font-size:11px;"></i></span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- VIDEO -->
+  <div class="section-title"><i class="ti ti-video"></i> Video Edukasi</div>
+  <div class="video-grid">
+    <div class="video-card" onclick="alert('Fitur video segera hadir!')">
+      <div class="video-thumb">
+        <div class="play-btn"><i class="ti ti-player-play" style="margin-left:2px;"></i></div>
+        <div class="video-dur">08:24</div>
+      </div>
+      <div class="video-body">
+        <div class="video-judul">Panduan Dzikir Harian untuk Pasien HD</div>
+        <div class="video-meta"><i class="ti ti-eye" style="font-size:12px;"></i> 1.2k views · <i class="ti ti-clock" style="font-size:12px;"></i> 8 mnt</div>
+      </div>
+    </div>
+    <div class="video-card" onclick="alert('Fitur video segera hadir!')">
+      <div class="video-thumb" style="background:linear-gradient(135deg,#7c3aed,#a78bfa);">
+        <div class="play-btn"><i class="ti ti-player-play" style="margin-left:2px;"></i></div>
+        <div class="video-dur">12:10</div>
+      </div>
+      <div class="video-body">
+        <div class="video-judul">Mengelola Stres dengan Teknik Pernapasan Islami</div>
+        <div class="video-meta"><i class="ti ti-eye" style="font-size:12px;"></i> 890 views · <i class="ti ti-clock" style="font-size:12px;"></i> 12 mnt</div>
+      </div>
+    </div>
+    <div class="video-card" onclick="alert('Fitur video segera hadir!')">
+      <div class="video-thumb" style="background:linear-gradient(135deg,#1d4ed8,#3b82f6);">
+        <div class="play-btn"><i class="ti ti-player-play" style="margin-left:2px;"></i></div>
+        <div class="video-dur">06:45</div>
+      </div>
+      <div class="video-body">
+        <div class="video-judul">Nutrisi & Diet untuk Pasien Hemodialisa</div>
+        <div class="video-meta"><i class="ti ti-eye" style="font-size:12px;"></i> 2.1k views · <i class="ti ti-clock" style="font-size:12px;"></i> 7 mnt</div>
+      </div>
+    </div>
+    <div class="video-card" onclick="alert('Fitur video segera hadir!')">
+      <div class="video-thumb" style="background:linear-gradient(135deg,var(--emas),var(--emas-terang));">
+        <div class="play-btn"><i class="ti ti-player-play" style="margin-left:2px;color:var(--hijau-tua);"></i></div>
+        <div class="video-dur">15:30</div>
+      </div>
+      <div class="video-body">
+        <div class="video-judul">Kepatuhan Terapi & Motivasi Beribadah saat Sakit</div>
+        <div class="video-meta"><i class="ti ti-eye" style="font-size:12px;"></i> 654 views · <i class="ti ti-clock" style="font-size:12px;"></i> 15 mnt</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIPS -->
+  <div class="section-title"><i class="ti ti-bulb"></i> Tips Harian Pasien HD</div>
+  <div class="tips-list">
+    <div class="tips-item">
+      <div class="tips-num">1</div>
+      <div>
+        <div class="tips-judul">Mulai hari dengan dzikir pagi</div>
+        <div class="tips-desc">Baca Subhanallah, Alhamdulillah, Allahuakbar masing-masing 33x setelah subuh untuk memulai hari dengan tenang.</div>
+      </div>
+    </div>
+    <div class="tips-item">
+      <div class="tips-num gold">2</div>
+      <div>
+        <div class="tips-judul">Batasi asupan cairan sesuai anjuran dokter</div>
+        <div class="tips-desc">Catat jumlah cairan yang masuk setiap hari dan patuhi batas yang telah ditentukan oleh tim medis.</div>
+      </div>
+    </div>
+    <div class="tips-item">
+      <div class="tips-num">3</div>
+      <div>
+        <div class="tips-judul">Istigfar saat merasa cemas</div>
+        <div class="tips-desc">Membaca Astaghfirullah 100x terbukti menurunkan ketegangan saraf dan membawa ketenangan hati.</div>
+      </div>
+    </div>
+    <div class="tips-item">
+      <div class="tips-num gold">4</div>
+      <div>
+        <div class="tips-judul">Jangan lewatkan jadwal HD</div>
+        <div class="tips-desc">Konsistensi sesi hemodialisa sangat penting untuk menjaga racun dalam darah tetap terkontrol.</div>
+      </div>
+    </div>
+    <div class="tips-item">
+      <div class="tips-num">5</div>
+      <div>
+        <div class="tips-judul">Ceritakan keluhan pada tenaga kesehatan</div>
+        <div class="tips-desc">Jangan ragu berbagi perasaan dan kondisi Anda kepada perawat atau dokter di klinik HD.</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- MODAL ARTIKEL -->
+<div class="modal-overlay" id="modal-artikel">
+  <div class="modal">
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeArtikel()"><i class="ti ti-x"></i></button>
+      <div class="modal-kat" id="modal-kat"></div>
+      <div class="modal-title" id="modal-judul"></div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-content" id="modal-isi"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const ARTIKEL = [
+  // index 0 — featured
+  {
+    kat: '✦ Artikel Pilihan',
+    judul: 'Dzikir sebagai Terapi Spiritual Pasien Hemodialisa',
+    isi: `
+      <p>Pasien hemodialisa (HD) menghadapi tantangan psikologis yang besar: kecemasan, kelelahan kronis, dan penurunan motivasi. Pendekatan spiritual seperti dzikir terbukti memberikan dampak positif yang signifikan.</p>
+      <h4>Apa itu Dzikir Terapi?</h4>
+      <p>Dzikir terapi adalah praktik mengingat Allah SWT secara terstruktur dan konsisten sebagai bagian dari manajemen stres. Penelitian menunjukkan bahwa dzikir dapat menurunkan kadar kortisol (hormon stres) hingga 30%.</p>
+      <div class="ayat">إِنَّ فِي ذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ</div>
+      <div class="terjemah">"Ingatlah, hanya dengan mengingat Allah hati menjadi tenteram." — QS. Ar-Ra'd: 28</div>
+      <h4>Manfaat Dzikir untuk Pasien HD</h4>
+      <ul>
+        <li>Menurunkan tingkat stres dan kecemasan</li>
+        <li>Meningkatkan self-efikasi (keyakinan diri)</li>
+        <li>Membantu pasien lebih menerima kondisi penyakitnya</li>
+        <li>Meningkatkan kualitas hidup secara keseluruhan</li>
+      </ul>
+      <h4>Cara Memulai</h4>
+      <p>Gunakan fitur Dzikir Digital di aplikasi ini. Mulai dengan target 33x Subhanallah, 33x Alhamdulillah, 33x Allahuakbar setiap pagi dan malam.</p>
+    `
+  },
+  // index 1
+  {
+    kat: 'Manajemen Stres',
+    judul: 'Teknik Relaksasi untuk Pasien HD',
+    isi: `
+      <p>Sesi hemodialisa yang berlangsung 3–5 jam bisa menimbulkan ketidaknyamanan fisik dan psikologis. Teknik relaksasi berikut dapat membantu.</p>
+      <h4>1. Pernapasan Dalam (Deep Breathing)</h4>
+      <p>Tarik napas perlahan 4 hitungan, tahan 4 hitungan, hembuskan 6 hitungan. Ulangi 5–10 kali saat merasa cemas.</p>
+      <h4>2. Relaksasi Otot Progresif</h4>
+      <p>Tegangkan lalu rilekskan kelompok otot secara bergantian mulai dari kaki hingga wajah.</p>
+      <h4>3. Visualisasi Positif</h4>
+      <p>Bayangkan tempat yang nyaman dan menenangkan sambil membaca dzikir dalam hati.</p>
+      <h4>4. Membaca Al-Quran</h4>
+      <p>Mendengarkan atau membaca Al-Quran terbukti menurunkan tekanan darah dan detak jantung pada pasien HD.</p>
+    `
+  },
+  // index 2
+  {
+    kat: 'Terapi Dzikir',
+    judul: 'Keutamaan Dzikir bagi Kesehatan Mental',
+    isi: `
+      <p>Dzikir bukan sekadar ibadah, tetapi juga terapi psikospiritual yang diakui dalam dunia kesehatan modern.</p>
+      <h4>Bukti Ilmiah</h4>
+      <p>Penelitian di berbagai jurnal kesehatan menunjukkan bahwa praktik dzikir secara rutin dapat menurunkan skor kecemasan pada pasien kronis, termasuk pasien gagal ginjal yang menjalani HD.</p>
+      <div class="ayat">وَاذْكُرُوا اللَّهَ كَثِيرًا لَّعَلَّكُمْ تُفْلِحُونَ</div>
+      <div class="terjemah">"Dan ingatlah Allah sebanyak-banyaknya agar kamu beruntung." — QS. Al-Jumu'ah: 10</div>
+      <h4>Dzikir yang Dianjurkan</h4>
+      <ul>
+        <li><strong>Subhanallah</strong> — Maha Suci Allah (33x)</li>
+        <li><strong>Alhamdulillah</strong> — Segala puji bagi Allah (33x)</li>
+        <li><strong>Allahuakbar</strong> — Allah Maha Besar (33x)</li>
+        <li><strong>La ilaha illallah</strong> — Tidak ada Tuhan selain Allah</li>
+        <li><strong>Astaghfirullah</strong> — Aku mohon ampun kepada Allah</li>
+      </ul>
+    `
+  },
+  // index 3
+  {
+    kat: 'Self Care HD',
+    judul: 'Menjaga Pola Makan saat Menjalani HD',
+    isi: `
+      <p>Diet yang tepat sangat penting untuk pasien hemodialisa agar kondisi tubuh tetap stabil di antara sesi HD.</p>
+      <h4>Batasi Konsumsi</h4>
+      <ul>
+        <li>Kalium (pisang, kentang, tomat) — batasi sesuai anjuran</li>
+        <li>Fosfor (susu, keju, kacang-kacangan)</li>
+        <li>Natrium/garam — maks. 2 gram per hari</li>
+        <li>Cairan — sesuai output urin + 500 ml</li>
+      </ul>
+      <h4>Anjuran Konsumsi</h4>
+      <ul>
+        <li>Protein cukup: telur, ikan, daging tanpa lemak</li>
+        <li>Karbohidrat kompleks: nasi putih, roti tawar</li>
+        <li>Sayuran rendah kalium: kol, buncis, wortel (direbus)</li>
+      </ul>
+      <h4>Tips Islami</h4>
+      <p>Makan secukupnya, tidak berlebihan. "Cukuplah bagi manusia beberapa suapan untuk menegakkan tulang punggungnya." — HR. Tirmidzi</p>
+    `
+  },
+  // index 4
+  {
+    kat: 'Kepatuhan Terapi',
+    judul: 'Pentingnya Konsistensi Sesi HD Rutin',
+    isi: `
+      <p>Hemodialisa rutin adalah kebutuhan vital bagi pasien gagal ginjal. Melewatkan satu sesi saja dapat berakibat serius.</p>
+      <h4>Risiko Melewatkan Sesi HD</h4>
+      <ul>
+        <li>Penumpukan racun (uremia) dalam darah</li>
+        <li>Kelebihan cairan yang membebani jantung</li>
+        <li>Ketidakseimbangan elektrolit berbahaya</li>
+        <li>Peningkatan risiko rawat inap darurat</li>
+      </ul>
+      <h4>Motivasi Spiritual</h4>
+      <div class="ayat">وَلَا تُلْقُوا بِأَيْدِيكُمْ إِلَى التَّهْلُكَةِ</div>
+      <div class="terjemah">"Dan janganlah kamu jatuhkan dirimu ke dalam kebinasaan." — QS. Al-Baqarah: 195</div>
+      <p>Menjaga kesehatan adalah kewajiban. Menjalani HD rutin adalah bentuk ikhtiar dan ibadah.</p>
+      <h4>Tips Tetap Konsisten</h4>
+      <ul>
+        <li>Aktifkan pengingat jadwal HD di aplikasi ini</li>
+        <li>Ajak keluarga sebagai pendamping dan pengingat</li>
+        <li>Catat dan rayakan konsistensi Anda di statistik</li>
+      </ul>
+    `
+  },
+  // index 5
+  {
+    kat: 'Manajemen Stres',
+    judul: 'Membangun Self-Efikasi melalui Doa',
+    isi: `
+      <p>Self-efikasi adalah keyakinan seseorang bahwa ia mampu menghadapi tantangan. Bagi pasien HD, ini adalah kunci keberhasilan pengobatan.</p>
+      <h4>Apa itu Self-Efikasi?</h4>
+      <p>Self-efikasi tinggi membuat pasien lebih patuh pada terapi, lebih aktif mencari informasi kesehatan, dan lebih mampu mengelola stres.</p>
+      <h4>Membangun Self-Efikasi Melalui Islam</h4>
+      <ul>
+        <li>Tawakkal kepada Allah setelah berikhtiar</li>
+        <li>Memperbanyak doa dan dzikir</li>
+        <li>Mengingat kisah kesabaran para nabi</li>
+        <li>Bersyukur atas nikmat sehat yang masih ada</li>
+      </ul>
+      <div class="ayat">حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ</div>
+      <div class="terjemah">"Cukuplah Allah (menjadi penolong) kami dan Allah adalah sebaik-baik pelindung." — QS. Ali Imran: 173</div>
+    `
+  },
+  // index 6
+  {
+    kat: 'Self Care HD',
+    judul: 'Aktivitas Fisik Ringan untuk Pasien HD',
+    isi: `
+      <p>Pasien hemodialisa tetap dianjurkan untuk aktif bergerak. Olahraga ringan dapat meningkatkan kualitas hidup secara signifikan.</p>
+      <h4>Olahraga yang Aman</h4>
+      <ul>
+        <li>Jalan kaki 15–30 menit, 3x seminggu</li>
+        <li>Senam ringan / stretching di tempat tidur</li>
+        <li>Bersepeda statis dengan intensitas rendah</li>
+        <li>Latihan pernapasan dan relaksasi</li>
+      </ul>
+      <h4>Yang Perlu Dihindari</h4>
+      <ul>
+        <li>Olahraga berat yang menguras energi berlebih</li>
+        <li>Aktivitas di cuaca panas terik</li>
+        <li>Olahraga saat tekanan darah tidak stabil</li>
+      </ul>
+      <h4>Panduan Islami</h4>
+      <p>Islam menganjurkan menjaga kesehatan tubuh. Nabi SAW bersabda: "Mukmin yang kuat lebih baik dari mukmin yang lemah." — HR. Muslim</p>
+    `
+  }
+];
+
+function openArtikel(idx) {
+  const a = ARTIKEL[idx];
+  document.getElementById('modal-kat').textContent = a.kat;
+  document.getElementById('modal-judul').textContent = a.judul;
+  document.getElementById('modal-isi').innerHTML = a.isi;
+  document.getElementById('modal-artikel').classList.add('show');
+}
+
+function closeArtikel() {
+  document.getElementById('modal-artikel').classList.remove('show');
+}
+
+document.getElementById('modal-artikel').addEventListener('click', function(e){
+  if(e.target === this) closeArtikel();
+});
+
+function filterTab(el, kat) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  const cards = document.querySelectorAll('.artikel-card');
+  cards.forEach(c => {
+    if(kat === 'semua' || c.dataset.kat === kat) {
+      c.style.display = '';
+    } else {
+      c.style.display = 'none';
+    }
+  });
+}
+
+function filterKonten(val) {
+  const q = val.toLowerCase();
+  document.querySelectorAll('.artikel-card').forEach(c => {
+    const teks = c.innerText.toLowerCase();
+    c.style.display = teks.includes(q) ? '' : 'none';
+  });
+}
+</script>
+</body>
+</html>

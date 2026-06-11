@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dzikir Digital — DzikirCare HD</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    :root{
+      --hijau-tua:#0d3b2e;
+      --hijau-gelap:#1a5c45;
+      --hijau-mid:#2e8b63;
+      --hijau-soft:#3dab7a;
+      --hijau-terang:#5ec995;
+      --hijau-pucat:#e8f7f0;
+      --emas:#c9a84c;
+      --emas-terang:#e8c96b;
+      --emas-muda:#faf0d7;
+      --text-dark:#1a3a1a;
+      --text-mid:#52796f;
+      --sidebar-w:224px;
+    }
+    body{font-family:'Plus Jakarta Sans',sans-serif;background:linear-gradient(135deg,#e8f5e9 0%,#f1f8e9 50%,#e0f2f1 100%);min-height:100vh;color:var(--text-dark);}
+
+    /* SIDEBAR */
+    .sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--sidebar-w);background:linear-gradient(180deg,#0d3b2e 0%,#1a5c45 60%,#2e8b63 100%);display:flex;flex-direction:column;padding:24px 0;z-index:100;box-shadow:4px 0 32px rgba(13,59,46,0.3);}
+    .logo{padding:0 20px 20px;border-bottom:.5px solid rgba(255,255,255,0.13);margin-bottom:12px;}
+    .logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--emas),var(--emas-terang));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:8px;}
+    .logo-title{font-family:'Amiri',serif;font-size:20px;color:#d8f3dc;font-weight:700;}
+    .logo-sub{font-size:10px;color:var(--emas-terang);letter-spacing:.08em;opacity:.8;}
+    .nav{display:flex;flex-direction:column;gap:2px;padding:0 12px;flex:1;overflow-y:auto;}
+    .nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;font-size:13px;color:#b7e4c7;cursor:pointer;transition:all .15s;text-decoration:none;width:100%;}
+    .nav-item:hover{background:rgba(255,255,255,0.1);color:#d8f3dc;}
+    .nav-item.active{background:linear-gradient(90deg,rgba(255,255,255,0.18),rgba(255,255,255,0.06));color:#d8f3dc;font-weight:600;border-left:3px solid var(--emas);}
+    .nav-item i{font-size:17px;flex-shrink:0;}
+    .nav-section{font-size:10px;color:var(--emas);letter-spacing:.1em;text-transform:uppercase;padding:10px 12px 4px;margin-top:6px;opacity:.8;}
+    .user-area{padding:14px 20px 0;border-top:.5px solid rgba(255,255,255,0.13);margin-top:auto;}
+    .avatar-sm{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--emas),var(--emas-terang));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#0d3b2e;flex-shrink:0;}
+    .username{font-size:13px;color:#d8f3dc;font-weight:600;}
+    .usertag{font-size:11px;color:var(--emas-terang);opacity:.8;}
+
+    /* MAIN */
+    .main{margin-left:var(--sidebar-w);padding:28px 28px 60px;min-height:100vh;}
+    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+    .page-title{font-size:22px;font-weight:700;color:var(--hijau-tua);}
+    .page-sub{font-size:12.5px;color:var(--text-mid);margin-top:2px;}
+
+    .layout{display:grid;grid-template-columns:1fr 320px;gap:20px;align-items:start;}
+
+    /* CARD */
+    .card{background:linear-gradient(135deg,#fff,#f6fbf7);border-radius:16px;border:.5px solid #c8e6c9;padding:20px 22px;box-shadow:0 2px 14px rgba(27,67,50,0.07);margin-bottom:16px;}
+    .card:last-child{margin-bottom:0;}
+    .card-title{font-size:14px;font-weight:700;color:var(--hijau-tua);display:flex;align-items:center;gap:8px;margin-bottom:16px;}
+    .card-title i{color:var(--hijau-mid);font-size:16px;}
+
+    /* DZIKIR UTAMA */
+    .dzikir-banner{background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-gelap),var(--hijau-mid));border-radius:20px;padding:28px 24px;text-align:center;margin-bottom:16px;position:relative;overflow:hidden;}
+    .dzikir-banner::before{content:'';position:absolute;width:200px;height:200px;border-radius:50%;background:rgba(201,168,76,0.07);top:-80px;right:-60px;}
+    .dzikir-banner::after{content:'';position:absolute;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,0.03);bottom:-60px;left:-40px;}
+    .dzikir-waktu{font-size:10px;font-weight:700;color:var(--emas-terang);letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px;position:relative;z-index:1;}
+    .dzikir-arab{font-family:'Amiri',serif;font-size:36px;color:#fff;line-height:1.6;margin-bottom:6px;position:relative;z-index:1;}
+    .dzikir-latin{font-size:15px;color:rgba(255,255,255,0.8);font-weight:500;margin-bottom:4px;position:relative;z-index:1;}
+    .dzikir-arti{font-size:13px;color:rgba(255,255,255,0.55);position:relative;z-index:1;margin-bottom:20px;}
+    .emas-line{height:1.5px;background:linear-gradient(90deg,transparent,var(--emas),transparent);margin:16px 0;position:relative;z-index:1;}
+
+    /* COUNTER */
+    .counter-area{display:flex;align-items:center;justify-content:center;gap:20px;position:relative;z-index:1;}
+    .btn-reset{width:46px;height:46px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:18px;color:rgba(255,255,255,0.7);cursor:pointer;transition:all .2s;}
+    .btn-reset:hover{background:rgba(255,255,255,0.15);color:#fff;}
+    .counter-num{font-size:64px;font-weight:700;color:#fff;min-width:100px;text-align:center;line-height:1;}
+    .btn-tap{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--emas),var(--emas-terang));border:none;display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--hijau-tua);cursor:pointer;box-shadow:0 6px 24px rgba(201,168,76,0.5);transition:all .15s;}
+    .btn-tap:hover{transform:scale(1.07);}
+    .btn-tap:active{transform:scale(0.95);}
+    .counter-target{font-size:12px;color:rgba(255,255,255,0.6);text-align:center;margin-top:12px;position:relative;z-index:1;}
+    .counter-progress{height:6px;background:rgba(255,255,255,0.15);border-radius:99px;overflow:hidden;margin:8px 24px 0;position:relative;z-index:1;}
+    .counter-progress-fill{height:100%;background:linear-gradient(90deg,var(--emas),var(--emas-terang));border-radius:99px;transition:width .3s ease;}
+
+    /* PILIH DZIKIR */
+    .dzikir-list{display:flex;flex-direction:column;gap:8px;}
+    .dzikir-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;border:1.5px solid #e8f5e9;background:#fff;cursor:pointer;transition:all .2s;}
+    .dzikir-item:hover{border-color:var(--hijau-terang);background:var(--hijau-pucat);}
+    .dzikir-item.active{border-color:var(--emas);background:var(--emas-muda);}
+    .dzikir-item-arab{font-family:'Amiri',serif;font-size:20px;color:var(--hijau-tua);min-width:80px;text-align:center;}
+    .dzikir-item-info{flex:1;}
+    .dzikir-item-nama{font-size:13px;font-weight:700;color:var(--hijau-tua);}
+    .dzikir-item-arti{font-size:11.5px;color:var(--text-mid);margin-top:2px;}
+    .dzikir-item-target{font-size:11px;font-weight:700;color:var(--emas);background:var(--emas-muda);padding:2px 8px;border-radius:99px;}
+
+    /* WAKTU DZIKIR */
+    .waktu-tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+    .waktu-tab{padding:7px 14px;border-radius:99px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid #c8e6c9;background:#fff;color:var(--text-mid);transition:all .2s;}
+    .waktu-tab:hover{border-color:var(--hijau-soft);}
+    .waktu-tab.active{background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-mid));color:#fff;border-color:transparent;}
+
+    /* RINGKASAN HARIAN */
+    .ringkasan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:0;}
+    .ringkasan-item{background:#fff;border-radius:12px;border:.5px solid #c8e6c9;padding:12px;text-align:center;}
+    .ringkasan-num{font-size:22px;font-weight:700;color:var(--hijau-tua);}
+    .ringkasan-label{font-size:10.5px;color:var(--text-mid);margin-top:3px;}
+
+    /* SELESAI MODAL */
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;display:none;align-items:center;justify-content:center;}
+    .modal-overlay.show{display:flex;}
+    .modal{background:#fff;border-radius:24px;padding:32px 28px;width:100%;max-width:360px;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,0.2);}
+    .modal-icon{font-size:48px;margin-bottom:12px;}
+    .modal-title{font-family:'Amiri',serif;font-size:22px;font-weight:700;color:var(--hijau-tua);margin-bottom:6px;}
+    .modal-desc{font-size:13px;color:var(--text-mid);line-height:1.6;margin-bottom:20px;}
+    .modal-ayat{font-family:'Amiri',serif;font-size:18px;color:var(--hijau-tua);margin-bottom:4px;}
+    .modal-ayat-src{font-size:11px;color:var(--text-mid);margin-bottom:20px;}
+    .btn-modal{width:100%;padding:12px;background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-mid));color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;}
+
+    ::-webkit-scrollbar{width:4px;}
+    ::-webkit-scrollbar-track{background:transparent;}
+    ::-webkit-scrollbar-thumb{background:#b7e4c7;border-radius:99px;}
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="logo">
+    <div class="logo-icon">☪</div>
+    <div class="logo-title">DzikirCare HD</div>
+    <div class="logo-sub">HEMODIALISA & DZIKIR</div>
+  </div>
+  <nav class="nav">
+    <div class="nav-section">Utama</div>
+    <a class="nav-item" href="dashboard.html"><i class="ti ti-layout-dashboard"></i> Dashboard</a>
+    <a class="nav-item active" href="dzikir.html"><i class="ti ti-rosette"></i> Dzikir Digital</a>
+    <a class="nav-item" href="sholat.html"><i class="ti ti-clock"></i> Jadwal Sholat</a>
+    <div class="nav-section">Evaluasi Psikologis</div>
+    <a class="nav-item" href="screening.html"><i class="ti ti-heart-rate-monitor"></i> Screening Stres</a>
+    <a class="nav-item" href="selfefficacy.html"><i class="ti ti-brain"></i> Self-Efikasi</a>
+    <a class="nav-item" href="mood.html"><i class="ti ti-mood-smile"></i> Mood Tracker</a>
+    <div class="nav-section">Lainnya</div>
+    <a class="nav-item" href="edukasi.html"><i class="ti ti-book"></i> Edukasi</a>
+    <a class="nav-item" href="statistik.html"><i class="ti ti-chart-bar"></i> Statistik</a>
+    <a class="nav-item" href="pengingat.html"><i class="ti ti-bell"></i> Pengingat</a>
+    <a class="nav-item" href="profil.html"><i class="ti ti-user-circle"></i> Profil Saya</a>
+  </nav>
+  <div class="user-area">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="avatar-sm" id="sidebar-avatar">A</div>
+      <div>
+        <div class="username" id="sidebar-name">Pasien</div>
+        <div class="usertag">Pasien Hemodialisa</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <div>
+      <div class="page-title">📿 Dzikir Digital</div>
+      <div class="page-sub" id="user-greeting">Selamat berdzikir</div>
+    </div>
+  </div>
+
+  <div class="layout">
+    <!-- KOLOM KIRI -->
+    <div>
+      <!-- WAKTU DZIKIR -->
+      <div style="margin-bottom:14px;">
+        <div class="waktu-tabs">
+          <button class="waktu-tab active" onclick="setWaktu(this,'Pagi')">🌅 Dzikir Pagi</button>
+          <button class="waktu-tab" onclick="setWaktu(this,'Siang')">☀️ Dzikir Siang</button>
+          <button class="waktu-tab" onclick="setWaktu(this,'Petang')">🌆 Dzikir Petang</button>
+          <button class="waktu-tab" onclick="setWaktu(this,'Malam')">🌙 Dzikir Malam</button>
+        </div>
+      </div>
+
+      <!-- DZIKIR UTAMA COUNTER -->
+      <div class="dzikir-banner">
+        <div class="dzikir-waktu" id="dzikir-waktu-label">🌅 DZIKIR PAGI</div>
+        <div class="dzikir-arab" id="main-arab">سُبْحَانَ اللَّهِ</div>
+        <div class="dzikir-latin" id="main-latin">Subhanallah</div>
+        <div class="dzikir-arti" id="main-arti">Maha Suci Allah</div>
+        <div class="emas-line"></div>
+        <div class="counter-area">
+          <button class="btn-reset" onclick="resetCounter()" title="Reset"><i class="ti ti-refresh"></i></button>
+          <div class="counter-num" id="counter-num">0</div>
+          <button class="btn-tap" onclick="tapDzikir()"><i class="ti ti-plus"></i></button>
+        </div>
+        <div class="counter-target" id="counter-target">Target: 33x · Tekan tombol +</div>
+        <div class="counter-progress"><div class="counter-progress-fill" id="counter-bar" style="width:0%"></div></div>
+      </div>
+
+      <!-- PILIH DZIKIR -->
+      <div class="card">
+        <div class="card-title"><i class="ti ti-list"></i> Pilih Bacaan Dzikir</div>
+        <div class="dzikir-list" id="dzikir-list"></div>
+      </div>
+
+      <!-- RINGKASAN HARIAN -->
+      <div class="card">
+        <div class="card-title"><i class="ti ti-chart-bar"></i> Ringkasan Dzikir Hari Ini — <span id="nama-ringkasan" style="color:var(--emas);"></span></div>
+        <div class="ringkasan-grid">
+          <div class="ringkasan-item">
+            <div class="ringkasan-num" id="ring-total">0</div>
+            <div class="ringkasan-label">Total Dzikir</div>
+          </div>
+          <div class="ringkasan-item">
+            <div class="ringkasan-num" id="ring-sesi">0</div>
+            <div class="ringkasan-label">Sesi Selesai</div>
+          </div>
+          <div class="ringkasan-item">
+            <div class="ringkasan-num" id="ring-target">0%</div>
+            <div class="ringkasan-label">Target Harian</div>
+          </div>
+        </div>
+        <div style="height:6px;background:#e8f5e9;border-radius:99px;overflow:hidden;margin-top:12px;">
+          <div style="height:100%;background:linear-gradient(90deg,var(--hijau-soft),var(--hijau-terang));border-radius:99px;transition:width .5s;" id="ring-bar" style="width:0%"></div>
+        </div>
+        <div style="font-size:11px;color:var(--text-mid);margin-top:4px;text-align:right;" id="ring-info">0 dari 300x target harian</div>
+      </div>
+    </div>
+
+    <!-- KOLOM KANAN -->
+    <div>
+      <!-- PANDUAN DZIKIR -->
+      <div class="card">
+        <div class="card-title"><i class="ti ti-info-circle"></i> Panduan Dzikir HD</div>
+        <div style="font-size:12.5px;color:var(--text-mid);line-height:1.7;">
+          Lakukan dzikir <b style="color:var(--hijau-tua);">sebelum, selama, dan sesudah</b> sesi hemodialisa untuk menenangkan hati dan meningkatkan self-efikasi.
+        </div>
+        <div style="margin-top:12px;display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;gap:8px;align-items:flex-start;font-size:12px;color:var(--text-mid);">
+            <span style="background:var(--hijau-pucat);color:var(--hijau-mid);border-radius:6px;padding:2px 8px;font-weight:700;flex-shrink:0;">Sebelum</span>
+            <span>Baca Bismillah & Subhanallah 33x untuk memulai dengan tenang</span>
+          </div>
+          <div style="display:flex;gap:8px;align-items:flex-start;font-size:12px;color:var(--text-mid);">
+            <span style="background:var(--emas-muda);color:var(--emas);border-radius:6px;padding:2px 8px;font-weight:700;flex-shrink:0;">Selama</span>
+            <span>Baca Istighfar & La ilaha illallah untuk ketenangan sesi</span>
+          </div>
+          <div style="display:flex;gap:8px;align-items:flex-start;font-size:12px;color:var(--text-mid);">
+            <span style="background:#dbeafe;color:#1d4ed8;border-radius:6px;padding:2px 8px;font-weight:700;flex-shrink:0;">Sesudah</span>
+            <span>Baca Alhamdulillah & Allahuakbar 33x sebagai syukur</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- AYAT MOTIVASI -->
+      <div class="card" style="background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-gelap));">
+        <div style="height:1.5px;background:linear-gradient(90deg,transparent,var(--emas),transparent);margin-bottom:14px;"></div>
+        <div style="font-size:10px;font-weight:700;color:var(--emas-terang);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">Firman Allah SWT</div>
+        <div style="font-family:'Amiri',serif;font-size:20px;color:#fff;line-height:1.7;margin-bottom:6px;" id="ayat-text">أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.65);line-height:1.6;" id="ayat-terjemah">"Ingatlah, hanya dengan mengingat Allah hati menjadi tenteram."</div>
+        <div style="font-size:11px;color:var(--emas-terang);margin-top:6px;">— QS. Ar-Ra'd: 28</div>
+      </div>
+
+      <!-- RIWAYAT SESI -->
+      <div class="card">
+        <div class="card-title"><i class="ti ti-history"></i> Riwayat Sesi</div>
+        <div id="riwayat-sesi">
+          <div style="font-size:12px;color:#b0b0b0;text-align:center;padding:12px;">Belum ada sesi hari ini</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- MODAL SELESAI -->
+<div class="modal-overlay" id="modal-selesai">
+  <div class="modal">
+    <div class="modal-icon">🎉</div>
+    <div class="modal-title">Alhamdulillah!</div>
+    <div class="modal-desc" id="modal-desc">Target dzikir tercapai. Semoga Allah menerima amal ibadah Anda.</div>
+    <div class="modal-ayat">وَاذْكُرُوا اللَّهَ كَثِيرًا</div>
+    <div class="modal-ayat-src">— QS. Al-Jumu'ah: 10</div>
+    <button class="btn-modal" onclick="closeModal()">Lanjutkan Dzikir</button>
+  </div>
+</div>
+
+<script>
+const DZIKIR_DATA = {
+  Pagi: [
+    {arab:'سُبْحَانَ اللَّهِ', latin:'Subhanallah', arti:'Maha Suci Allah', target:33},
+    {arab:'اَلْحَمْدُ لِلّٰهِ', latin:'Alhamdulillah', arti:'Segala Puji bagi Allah', target:33},
+    {arab:'اللَّهُ أَكْبَرُ', latin:'Allahuakbar', arti:'Allah Maha Besar', target:33},
+    {arab:'أَسْتَغْفِرُ اللَّهَ', latin:'Astaghfirullah', arti:'Aku mohon ampun kepada Allah', target:100},
+  ],
+  Siang: [
+    {arab:'لَا إِلَٰهَ إِلَّا اللَّهُ', latin:'La ilaha illallah', arti:'Tidak ada Tuhan selain Allah', target:100},
+    {arab:'سُبْحَانَ اللَّهِ', latin:'Subhanallah', arti:'Maha Suci Allah', target:33},
+    {arab:'اَلْحَمْدُ لِلّٰهِ', latin:'Alhamdulillah', arti:'Segala Puji bagi Allah', target:33},
+  ],
+  Petang: [
+    {arab:'اَلْحَمْدُ لِلّٰهِ', latin:'Alhamdulillah', arti:'Segala Puji bagi Allah', target:33},
+    {arab:'اللَّهُ أَكْبَرُ', latin:'Allahuakbar', arti:'Allah Maha Besar', target:33},
+    {arab:'حَسْبُنَا اللَّهُ', latin:'Hasbunallah', arti:'Cukuplah Allah bagi kami', target:7},
+    {arab:'أَسْتَغْفِرُ اللَّهَ', latin:'Astaghfirullah', arti:'Aku mohon ampun kepada Allah', target:100},
+  ],
+  Malam: [
+    {arab:'سُبْحَانَ اللَّهِ', latin:'Subhanallah', arti:'Maha Suci Allah', target:33},
+    {arab:'لَا حَوْلَ وَلَا قُوَّةَ', latin:'La hawla wa la quwwata illa billah', arti:'Tiada daya kecuali dengan Allah', target:10},
+    {arab:'اَللّٰهُمَّ صَلِّ عَلَى مُحَمَّد', latin:'Allahumma shalli ala Muhammad', arti:'Ya Allah limpahkan sholawat pada Nabi Muhammad', target:100},
+  ],
+};
+
+let currentWaktu = 'Pagi';
+let currentDzikirIdx = 0;
+let counter = 0;
+let totalHarian = 0;
+let sesiSelesai = 0;
+let riwayatSesi = [];
+
+window.onload = () => {
+  const nama = localStorage.getItem('dzikircare_user') || 'Pasien';
+  document.getElementById('sidebar-name').textContent = nama;
+  document.getElementById('sidebar-avatar').textContent = nama.charAt(0).toUpperCase();
+  document.getElementById('user-greeting').textContent = `Selamat berdzikir, ${nama} 🤲`;
+  document.getElementById('nama-ringkasan').textContent = nama;
+  renderDzikirList();
+  updateMainDzikir();
+  updateRingkasan();
+};
+
+function setWaktu(el, waktu){
+  document.querySelectorAll('.waktu-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  currentWaktu = waktu;
+  currentDzikirIdx = 0;
+  counter = 0;
+  document.getElementById('dzikir-waktu-label').textContent =
+    waktu === 'Pagi' ? '🌅 DZIKIR PAGI' :
+    waktu === 'Siang' ? '☀️ DZIKIR SIANG' :
+    waktu === 'Petang' ? '🌆 DZIKIR PETANG' : '🌙 DZIKIR MALAM';
+  renderDzikirList();
+  updateMainDzikir();
+}
+
+function renderDzikirList(){
+  const list = document.getElementById('dzikir-list');
+  const data = DZIKIR_DATA[currentWaktu];
+  list.innerHTML = data.map((d, i) => `
+    <div class="dzikir-item ${i === currentDzikirIdx ? 'active' : ''}" onclick="pilihDzikir(${i})">
+      <div class="dzikir-item-arab">${d.arab}</div>
+      <div class="dzikir-item-info">
+        <div class="dzikir-item-nama">${d.latin}</div>
+        <div class="dzikir-item-arti">${d.arti}</div>
+      </div>
+      <div class="dzikir-item-target">${d.target}x</div>
+    </div>
+  `).join('');
+}
+
+function pilihDzikir(idx){
+  currentDzikirIdx = idx;
+  counter = 0;
+  renderDzikirList();
+  updateMainDzikir();
+}
+
+function updateMainDzikir(){
+  const d = DZIKIR_DATA[currentWaktu][currentDzikirIdx];
+  document.getElementById('main-arab').textContent = d.arab;
+  document.getElementById('main-latin').textContent = d.latin;
+  document.getElementById('main-arti').textContent = d.arti;
+  document.getElementById('counter-num').textContent = counter;
+  const pct = Math.min(Math.round(counter / d.target * 100), 100);
+  document.getElementById('counter-bar').style.width = pct + '%';
+  const rem = d.target - counter;
+  document.getElementById('counter-target').textContent =
+    rem > 0 ? `Target: ${d.target}x · ${rem} lagi` : `Alhamdulillah! Target ${d.target}x tercapai 🎉`;
+}
+
+function tapDzikir(){
+  const d = DZIKIR_DATA[currentWaktu][currentDzikirIdx];
+  counter++;
+  totalHarian++;
+  document.getElementById('counter-num').textContent = counter;
+  const pct = Math.min(Math.round(counter / d.target * 100), 100);
+  document.getElementById('counter-bar').style.width = pct + '%';
+  const rem = d.target - counter;
+  document.getElementById('counter-target').textContent =
+    rem > 0 ? `Target: ${d.target}x · ${rem} lagi` : `Alhamdulillah! Target ${d.target}x tercapai 🎉`;
+
+  updateRingkasan();
+
+  // Cek target tercapai
+  if(counter === d.target){
+    sesiSelesai++;
+    riwayatSesi.unshift({latin: d.latin, target: d.target, waktu: currentWaktu});
+    renderRiwayatSesi();
+    updateRingkasan();
+    document.getElementById('modal-desc').textContent =
+      `${d.latin} ${d.target}x selesai. Semoga Allah menerima amal dzikir Anda.`;
+    document.getElementById('modal-selesai').classList.add('show');
+
+    // Auto pindah ke dzikir berikutnya
+    const nextIdx = currentDzikirIdx + 1;
+    if(nextIdx < DZIKIR_DATA[currentWaktu].length){
+      setTimeout(()=>{
+        currentDzikirIdx = nextIdx;
+        counter = 0;
+        renderDzikirList();
+        updateMainDzikir();
+      }, 300);
+    }
+  }
+}
+
+function resetCounter(){
+  counter = 0;
+  updateMainDzikir();
+}
+
+function closeModal(){
+  document.getElementById('modal-selesai').classList.remove('show');
+}
+
+function updateRingkasan(){
+  document.getElementById('ring-total').textContent = totalHarian;
+  document.getElementById('ring-sesi').textContent = sesiSelesai;
+  const pct = Math.min(Math.round(totalHarian / 300 * 100), 100);
+  document.getElementById('ring-target').textContent = pct + '%';
+  document.getElementById('ring-bar').style.width = pct + '%';
+  document.getElementById('ring-info').textContent = `${totalHarian} dari 300x target harian`;
+}
+
+function renderRiwayatSesi(){
+  const el = document.getElementById('riwayat-sesi');
+  if(!riwayatSesi.length){
+    el.innerHTML = '<div style="font-size:12px;color:#b0b0b0;text-align:center;padding:12px;">Belum ada sesi hari ini</div>';
+    return;
+  }
+  el.innerHTML = riwayatSesi.map(r => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:.5px solid #f0faf2;">
+      <div>
+        <div style="font-size:13px;font-weight:600;color:var(--hijau-tua);">${r.latin}</div>
+        <div style="font-size:11px;color:var(--text-mid);">${r.waktu} · ${r.target}x</div>
+      </div>
+      <span style="background:#d8f3dc;color:#1a5c45;font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;">✓ Selesai</span>
+    </div>
+  `).join('');
+}
+
+document.getElementById('modal-selesai').addEventListener('click', function(e){
+  if(e.target === this) closeModal();
+});
+</script>
+</body>
+</html>
