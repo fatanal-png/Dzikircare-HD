@@ -14,7 +14,6 @@
 }
 body{font-family:'Plus Jakarta Sans',sans-serif;background:linear-gradient(145deg,var(--g1) 0%,var(--g2) 50%,var(--g3) 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;overflow:hidden;}
 
-/* ORNAMEN */
 .bg-o{position:fixed;inset:0;pointer-events:none;overflow:hidden;}
 .bg-o span{position:absolute;border-radius:50%;border:1px solid rgba(201,168,76,0.08);}
 .bg-o span:nth-child(1){width:700px;height:700px;top:-250px;right:-250px;}
@@ -22,34 +21,23 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:linear-gradient(145de
 .bg-o span:nth-child(3){width:250px;height:250px;top:40%;left:5%;}
 .dots{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(201,168,76,0.04) 1px,transparent 1px);background-size:28px 28px;}
 
-/* LAYOUT 2 KOLOM */
 .page-wrap{position:relative;z-index:10;width:100%;max-width:940px;display:grid;grid-template-columns:1fr 1fr;border-radius:26px;overflow:hidden;box-shadow:0 28px 90px rgba(0,0,0,0.35);}
 
-/* ===== KOLOM KIRI — FOTO ===== */
+/* ===== KIRI — FOTO DEVELOPER ===== */
 .left-panel{position:relative;min-height:600px;background:linear-gradient(180deg,var(--g1),var(--g2));overflow:hidden;display:flex;flex-direction:column;}
 
-/* Area foto — klik untuk upload */
-.photo-area{flex:1;position:relative;cursor:pointer;overflow:hidden;}
-.photo-area img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s;}
-.photo-area:hover img{transform:scale(1.03);}
-.photo-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;min-height:340px;}
-.ph-ic{width:70px;height:70px;border-radius:50%;border:2px dashed rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-size:28px;}
-.ph-t{font-size:13px;color:rgba(255,255,255,.55);text-align:center;line-height:1.6;}
-.ph-btn{padding:9px 20px;border-radius:99px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);color:rgba(255,255,255,.8);font-size:12px;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s;}
-.ph-btn:hover{background:rgba(255,255,255,.2);}
-/* Overlay edit foto */
-.photo-overlay{position:absolute;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;flex-direction:column;gap:10px;}
-.photo-area:hover .photo-overlay{display:flex;}
-.photo-overlay span{color:#fff;font-size:13px;font-weight:600;}
-.photo-overlay .ov-ic{font-size:28px;}
-/* Hidden file input */
-#foto-input{display:none;}
+/* Foto cover — diset developer, bukan user */
+.cover-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;display:block;}
+/* Overlay gradasi agar teks terbaca */
+.cover-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(13,59,46,0.35) 0%,rgba(13,59,46,0.15) 40%,rgba(13,59,46,0.75) 75%,var(--g1) 100%);}
 
-/* Gradient bottom overlay di atas foto */
-.left-gradient{position:absolute;bottom:0;left:0;right:0;height:200px;background:linear-gradient(to top,var(--g1),transparent);pointer-events:none;}
+/* Badge pojok kiri atas */
+.cover-badge{position:absolute;top:16px;left:16px;z-index:3;background:rgba(13,59,46,0.7);backdrop-filter:blur(6px);border:1px solid rgba(201,168,76,0.3);border-radius:10px;padding:6px 12px;display:flex;align-items:center;gap:7px;}
+.cover-badge-dot{width:7px;height:7px;border-radius:50%;background:#52b788;animation:pulse 1.8s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(1.3);}}
+.cover-badge span{font-size:11px;color:rgba(255,255,255,0.85);font-weight:600;}
 
-/* Teks bawah panel kiri */
-.left-bottom{padding:22px 24px;position:relative;z-index:2;}
+.left-bottom{padding:22px 24px;position:relative;z-index:3;}
 .emas-line-h{height:1.5px;background:linear-gradient(90deg,transparent,var(--emas),transparent);margin-bottom:16px;}
 .left-quote{font-family:'Amiri',serif;font-size:19px;color:#d8f3dc;line-height:1.7;margin-bottom:6px;}
 .left-src{font-size:11px;color:var(--emas2);opacity:.8;}
@@ -57,7 +45,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:linear-gradient(145de
 .left-tag{background:rgba(255,255,255,.1);border-radius:8px;padding:4px 12px;font-size:11px;color:rgba(255,255,255,.7);}
 .left-tag.gold{background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.3);color:var(--emas2);}
 
-/* ===== KOLOM KANAN — FORM ===== */
+/* ===== KANAN — FORM ===== */
 .right-panel{background:rgba(255,255,255,0.97);display:flex;flex-direction:column;overflow-y:auto;max-height:90vh;}
 .card-head{background:linear-gradient(135deg,var(--g1),var(--g2),var(--g3));padding:18px 24px 14px;position:relative;overflow:hidden;flex-shrink:0;}
 .card-head::before{content:'';position:absolute;right:-40px;top:-40px;width:140px;height:140px;border-radius:50%;background:rgba(201,168,76,0.07);}
@@ -67,14 +55,12 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:linear-gradient(145de
 .logo-txt .n2{font-size:10px;color:var(--emas2);letter-spacing:.08em;opacity:.8;}
 .emas-line{height:1.5px;background:linear-gradient(90deg,transparent,var(--emas),transparent);margin-top:12px;position:relative;z-index:1;}
 
-/* TAB */
-.tab-bar{display:flex;background:rgba(255,255,255,0.08);border-radius:10px;padding:4px;margin:14px 24px 0;gap:4px;}
+.tab-bar{display:flex;background:rgba(255,255,255,0.08);border-radius:10px;padding:4px;margin:12px 24px 0;gap:4px;}
 .tab{flex:1;padding:8px;text-align:center;font-size:12.5px;font-weight:600;color:rgba(255,255,255,0.5);border-radius:8px;cursor:pointer;transition:all .2s;}
 .tab.active{background:#fff;color:var(--g1);}
 
 .card-body{padding:18px 24px 22px;flex:1;}
 
-/* STEPPER */
 .stepper{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:16px;}
 .st{display:flex;align-items:center;gap:5px;font-size:11px;color:rgba(0,0,0,0.35);}
 .st.active{color:var(--g1);font-weight:700;}
@@ -86,7 +72,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:linear-gradient(145de
 .prog-bar{height:3px;background:#e8f5e9;border-radius:99px;margin-bottom:16px;overflow:hidden;}
 .prog-fill{height:100%;background:linear-gradient(90deg,var(--emas),var(--emas2));border-radius:99px;transition:width .4s;}
 
-/* FORM */
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .fg{margin-bottom:12px;}
 .fg.full{grid-column:1/-1;}
@@ -99,45 +84,36 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:linear-gradient(145de
 .pw-wrap .fi{padding-right:36px;}
 .pw-eye{position:absolute;right:10px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:14px;background:none;border:none;color:#bbb;}
 
-/* INFO BOX */
 .info-box{background:#e8f7f0;border:1px solid #b7e4c7;border-radius:10px;padding:10px 12px;margin-bottom:12px;font-size:11.5px;color:#2d6a4f;line-height:1.6;}
-/* CHECKBOX */
 .ck-row{display:flex;align-items:flex-start;gap:8px;margin-bottom:12px;}
 .ck-row input{width:15px;height:15px;accent-color:var(--g3);flex-shrink:0;margin-top:2px;}
 .ck-row label{font-size:11.5px;color:#555;line-height:1.5;}
 .ck-row a{color:var(--g3);text-decoration:none;font-weight:600;}
 
-/* TOMBOL */
 .btn-primary{width:100%;padding:11px;background:linear-gradient(135deg,var(--g1),var(--g3));color:#fff;border:none;border-radius:10px;font-size:13.5px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
 .btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(13,59,46,.28);}
 .btn-primary:disabled{opacity:.6;cursor:not-allowed;transform:none;}
 .btn-sec{width:100%;padding:9px;background:transparent;color:#888;border:1.5px solid #e0e0e0;border-radius:10px;font-size:12.5px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;margin-top:7px;transition:all .2s;}
 .btn-sec:hover{border-color:#b7e4c7;color:var(--g3);}
 
-/* SPINNER */
 .spin{width:15px;height:15px;border:2px solid rgba(255,255,255,0.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:none;}
 @keyframes spin{to{transform:rotate(360deg);}}
 
-/* TOAST */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#1a3a1a;color:#fff;padding:11px 22px;border-radius:99px;font-size:13px;font-weight:600;z-index:999;opacity:0;transition:all .35s;pointer-events:none;white-space:nowrap;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 .toast.err{background:#7f1d1d;}
 
-/* PAGE SWITCH */
 .page{display:none;}
 .page.active{display:block;}
 .step-page{display:none;animation:fadeUp .3s ease;}
 .step-page.active{display:block;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
 
-/* SUKSES */
 .suk-icon{width:56px;height:56px;background:linear-gradient(135deg,var(--g1),var(--g3));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 12px;}
 
-/* RESPONSIVE */
 @media(max-width:700px){
   .page-wrap{grid-template-columns:1fr;max-width:440px;}
-  .left-panel{min-height:220px;}
-  .photo-placeholder{min-height:180px;}
+  .left-panel{min-height:200px;}
   .right-panel{max-height:none;}
 }
 </style>
@@ -148,31 +124,29 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:linear-gradient(145de
 
 <div class="page-wrap">
 
-  <!-- ===== KIRI: PANEL FOTO ===== -->
+  <!-- ===== KIRI: PANEL FOTO DEVELOPER ===== -->
   <div class="left-panel">
-    <div class="photo-area" onclick="document.getElementById('foto-input').click()">
-      <!-- Placeholder sebelum ada foto -->
-      <div class="photo-placeholder" id="photo-placeholder">
-        <div class="ph-ic">🖼️</div>
-        <div class="ph-t">Tambahkan foto pasien<br>atau gambar motivasi di sini</div>
-        <button class="ph-btn" type="button">📷 Pilih Foto</button>
-      </div>
-      <!-- Foto setelah dipilih -->
-      <img id="foto-preview" src="" alt="Foto Pasien" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-      <!-- Overlay saat hover foto -->
-      <div class="photo-overlay" id="photo-overlay" style="display:none;">
-        <div class="ov-ic">📷</div>
-        <span>Ganti Foto</span>
-      </div>
-    </div>
-    <input type="file" id="foto-input" accept="image/*" onchange="gantiPhoto(this)">
+    <!--
+      GANTI URL di bawah ini dengan foto pilihan developer.
+      Bisa pakai path lokal: src="img/cover.jpg"
+      atau URL online: src="https://..."
+    -->
+    <img
+      class="cover-img"
+      src="https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=600&q=80"
+      alt="Pasien Hemodialisa"
+    >
+    <div class="cover-overlay"></div>
 
-    <!-- Tombol hapus foto (muncul kalau ada foto) -->
-    <div id="hapus-foto-wrap" style="display:none;padding:8px 20px 0;position:relative;z-index:2;">
-      <button onclick="hapusFoto()" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:8px;color:rgba(255,255,255,.6);font-size:11.5px;padding:6px 14px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;">✕ Hapus Foto</button>
+    <!-- Badge aktif pojok kiri atas -->
+    <div class="cover-badge">
+      <div class="cover-badge-dot"></div>
+      <span>DzikirCare HD Aktif</span>
     </div>
 
-    <div class="left-gradient"></div>
+    <!-- Spacer agar teks turun ke bawah -->
+    <div style="flex:1;"></div>
+
     <div class="left-bottom">
       <div class="emas-line-h"></div>
       <div class="left-quote">وَإِذَا مَرِضْتُ فَهُوَ يَشْفِينِ</div>
@@ -198,15 +172,14 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:linear-gradient(145de
       <div class="emas-line"></div>
     </div>
 
-    <!-- TAB -->
-    <div class="tab-bar" style="margin:12px 24px 0;">
+    <div class="tab-bar">
       <div class="tab active" id="tab-login" onclick="switchTab('login')">Masuk</div>
       <div class="tab" id="tab-reg" onclick="switchTab('reg')">Daftar Akun</div>
     </div>
 
     <div class="card-body">
 
-      <!-- ===== HALAMAN LOGIN ===== -->
+      <!-- LOGIN -->
       <div class="page active" id="page-login">
         <div class="fg">
           <label class="fl">Username</label>
@@ -230,7 +203,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:linear-gradient(145de
         </div>
       </div>
 
-      <!-- ===== HALAMAN REGISTER (3 STEP) ===== -->
+      <!-- REGISTER -->
       <div class="page" id="page-reg">
         <div class="stepper" id="reg-stepper">
           <div class="st active" id="rst1"><div class="st-dot">1</div><span>Data Diri</span></div>
@@ -241,7 +214,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:linear-gradient(145de
         </div>
         <div class="prog-bar"><div class="prog-fill" id="reg-prog" style="width:33%"></div></div>
 
-        <!-- Step 1 -->
+        <!-- Step 1: Data Diri -->
         <div class="step-page active" id="rp1">
           <div class="form-row">
             <div class="fg full">
@@ -288,12 +261,12 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:linear-gradient(145de
           <button class="btn-primary" onclick="regNext(1)">Lanjut — Buat Akun →</button>
         </div>
 
-        <!-- Step 2 -->
+        <!-- Step 2: Akun -->
         <div class="step-page" id="rp2">
           <div class="fg">
             <label class="fl">Username *</label>
-            <input class="fi" type="text" id="r-user" placeholder="Contoh: ahmad123 (min. 4 karakter)" autocomplete="username">
-            <div class="err-msg" id="r-user-err">Username min. 4 karakter, hanya huruf/angka</div>
+            <input class="fi" type="text" id="r-user" placeholder="min. 4 karakter, hanya huruf/angka" autocomplete="username">
+            <div class="err-msg" id="r-user-err">Username min. 4 karakter, hanya huruf/angka/_</div>
           </div>
           <div class="fg">
             <label class="fl">Email (opsional)</label>
@@ -343,62 +316,20 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:linear-gradient(145de
             <button class="btn-primary" onclick="goToDashboard()">Masuk ke Dashboard →</button>
           </div>
         </div>
-      </div><!-- /page-reg -->
+      </div>
 
-    </div><!-- /card-body -->
-  </div><!-- /right-panel -->
-
-</div><!-- /page-wrap -->
+    </div>
+  </div>
+</div>
 
 <script>
-// ── FOTO HANDLER (berjalan tanpa Firebase) ────────────────────
-window.gantiPhoto = function(input) {
-  if (!input.files || !input.files[0]) return;
-  const file = input.files[0];
-  const reader = new FileReader();
-  reader.onload = e => {
-    document.getElementById('foto-preview').src = e.target.result;
-    document.getElementById('foto-preview').style.display = 'block';
-    document.getElementById('photo-placeholder').style.display = 'none';
-    document.getElementById('photo-overlay').style.display = '';
-    document.getElementById('hapus-foto-wrap').style.display = 'block';
-    // Simpan ke localStorage agar tetap ada saat reload
-    try { localStorage.setItem('dc_foto', e.target.result); } catch {}
-  };
-  reader.readAsDataURL(file);
-};
-
-window.hapusFoto = function() {
-  document.getElementById('foto-preview').src = '';
-  document.getElementById('foto-preview').style.display = 'none';
-  document.getElementById('photo-placeholder').style.display = 'flex';
-  document.getElementById('photo-overlay').style.display = 'none';
-  document.getElementById('hapus-foto-wrap').style.display = 'none';
-  document.getElementById('foto-input').value = '';
-  try { localStorage.removeItem('dc_foto'); } catch {}
-};
-
-// Muat foto yang sudah disimpan
-(function() {
-  try {
-    const saved = localStorage.getItem('dc_foto');
-    if (saved) {
-      document.getElementById('foto-preview').src = saved;
-      document.getElementById('foto-preview').style.display = 'block';
-      document.getElementById('photo-placeholder').style.display = 'none';
-      document.getElementById('photo-overlay').style.display = '';
-      document.getElementById('hapus-foto-wrap').style.display = 'block';
-    }
-  } catch {}
-})();
-
-// ── TOGGLE PASSWORD ───────────────────────────────────────────
+// ── TOGGLE PASSWORD ────────────────────────────────────────────
 window.togglePw = function(id) {
   const el = document.getElementById(id);
   el.type = el.type === 'password' ? 'text' : 'password';
 };
 
-// ── TAB SWITCH ────────────────────────────────────────────────
+// ── TAB SWITCH ─────────────────────────────────────────────────
 window.switchTab = function(tab) {
   document.getElementById('page-login').classList.toggle('active', tab === 'login');
   document.getElementById('page-reg').classList.toggle('active', tab === 'reg');
@@ -407,77 +338,103 @@ window.switchTab = function(tab) {
   document.getElementById('head-sub').textContent = tab === 'login' ? 'MASUK KE AKUN ANDA' : 'DAFTAR AKUN BARU';
 };
 
-// ── TOAST ─────────────────────────────────────────────────────
+// ── TOAST ──────────────────────────────────────────────────────
 function toast(msg, isErr = false) {
   const el = document.getElementById('toast');
   el.textContent = msg;
   el.className = 'toast' + (isErr ? ' err' : '') + ' show';
-  setTimeout(() => el.className = 'toast', 3000);
+  setTimeout(() => el.className = 'toast', 3500);
 }
 
-// ── LOADING ───────────────────────────────────────────────────
+// ── LOADING ────────────────────────────────────────────────────
 function setLoading(btnId, spinId, on) {
   document.getElementById(btnId).disabled = on;
   document.getElementById(spinId).style.display = on ? 'block' : 'none';
 }
 
-// ── VALIDASI ──────────────────────────────────────────────────
+// ── VALIDASI HELPER ────────────────────────────────────────────
 function validate(rules) {
   let ok = true;
   rules.forEach(({ id, errId, check, msg }) => {
     const el = document.getElementById(id);
     const err = document.getElementById(errId);
-    if (!check(el.value.trim(), el)) {
-      el.classList.add('err'); err.textContent = msg; err.style.display = 'block'; ok = false;
+    const val = el.value.trim();
+    if (!check(val, el)) {
+      el.classList.add('err');
+      err.textContent = msg;
+      err.style.display = 'block';
+      ok = false;
     } else {
-      el.classList.remove('err'); err.style.display = 'none';
+      el.classList.remove('err');
+      err.style.display = 'none';
     }
   });
   return ok;
 }
 
-// ── ENTER KEY LOGIN ────────────────────────────────────────────
-document.getElementById('l-pw').addEventListener('keydown', e => { if (e.key === 'Enter') window.doLogin(); });
-
-// ── REGISTER NAVIGASI ─────────────────────────────────────────
-window.regNext = function(step) {
-  if (step === 1) {
-    const ok = validate([
-      { id:'r-nama', errId:'r-nama-err', check: v => v.length >= 3, msg:'Nama min. 3 karakter' },
-      { id:'r-ttl',  errId:'r-ttl-err',  check: v => v !== '',       msg:'Tanggal lahir wajib diisi' },
-      { id:'r-jk',   errId:'r-jk-err',   check: v => v !== '',       msg:'Pilih jenis kelamin' },
-      { id:'r-hp',   errId:'r-hp-err',   check: v => /^0[0-9]{8,12}$/.test(v.replace(/[-\s]/g,'')), msg:'No. HP tidak valid' },
-      { id:'r-jadwal',errId:'r-jadwal-err',check:v=>v!=='',          msg:'Pilih jadwal HD' },
-      { id:'r-rs',   errId:'r-rs-err',   check: v => v.length >= 3, msg:'Nama RS min. 3 karakter' },
-    ]);
-    if (ok) goToRegStep(2);
-  } else if (step === 2) {
-    regSubmit();
-  }
-};
-window.regBack = function() { goToRegStep(1); };
-
+// ── STEPPER ────────────────────────────────────────────────────
 function goToRegStep(n) {
   [1,2,3].forEach(i => {
     document.getElementById('rp'+i).classList.toggle('active', i === n);
     const st = document.getElementById('rst'+i);
     st.classList.remove('active','done');
-    if (i < n) st.classList.add('done'); else if (i === n) st.classList.add('active');
+    if (i < n) st.classList.add('done');
+    else if (i === n) st.classList.add('active');
   });
   document.getElementById('reg-prog').style.width = {1:'33%',2:'66%',3:'100%'}[n];
 }
 
+// ── REGISTER NAVIGASI ──────────────────────────────────────────
+window.regNext = function(step) {
+  if (step === 1) {
+    const ok = validate([
+      { id:'r-nama',   errId:'r-nama-err',   check: v => v.length >= 3,                           msg:'Nama min. 3 karakter' },
+      { id:'r-ttl',    errId:'r-ttl-err',    check: v => v !== '',                                msg:'Tanggal lahir wajib diisi' },
+      { id:'r-jk',     errId:'r-jk-err',     check: v => v !== '',                                msg:'Pilih jenis kelamin' },
+      { id:'r-hp',     errId:'r-hp-err',     check: v => /^0[0-9]{8,12}$/.test(v.replace(/[-\s]/g,'')), msg:'No. HP tidak valid (contoh: 08123456789)' },
+      { id:'r-jadwal', errId:'r-jadwal-err', check: v => v !== '',                                msg:'Pilih jadwal HD' },
+      { id:'r-rs',     errId:'r-rs-err',     check: v => v.length >= 3,                           msg:'Nama RS min. 3 karakter' },
+    ]);
+    if (ok) goToRegStep(2);
+
+  } else if (step === 2) {
+    // Validasi step 2 dulu sebelum submit ke Firebase
+    const pw  = document.getElementById('r-pw').value;
+    const pw2 = document.getElementById('r-pw2').value;
+    const ok = validate([
+      { id:'r-user',  errId:'r-user-err',  check: v => /^[a-z0-9_]{4,}$/i.test(v),                          msg:'Username min. 4 karakter, hanya huruf/angka/_' },
+      { id:'r-email', errId:'r-email-err', check: v => v==='' || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),       msg:'Format email tidak valid' },
+      { id:'r-pw',    errId:'r-pw-err',    check: v => v.length >= 6,                                         msg:'Password min. 6 karakter' },
+      { id:'r-pw2',   errId:'r-pw2-err',   check: () => pw === pw2,                                           msg:'Password tidak cocok' },
+    ]);
+    if (!ok) return;
+    if (!document.getElementById('r-setuju').checked) {
+      toast('Harap centang persetujuan Syarat & Ketentuan', true);
+      return;
+    }
+    // Panggil fungsi Firebase (didefinisikan di module script)
+    window._regSubmitFirebase();
+  }
+};
+
+window.regBack = function() { goToRegStep(1); };
 window.goToDashboard = function() { window.location.href = 'dashboard.html'; };
+
+// Enter key di login
+document.getElementById('l-pw').addEventListener('keydown', e => {
+  if (e.key === 'Enter') window._doLoginFirebase && window._doLoginFirebase();
+});
 </script>
 
+<!-- ===== FIREBASE MODULE ===== -->
 <script type="module">
-import { initializeApp }                              from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, setDoc, getDoc, query,
-         collection, where, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { getAuth, signInWithEmailAndPassword,
-         createUserWithEmailAndPassword,
-         onAuthStateChanged }                          from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { initializeApp }    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, setDoc, collection, query, where, getDocs, serverTimestamp }
+                            from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged }
+                            from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+// ⬇️ GANTI dengan config Firebase project kamu
 const firebaseConfig = {
   apiKey:            "GANTI_API_KEY",
   authDomain:        "GANTI_PROJECT.firebaseapp.com",
@@ -486,6 +443,7 @@ const firebaseConfig = {
   messagingSenderId: "GANTI_SENDER_ID",
   appId:             "GANTI_APP_ID"
 };
+
 const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
@@ -494,96 +452,115 @@ function toast(msg, isErr = false) {
   const el = document.getElementById('toast');
   el.textContent = msg;
   el.className = 'toast' + (isErr ? ' err' : '') + ' show';
-  setTimeout(() => el.className = 'toast', 3000);
+  setTimeout(() => el.className = 'toast', 3500);
 }
 function setLoading(btnId, spinId, on) {
   document.getElementById(btnId).disabled = on;
   document.getElementById(spinId).style.display = on ? 'block' : 'none';
 }
 
+// Kalau sudah login sebelumnya, langsung redirect
 onAuthStateChanged(auth, user => {
-  if (user && sessionStorage.getItem('dc_profile')) window.location.href = 'dashboard.html';
+  if (user && sessionStorage.getItem('dc_profile')) {
+    window.location.href = 'dashboard.html';
+  }
 });
 
-// LOGIN
-window.doLogin = async function() {
+// ── LOGIN ──────────────────────────────────────────────────────
+window._doLoginFirebase = async function() {
   const username = document.getElementById('l-user').value.trim();
   const pw = document.getElementById('l-pw').value;
-  if (!username) { document.getElementById('l-user').classList.add('err'); document.getElementById('l-user-err').style.display='block'; return; }
-  if (pw.length < 6) { document.getElementById('l-pw').classList.add('err'); document.getElementById('l-pw-err').style.display='block'; return; }
+  if (!username) {
+    document.getElementById('l-user').classList.add('err');
+    document.getElementById('l-user-err').style.display = 'block';
+    return;
+  }
+  if (pw.length < 6) {
+    document.getElementById('l-pw').classList.add('err');
+    document.getElementById('l-pw-err').style.display = 'block';
+    return;
+  }
   setLoading('btn-login','spin-login',true);
   try {
     const q = query(collection(db,'users'), where('username','==',username));
     const snap = await getDocs(q);
-    if (snap.empty) { toast('Username tidak ditemukan',true); return; }
+    if (snap.empty) { toast('Username tidak ditemukan', true); return; }
     const profile = snap.docs[0].data();
     await signInWithEmailAndPassword(auth, profile.authEmail, pw);
     sessionStorage.setItem('dc_profile', JSON.stringify({...profile, uid: snap.docs[0].id}));
     toast('Selamat datang, ' + profile.namaDepan + '! 🌿');
     setTimeout(() => window.location.href = 'dashboard.html', 900);
   } catch(e) {
-    const msg = e.code==='auth/wrong-password'?'Password salah.':e.code==='auth/too-many-requests'?'Terlalu banyak percobaan. Coba lagi nanti.':'Login gagal. Periksa username & password.';
+    const msg =
+      e.code === 'auth/wrong-password'    ? 'Password salah.' :
+      e.code === 'auth/too-many-requests' ? 'Terlalu banyak percobaan. Coba lagi nanti.' :
+      'Login gagal. Periksa username & password.';
     toast(msg, true);
   } finally { setLoading('btn-login','spin-login',false); }
 };
 
-// REGISTER
-async function regSubmit() {
-  const pw  = document.getElementById('r-pw').value;
-  const pw2 = document.getElementById('r-pw2').value;
-  const email = document.getElementById('r-email').value.trim();
-  const user  = document.getElementById('r-user').value.trim();
-  const setuju = document.getElementById('r-setuju').checked;
+// Hubungkan tombol Login ke fungsi Firebase
+document.getElementById('btn-login').addEventListener('click', () => window._doLoginFirebase());
 
-  let ok = true;
-  const rules = [
-    {id:'r-user',errId:'r-user-err',check:v=>/^[a-z0-9_]{4,}$/i.test(v),msg:'Username min. 4 karakter, hanya huruf/angka/_'},
-    {id:'r-email',errId:'r-email-err',check:v=>v===''||/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),msg:'Format email tidak valid'},
-    {id:'r-pw',errId:'r-pw-err',check:v=>v.length>=6,msg:'Password min. 6 karakter'},
-    {id:'r-pw2',errId:'r-pw2-err',check:()=>pw===pw2,msg:'Password tidak cocok'},
-  ];
-  rules.forEach(({id,errId,check,msg})=>{
-    const el=document.getElementById(id);const err=document.getElementById(errId);
-    if(!check(el.value.trim(),el)){el.classList.add('err');err.textContent=msg;err.style.display='block';ok=false;}
-    else{el.classList.remove('err');err.style.display='none';}
-  });
-  if (!ok) return;
-  if (!setuju) { toast('Harap centang persetujuan Syarat & Ketentuan', true); return; }
+// ── REGISTER ───────────────────────────────────────────────────
+window._regSubmitFirebase = async function() {
+  const user   = document.getElementById('r-user').value.trim();
+  const email  = document.getElementById('r-email').value.trim();
+  const pw     = document.getElementById('r-pw').value;
 
   setLoading('btn-reg','spin-reg',true);
   try {
+    // Cek username sudah ada belum
     const qU = query(collection(db,'users'), where('username','==',user));
     const snapU = await getDocs(qU);
-    if (!snapU.empty) { document.getElementById('r-user').classList.add('err'); document.getElementById('r-user-err').textContent='Username sudah digunakan.'; document.getElementById('r-user-err').style.display='block'; return; }
+    if (!snapU.empty) {
+      document.getElementById('r-user').classList.add('err');
+      document.getElementById('r-user-err').textContent = 'Username sudah digunakan.';
+      document.getElementById('r-user-err').style.display = 'block';
+      return;
+    }
 
+    // Buat akun Firebase Auth
     const authEmail = email || `${user.toLowerCase()}@dzikircare.app`;
     const cred = await createUserWithEmailAndPassword(auth, authEmail, pw);
-    const uid = cred.user.uid;
-    const nama = document.getElementById('r-nama').value.trim();
-    const profile = {uid,username:user,namaLengkap:nama,namaDepan:nama.split(' ')[0],authEmail,ttl:document.getElementById('r-ttl').value,jk:document.getElementById('r-jk').value,hp:document.getElementById('r-hp').value.trim(),jadwalHD:document.getElementById('r-jadwal').value,rumahSakit:document.getElementById('r-rs').value.trim(),createdAt:serverTimestamp(),lastLogin:serverTimestamp(),totalDzikir:0,streakHari:0,lastMood:null,lastScreening:null};
-    await setDoc(doc(db,'users',uid), profile);
-    sessionStorage.setItem('dc_profile', JSON.stringify({...profile,uid}));
+    const uid  = cred.user.uid;
 
-    document.getElementById('s-nama').textContent = nama;
-    document.getElementById('s-user').textContent = user;
-    document.getElementById('s-jadwal').textContent = document.getElementById('r-jadwal').value;
-    document.getElementById('s-rs').textContent = document.getElementById('r-rs').value.trim();
+    const nama = document.getElementById('r-nama').value.trim();
+    const profile = {
+      uid, username: user,
+      namaLengkap: nama,
+      namaDepan: nama.split(' ')[0],
+      authEmail,
+      ttl:       document.getElementById('r-ttl').value,
+      jk:        document.getElementById('r-jk').value,
+      hp:        document.getElementById('r-hp').value.trim(),
+      jadwalHD:  document.getElementById('r-jadwal').value,
+      rumahSakit:document.getElementById('r-rs').value.trim(),
+      createdAt: serverTimestamp(),
+      lastLogin: serverTimestamp(),
+      totalDzikir:0, streakHari:0, lastMood:null, lastScreening:null
+    };
+
+    await setDoc(doc(db,'users',uid), profile);
+    sessionStorage.setItem('dc_profile', JSON.stringify({...profile, uid}));
+
+    // Isi data ringkasan di step 3
+    document.getElementById('s-nama').textContent   = nama;
+    document.getElementById('s-user').textContent   = user;
+    document.getElementById('s-jadwal').textContent = profile.jadwalHD;
+    document.getElementById('s-rs').textContent     = profile.rumahSakit;
+
+    // Pindah ke step sukses
     goToRegStep(3);
+
   } catch(e) {
-    const msg = e.code==='auth/email-already-in-use'?'Username sudah terdaftar. Gunakan username lain.':e.code==='auth/weak-password'?'Password terlalu lemah.':'Pendaftaran gagal: '+e.message;
+    const msg =
+      e.code === 'auth/email-already-in-use' ? 'Username sudah terdaftar. Gunakan username lain.' :
+      e.code === 'auth/weak-password'         ? 'Password terlalu lemah.' :
+      'Pendaftaran gagal: ' + e.message;
     toast(msg, true);
   } finally { setLoading('btn-reg','spin-reg',false); }
-}
-
-function goToRegStep(n) {
-  [1,2,3].forEach(i => {
-    document.getElementById('rp'+i).classList.toggle('active', i===n);
-    const st=document.getElementById('rst'+i);
-    st.classList.remove('active','done');
-    if(i<n)st.classList.add('done');else if(i===n)st.classList.add('active');
-  });
-  document.getElementById('reg-prog').style.width={1:'33%',2:'66%',3:'100%'}[n];
-}
+};
 </script>
 </body>
 </html>
