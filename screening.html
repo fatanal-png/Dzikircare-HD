@@ -1,540 +1,333 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Screening Stres — DzikirCare HD</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box;}
-    :root{
-      --hijau-tua:#0d3b2e;
-      --hijau-gelap:#1a5c45;
-      --hijau-mid:#2e8b63;
-      --hijau-soft:#3dab7a;
-      --hijau-terang:#5ec995;
-      --hijau-pucat:#e8f7f0;
-      --emas:#c9a84c;
-      --emas-terang:#e8c96b;
-      --emas-muda:#faf0d7;
-      --text-dark:#1a3a1a;
-      --text-mid:#52796f;
-      --sidebar-w:224px;
-    }
-    body{font-family:'Plus Jakarta Sans',sans-serif;background:linear-gradient(135deg,#e8f5e9 0%,#f1f8e9 50%,#e0f2f1 100%);min-height:100vh;color:var(--text-dark);}
-
-    /* SIDEBAR */
-    .sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--sidebar-w);background:linear-gradient(180deg,#0d3b2e 0%,#1a5c45 60%,#2e8b63 100%);display:flex;flex-direction:column;padding:24px 0;z-index:100;box-shadow:4px 0 32px rgba(13,59,46,0.3);}
-    .logo{padding:0 20px 20px;border-bottom:.5px solid rgba(255,255,255,0.13);margin-bottom:12px;}
-    .logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--emas),var(--emas-terang));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:8px;}
-    .logo-title{font-family:'Amiri',serif;font-size:20px;color:#d8f3dc;font-weight:700;}
-    .logo-sub{font-size:10px;color:var(--emas-terang);letter-spacing:.08em;opacity:.8;}
-    .nav{display:flex;flex-direction:column;gap:2px;padding:0 12px;flex:1;overflow-y:auto;}
-    .nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;font-size:13px;color:#b7e4c7;cursor:pointer;transition:all .15s;text-decoration:none;width:100%;}
-    .nav-item:hover{background:rgba(255,255,255,0.1);color:#d8f3dc;}
-    .nav-item.active{background:linear-gradient(90deg,rgba(255,255,255,0.18),rgba(255,255,255,0.06));color:#d8f3dc;font-weight:600;border-left:3px solid var(--emas);}
-    .nav-item i{font-size:17px;flex-shrink:0;}
-    .nav-section{font-size:10px;color:var(--emas);letter-spacing:.1em;text-transform:uppercase;padding:10px 12px 4px;margin-top:6px;opacity:.8;}
-    .user-area{padding:14px 20px 0;border-top:.5px solid rgba(255,255,255,0.13);margin-top:auto;}
-    .avatar-sm{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--emas),var(--emas-terang));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#0d3b2e;flex-shrink:0;}
-    .username{font-size:13px;color:#d8f3dc;font-weight:600;}
-    .usertag{font-size:11px;color:var(--emas-terang);opacity:.8;}
-
-    /* MAIN */
-    .main{margin-left:var(--sidebar-w);padding:28px 28px 60px;min-height:100vh;}
-    .topbar{margin-bottom:24px;}
-    .page-title{font-size:22px;font-weight:700;color:var(--hijau-tua);}
-    .page-sub{font-size:12.5px;color:var(--text-mid);margin-top:2px;}
-
-    /* LAYOUT 2 KOLOM */
-    .layout{display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:start;}
-
-    /* CARD */
-    .card{background:linear-gradient(135deg,#fff,#f6fbf7);border-radius:16px;border:.5px solid #c8e6c9;padding:20px 22px;box-shadow:0 2px 14px rgba(27,67,50,0.07);margin-bottom:16px;}
-    .card:last-child{margin-bottom:0;}
-
-    /* INTRO BANNER */
-    .intro-banner{background:linear-gradient(120deg,var(--hijau-tua),var(--hijau-gelap),var(--hijau-mid));border-radius:18px;padding:20px 24px;margin-bottom:20px;position:relative;overflow:hidden;}
-    .intro-banner::before{content:'';position:absolute;right:-30px;top:-30px;width:130px;height:130px;border-radius:50%;background:rgba(201,168,76,0.08);}
-    .intro-tag{font-size:10px;font-weight:700;color:var(--emas-terang);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;}
-    .intro-title{font-family:'Amiri',serif;font-size:20px;color:#fff;font-weight:700;margin-bottom:6px;}
-    .intro-desc{font-size:12px;color:rgba(255,255,255,0.7);line-height:1.6;max-width:480px;}
-    .intro-stats{display:flex;gap:16px;margin-top:14px;}
-    .intro-stat{background:rgba(255,255,255,0.1);border-radius:10px;padding:8px 14px;text-align:center;}
-    .intro-stat-num{font-size:18px;font-weight:700;color:#fff;}
-    .intro-stat-label{font-size:10px;color:rgba(255,255,255,0.6);margin-top:2px;}
-
-    /* PROGRESS BAR */
-    .progress-wrap{margin-bottom:18px;}
-    .progress-info{display:flex;justify-content:space-between;font-size:11.5px;color:var(--text-mid);margin-bottom:6px;}
-    .progress-bar{height:8px;background:#e8f5e9;border-radius:99px;overflow:hidden;}
-    .progress-fill{height:100%;background:linear-gradient(90deg,var(--hijau-soft),var(--hijau-terang));border-radius:99px;transition:width .4s ease;}
-
-    /* SOAL */
-    .soal-section-label{font-size:11px;font-weight:700;color:var(--emas);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:6px;}
-    .soal-item{background:#fff;border-radius:14px;border:1.5px solid #e8f5e9;padding:16px 18px;margin-bottom:10px;transition:all .2s;}
-    .soal-item.answered{border-color:#b7e4c7;background:linear-gradient(135deg,#fff,#f6fbf7);}
-    .soal-num{font-size:10.5px;font-weight:700;color:var(--hijau-terang);margin-bottom:6px;letter-spacing:.04em;}
-    .soal-teks{font-size:13.5px;font-weight:600;color:var(--hijau-tua);line-height:1.5;margin-bottom:12px;}
-    .skala-wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
-    .skala-btn{padding:8px 4px;border-radius:10px;border:1.5px solid #e0ede5;background:#fafff8;font-size:11px;font-weight:600;color:var(--text-mid);cursor:pointer;text-align:center;transition:all .15s;line-height:1.3;}
-    .skala-btn:hover{border-color:var(--hijau-soft);background:var(--hijau-pucat);}
-    .skala-btn.selected{background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-mid));color:#fff;border-color:var(--hijau-tua);}
-    .skala-val{font-size:16px;font-weight:700;display:block;margin-bottom:2px;}
-
-    /* TOMBOL */
-    .btn-primary{background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-mid));color:#fff;border:none;border-radius:12px;padding:12px 24px;font-size:13.5px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px;}
-    .btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(13,59,46,0.3);}
-    .btn-outline{background:transparent;color:var(--hijau-mid);border:1.5px solid #b7e4c7;border-radius:12px;padding:11px 20px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;cursor:pointer;transition:all .2s;}
-    .btn-outline:hover{background:var(--hijau-pucat);}
-
-    /* HASIL */
-    .hasil-box{border-radius:16px;padding:22px;text-align:center;margin-bottom:16px;}
-    .hasil-box.normal{background:linear-gradient(135deg,#d8f3dc,#b7e4c7);}
-    .hasil-box.ringan{background:linear-gradient(135deg,#e8f5e9,#c8f0dc);}
-    .hasil-box.sedang{background:linear-gradient(135deg,#fff9c4,#ffeaa7);}
-    .hasil-box.berat{background:linear-gradient(135deg,#ffe0b2,#ffcc80);}
-    .hasil-box.sangat-berat{background:linear-gradient(135deg,#fce4ec,#f8bbd0);}
-    .hasil-emoji{font-size:40px;margin-bottom:8px;}
-    .hasil-level{font-size:20px;font-weight:700;color:var(--hijau-tua);margin-bottom:4px;}
-    .hasil-skor{font-size:36px;font-weight:700;color:var(--hijau-tua);line-height:1;}
-    .hasil-dari{font-size:13px;color:var(--text-mid);}
-    .hasil-desc{font-size:13px;color:#444;line-height:1.7;margin-top:10px;}
-    .hasil-rec{font-size:12.5px;color:var(--hijau-gelap);margin-top:10px;padding:10px 14px;background:rgba(255,255,255,0.6);border-radius:10px;text-align:left;line-height:1.6;}
-
-    /* SUBSKALA */
-    .subskala-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
-    .subskala-item{background:#fff;border-radius:12px;border:.5px solid #c8e6c9;padding:12px;text-align:center;}
-    .subskala-label{font-size:10.5px;font-weight:700;color:var(--text-mid);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px;}
-    .subskala-skor{font-size:22px;font-weight:700;color:var(--hijau-tua);}
-    .subskala-kat{font-size:10px;margin-top:3px;font-weight:600;padding:2px 8px;border-radius:99px;display:inline-block;}
-
-    /* RIWAYAT */
-    .riwayat-item{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:.5px solid #f0faf2;}
-    .riwayat-item:last-child{border-bottom:none;}
-    .riwayat-tgl{font-size:11px;color:var(--text-mid);}
-    .riwayat-nama{font-size:13px;font-weight:600;color:var(--hijau-tua);margin-top:2px;}
-    .badge{display:inline-block;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:600;}
-    .badge-normal{background:#d8f3dc;color:#1a5c45;}
-    .badge-ringan{background:#c8f0dc;color:#1a5c45;}
-    .badge-sedang{background:#fff9c4;color:#856404;}
-    .badge-berat{background:#ffe0b2;color:#7a3900;}
-    .badge-sangat-berat{background:#fce4ec;color:#b71c1c;}
-
-    /* PANDUAN SKALA */
-    .panduan-item{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:.5px solid #f0faf2;font-size:12px;color:var(--text-mid);}
-    .panduan-item:last-child{border-bottom:none;}
-    .panduan-num{width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-mid));color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-
-    ::-webkit-scrollbar{width:4px;}
-    ::-webkit-scrollbar-track{background:transparent;}
-    ::-webkit-scrollbar-thumb{background:#b7e4c7;border-radius:99px;}
-  </style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Screening Stres DASS-21 — DzikirCare HD</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--g1:#0d3b2e;--g2:#1a5c45;--g3:#2e8b63;--g4:#52b788;--g5:#74c69d;--emas:#c9a84c;--emas2:#e8c96b;--emas-bg:#faf0d7;--text:#1a3a1a;--mid:#52796f;--pale:#f0faf2;--sidebar:224px;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:linear-gradient(135deg,#e8f5e9,#f1f8e9,#e0f2f1);min-height:100vh;color:var(--text);}
+#ag{position:fixed;inset:0;background:linear-gradient(135deg,var(--g1),var(--g2));z-index:999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;}
+#ag .sp{width:36px;height:36px;border:3px solid rgba(255,255,255,.2);border-top-color:var(--emas2);border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+#ag p{color:rgba(255,255,255,.6);font-size:13px;}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--sidebar);background:linear-gradient(180deg,var(--g1),var(--g2) 60%,var(--g3));display:flex;flex-direction:column;padding:24px 0;z-index:100;box-shadow:4px 0 32px rgba(13,59,46,.3);}
+.logo{padding:0 20px 20px;border-bottom:.5px solid rgba(255,255,255,.13);margin-bottom:12px;}
+.logo-ic{width:36px;height:36px;background:linear-gradient(135deg,var(--emas),var(--emas2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:8px;}
+.logo-t{font-family:'Amiri',serif;font-size:20px;color:#d8f3dc;font-weight:700;}
+.logo-s{font-size:10px;color:var(--emas2);letter-spacing:.08em;opacity:.8;}
+.nav{display:flex;flex-direction:column;gap:2px;padding:0 12px;flex:1;overflow-y:auto;}
+.nav a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;font-size:13px;color:#b7e4c7;text-decoration:none;transition:all .15s;}
+.nav a:hover{background:rgba(255,255,255,.1);}
+.nav a.active{background:linear-gradient(90deg,rgba(255,255,255,.18),rgba(255,255,255,.06));color:#d8f3dc;font-weight:600;border-left:3px solid var(--emas);}
+.nav a i{font-size:17px;flex-shrink:0;}
+.ns{font-size:10px;color:var(--emas);letter-spacing:.1em;text-transform:uppercase;padding:10px 12px 4px;margin-top:6px;opacity:.8;}
+.user-box{padding:14px 20px 0;border-top:.5px solid rgba(255,255,255,.13);margin-top:auto;}
+.avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--emas),var(--emas2));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--g1);}
+.uname{font-size:13px;color:#d8f3dc;font-weight:600;}
+.btn-out{width:100%;margin-top:10px;padding:8px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:8px;color:rgba(255,255,255,.5);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;font-family:'Plus Jakarta Sans',sans-serif;}
+.main{margin-left:var(--sidebar);padding:28px 28px 60px;}
+.topbar{margin-bottom:20px;}
+.pt{font-size:22px;font-weight:700;color:var(--g1);}
+.ps{font-size:12.5px;color:var(--mid);margin-top:2px;}
+.layout{display:grid;grid-template-columns:1fr 330px;gap:20px;align-items:start;}
+.card{background:linear-gradient(135deg,#fff,#f6fbf7);border-radius:16px;border:.5px solid #c8e6c9;padding:20px 22px;box-shadow:0 2px 14px rgba(27,67,50,.07);margin-bottom:16px;}
+/* INTRO */
+.intro{background:linear-gradient(120deg,var(--g1),var(--g2),var(--g3));border-radius:18px;padding:20px 24px;margin-bottom:20px;position:relative;overflow:hidden;}
+.intro::before{content:'';position:absolute;right:-30px;top:-30px;width:130px;height:130px;border-radius:50%;background:rgba(201,168,76,.08);}
+.i-tag{font-size:10px;font-weight:700;color:var(--emas2);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;}
+.i-title{font-family:'Amiri',serif;font-size:20px;color:#fff;margin-bottom:6px;}
+.i-desc{font-size:12px;color:rgba(255,255,255,.7);line-height:1.6;}
+.i-stats{display:flex;gap:16px;margin-top:14px;}
+.i-stat{background:rgba(255,255,255,.1);border-radius:10px;padding:8px 14px;text-align:center;}
+.i-sn{font-size:18px;font-weight:700;color:#fff;}
+.i-sl{font-size:10px;color:rgba(255,255,255,.6);margin-top:2px;}
+/* PROGRESS */
+.pb-wrap{margin-bottom:16px;}
+.pb-info{display:flex;justify-content:space-between;font-size:11.5px;color:var(--mid);margin-bottom:6px;}
+.pb{height:8px;background:#e8f5e9;border-radius:99px;overflow:hidden;}
+.pf{height:100%;background:linear-gradient(90deg,var(--g4),var(--g5));border-radius:99px;transition:width .4s;}
+.sub-mini{display:flex;gap:10px;margin-top:12px;}
+.sub-mini-item{flex:1;text-align:center;padding:8px;background:var(--pale);border-radius:10px;}
+.sub-mini-item.a{background:var(--emas-bg);}
+.sub-mini-item.s{background:#fde8e8;}
+/* SOAL */
+.sec-lbl{font-size:11px;font-weight:700;color:var(--emas);letter-spacing:.08em;text-transform:uppercase;margin:16px 0 10px;display:flex;align-items:center;gap:6px;}
+.soal{background:#fff;border-radius:14px;border:1.5px solid #e8f5e9;padding:16px 18px;margin-bottom:10px;transition:border-color .2s;}
+.soal.done{border-color:#b7e4c7;background:linear-gradient(135deg,#fff,#f6fbf7);}
+.s-no{font-size:10.5px;font-weight:700;color:var(--g5);margin-bottom:6px;}
+.s-teks{font-size:13.5px;font-weight:600;color:var(--g1);line-height:1.5;margin-bottom:12px;}
+.skala{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
+.skala-btn{padding:8px 4px;border-radius:10px;border:1.5px solid #e0ede5;background:#fafff8;font-size:11px;font-weight:600;color:var(--mid);cursor:pointer;text-align:center;transition:all .15s;line-height:1.3;}
+.skala-btn:hover{border-color:var(--g4);background:var(--pale);}
+.skala-btn.sel{background:linear-gradient(135deg,var(--g1),var(--g3));color:#fff;border-color:transparent;}
+.skala-v{font-size:16px;font-weight:700;display:block;margin-bottom:2px;}
+/* TOMBOL */
+.btn-p{background:linear-gradient(135deg,var(--g1),var(--g3));color:#fff;border:none;border-radius:12px;padding:12px 24px;font-size:13.5px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all .2s;}
+.btn-p:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(13,59,46,.3);}
+.btn-p:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+.btn-o{background:transparent;color:var(--g3);border:1.5px solid #b7e4c7;border-radius:12px;padding:11px 20px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;cursor:pointer;}
+/* HASIL */
+.hasil{border-radius:16px;padding:22px;text-align:center;margin-bottom:16px;}
+.hasil.normal{background:linear-gradient(135deg,#d8f3dc,#b7e4c7);}
+.hasil.ringan{background:linear-gradient(135deg,#e8f5e9,#c8f0dc);}
+.hasil.sedang{background:linear-gradient(135deg,#fff9c4,#ffeaa7);}
+.hasil.berat{background:linear-gradient(135deg,#ffe0b2,#ffcc80);}
+.hasil.sangat-berat{background:linear-gradient(135deg,#fce4ec,#f8bbd0);}
+.h-emoji{font-size:40px;margin-bottom:8px;}
+.h-level{font-size:20px;font-weight:700;color:var(--g1);margin-bottom:4px;}
+.h-skor{font-size:36px;font-weight:700;color:var(--g1);line-height:1;}
+.h-desc{font-size:13px;color:#444;line-height:1.7;margin-top:10px;}
+.h-rec{font-size:12.5px;color:var(--g2);margin-top:10px;padding:10px 14px;background:rgba(255,255,255,.6);border-radius:10px;text-align:left;line-height:1.6;}
+.sub-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
+.sub-item{background:#fff;border-radius:12px;border:.5px solid #c8e6c9;padding:12px;text-align:center;}
+.sub-lbl{font-size:10.5px;font-weight:700;color:var(--mid);text-transform:uppercase;margin-bottom:6px;}
+.sub-skor{font-size:22px;font-weight:700;color:var(--g1);}
+.badge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:600;margin-top:3px;}
+.bn{background:#d8f3dc;color:#1a5c45;}.br{background:#c8f0dc;color:#1a5c45;}.bs{background:#fff9c4;color:#856404;}.bb{background:#ffe0b2;color:#7a3900;}.bsb{background:#fce4ec;color:#b71c1c;}
+/* RIWAYAT */
+.rw-item{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:.5px solid #f0faf2;}
+.rw-item:last-child{border-bottom:none;}
+.spin2{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:none;}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:#1a3a1a;color:#fff;padding:11px 22px;border-radius:99px;font-size:13px;font-weight:600;z-index:500;opacity:0;transition:all .3s;pointer-events:none;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-thumb{background:#b7e4c7;border-radius:99px;}
+</style>
 </head>
 <body>
-
-<!-- SIDEBAR -->
+<div id="ag"><div class="sp"></div><p>Memverifikasi sesi...</p></div>
+<div class="toast" id="toast"></div>
 <div class="sidebar">
-  <div class="logo">
-    <div class="logo-icon">☪</div>
-    <div class="logo-title">DzikirCare HD</div>
-    <div class="logo-sub">HEMODIALISA & DZIKIR</div>
-  </div>
+  <div class="logo"><div class="logo-ic">☪</div><div class="logo-t">DzikirCare HD</div><div class="logo-s">HEMODIALISA & DZIKIR</div></div>
   <nav class="nav">
-    <div class="nav-section">Utama</div>
-    <a class="nav-item" href="dashboard.html"><i class="ti ti-layout-dashboard"></i> Dashboard</a>
-    <a class="nav-item" href="dzikir.html"><i class="ti ti-rosette"></i> Dzikir Digital</a>
-    <a class="nav-item" href="sholat.html"><i class="ti ti-clock"></i> Jadwal Sholat</a>
-    <div class="nav-section">Evaluasi Psikologis</div>
-    <a class="nav-item active" href="screening.html"><i class="ti ti-heart-rate-monitor"></i> Screening Stres</a>
-    <a class="nav-item" href="selfefficacy.html"><i class="ti ti-brain"></i> Self-Efikasi</a>
-    <a class="nav-item" href="mood.html"><i class="ti ti-mood-smile"></i> Mood Tracker</a>
-    <div class="nav-section">Lainnya</div>
-    <a class="nav-item" href="edukasi.html"><i class="ti ti-book"></i> Edukasi</a>
-    <a class="nav-item" href="statistik.html"><i class="ti ti-chart-bar"></i> Statistik</a>
-    <a class="nav-item" href="pengingat.html"><i class="ti ti-bell"></i> Pengingat</a>
-    <a class="nav-item" href="profil.html"><i class="ti ti-user-circle"></i> Profil Saya</a>
+    <div class="ns">Utama</div>
+    <a href="dashboard.html"><i class="ti ti-layout-dashboard"></i> Dashboard</a>
+    <a href="Dzikir.html"><i class="ti ti-rosette"></i> Dzikir Digital</a>
+    <a href="sholat.html"><i class="ti ti-clock"></i> Jadwal Sholat</a>
+    <div class="ns">Evaluasi Psikologis</div>
+    <a href="screening.html" class="active"><i class="ti ti-heart-rate-monitor"></i> Screening Stres</a>
+    <a href="selfefficacy.html"><i class="ti ti-brain"></i> Self-Efikasi</a>
+    <a href="mood.html"><i class="ti ti-mood-smile"></i> Mood Tracker</a>
+    <div class="ns">Lainnya</div>
+    <a href="edukasi.html"><i class="ti ti-book"></i> Edukasi</a>
+    <a href="statistik.html"><i class="ti ti-chart-bar"></i> Statistik</a>
+    <a href="pengingat.html"><i class="ti ti-bell"></i> Pengingat</a>
+    <a href="profil.html"><i class="ti ti-user-circle"></i> Profil Saya</a>
   </nav>
-  <div class="user-area">
-    <div style="display:flex;align-items:center;gap:10px;">
-      <div class="avatar-sm">A</div>
-      <div>
-        <div class="username">Ahmad</div>
-        <div class="usertag">Pasien Hemodialisa</div>
-      </div>
-    </div>
+  <div class="user-box">
+    <div style="display:flex;align-items:center;gap:10px;"><div class="avatar" id="s-av">?</div><div><div class="uname" id="s-nm">—</div><div style="font-size:11px;color:var(--emas2);opacity:.8;">Pasien Hemodialisa</div></div></div>
+    <button class="btn-out" onclick="doLogout()"><i class="ti ti-logout"></i> Keluar</button>
   </div>
 </div>
 
-<!-- MAIN -->
-<main class="main">
-  <div class="topbar">
-    <div class="page-title">📋 Screening Stres DASS-21</div>
-    <div class="page-sub" id="datestr"></div>
-  </div>
-
-  <!-- INTRO BANNER -->
-  <div class="intro-banner">
-    <div class="intro-tag">✦ Instrumen Tervalidasi</div>
-    <div class="intro-title">Depression Anxiety Stress Scales (DASS-21)</div>
-    <div class="intro-desc">Kuesioner ini mengukur tingkat <b style="color:#e8c96b;">depresi</b>, <b style="color:#e8c96b;">kecemasan</b>, dan <b style="color:#e8c96b;">stres</b> yang Anda rasakan dalam <b style="color:#fff;">7 hari terakhir</b>. Jawab dengan jujur sesuai kondisi Anda. Tidak ada jawaban benar atau salah.</div>
-    <div class="intro-stats">
-      <div class="intro-stat"><div class="intro-stat-num">21</div><div class="intro-stat-label">Pertanyaan</div></div>
-      <div class="intro-stat"><div class="intro-stat-num">3</div><div class="intro-stat-label">Subskala</div></div>
-      <div class="intro-stat"><div class="intro-stat-num">±10</div><div class="intro-stat-label">Menit</div></div>
-    </div>
+<main class="main" id="main" style="display:none;">
+  <div class="topbar"><div class="pt">📋 Screening Stres DASS-21</div><div class="ps" id="tgl"></div></div>
+  <div class="intro">
+    <div class="i-tag">✦ Instrumen Tervalidasi</div>
+    <div class="i-title">Depression Anxiety Stress Scales (DASS-21)</div>
+    <div class="i-desc">Mengukur tingkat <b style="color:var(--emas2);">depresi, kecemasan, dan stres</b> dalam <b style="color:#fff;">7 hari terakhir</b>. Jawab dengan jujur. Tidak ada jawaban benar atau salah.</div>
+    <div class="i-stats"><div class="i-stat"><div class="i-sn">21</div><div class="i-sl">Pertanyaan</div></div><div class="i-stat"><div class="i-sn">3</div><div class="i-sl">Subskala</div></div><div class="i-stat"><div class="i-sn">±10</div><div class="i-sl">Menit</div></div></div>
   </div>
 
   <div class="layout">
-    <!-- KOLOM KIRI: FORM -->
     <div>
-      <!-- PROGRESS -->
       <div class="card">
-        <div class="progress-wrap">
-          <div class="progress-info">
-            <span id="prog-label">0 dari 21 pertanyaan dijawab</span>
-            <span id="prog-pct">0%</span>
-          </div>
-          <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+        <div class="pb-wrap">
+          <div class="pb-info"><span id="pb-lbl">0 dari 21 dijawab</span><span id="pb-pct">0%</span></div>
+          <div class="pb"><div class="pf" id="pb-fill" style="width:0%"></div></div>
         </div>
-        <div style="display:flex;gap:12px;">
-          <div style="flex:1;text-align:center;padding:8px;background:var(--hijau-pucat);border-radius:10px;">
-            <div style="font-size:10px;color:var(--text-mid);margin-bottom:2px;">DEPRESI (D)</div>
-            <div style="font-size:13px;font-weight:700;color:var(--hijau-tua);" id="mini-D">0/7</div>
-          </div>
-          <div style="flex:1;text-align:center;padding:8px;background:var(--emas-muda);border-radius:10px;">
-            <div style="font-size:10px;color:var(--text-mid);margin-bottom:2px;">KECEMASAN (A)</div>
-            <div style="font-size:13px;font-weight:700;color:var(--hijau-tua);" id="mini-A">0/7</div>
-          </div>
-          <div style="flex:1;text-align:center;padding:8px;background:#fde8e8;border-radius:10px;">
-            <div style="font-size:10px;color:var(--text-mid);margin-bottom:2px;">STRES (S)</div>
-            <div style="font-size:13px;font-weight:700;color:var(--hijau-tua);" id="mini-S">0/7</div>
-          </div>
+        <div class="sub-mini">
+          <div class="sub-mini-item"><div style="font-size:10px;color:var(--mid);margin-bottom:2px;">DEPRESI (D)</div><div style="font-size:13px;font-weight:700;color:var(--g1);" id="md">0/7</div></div>
+          <div class="sub-mini-item a"><div style="font-size:10px;color:var(--mid);margin-bottom:2px;">KECEMASAN (A)</div><div style="font-size:13px;font-weight:700;color:var(--g1);" id="ma">0/7</div></div>
+          <div class="sub-mini-item s"><div style="font-size:10px;color:var(--mid);margin-bottom:2px;">STRES (S)</div><div style="font-size:13px;font-weight:700;color:var(--g1);" id="ms">0/7</div></div>
         </div>
       </div>
 
-      <!-- SOAL DEPRESI -->
-      <div class="soal-section-label"><i class="ti ti-mood-sad" style="font-size:15px;"></i> Subskala Depresi (D)</div>
+      <div class="sec-lbl"><i class="ti ti-mood-sad"></i> Subskala Depresi (D)</div>
       <div id="soal-D"></div>
-
-      <!-- SOAL KECEMASAN -->
-      <div class="soal-section-label" style="margin-top:8px;"><i class="ti ti-heartbeat" style="font-size:15px;"></i> Subskala Kecemasan (A)</div>
+      <div class="sec-lbl"><i class="ti ti-heartbeat"></i> Subskala Kecemasan (A)</div>
       <div id="soal-A"></div>
-
-      <!-- SOAL STRES -->
-      <div class="soal-section-label" style="margin-top:8px;"><i class="ti ti-brain" style="font-size:15px;"></i> Subskala Stres (S)</div>
+      <div class="sec-lbl"><i class="ti ti-brain"></i> Subskala Stres (S)</div>
       <div id="soal-S"></div>
 
-      <!-- TOMBOL -->
       <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
-        <button class="btn-outline" onclick="resetForm()"><i class="ti ti-refresh"></i> Reset</button>
-        <button class="btn-primary" onclick="hitungHasil()"><i class="ti ti-calculator"></i> Hitung Hasil</button>
+        <button class="btn-o" onclick="resetForm()"><i class="ti ti-refresh"></i> Reset</button>
+        <button class="btn-p" id="btn-hitung" onclick="hitungHasil()"><span class="spin2" id="sp2"></span><i class="ti ti-calculator"></i> Hitung Hasil</button>
       </div>
 
-      <!-- HASIL -->
-      <div id="hasil-section" style="display:none;margin-top:20px;">
-        <div style="font-size:15px;font-weight:700;color:var(--hijau-tua);margin-bottom:14px;">📊 Hasil Screening DASS-21</div>
-
-        <!-- Subskala detail -->
-        <div class="subskala-grid" id="subskala-detail"></div>
-
-        <!-- Hasil utama stres -->
-        <div class="hasil-box" id="hasil-box">
-          <div class="hasil-emoji" id="hasil-emoji"></div>
-          <div class="hasil-level" id="hasil-level"></div>
-          <div class="hasil-skor" id="hasil-skor"></div>
-          <div class="hasil-dari">Skor Stres (0–42)</div>
-          <div class="hasil-desc" id="hasil-desc"></div>
-          <div class="hasil-rec" id="hasil-rec"></div>
+      <div id="hasil-sec" style="display:none;margin-top:20px;">
+        <div style="font-size:15px;font-weight:700;color:var(--g1);margin-bottom:14px;">📊 Hasil Screening DASS-21</div>
+        <div class="sub-grid" id="sub-grid"></div>
+        <div class="hasil" id="hasil-box">
+          <div class="h-emoji" id="h-emoji"></div>
+          <div class="h-level" id="h-level"></div>
+          <div class="h-skor" id="h-skor"></div>
+          <div style="font-size:13px;color:var(--mid);">Skor Stres (0–42)</div>
+          <div class="h-desc" id="h-desc"></div>
+          <div class="h-rec" id="h-rec"></div>
         </div>
-
-        <!-- Rekomendasi Dzikir -->
-        <div class="card" style="background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-gelap));color:#fff;">
-          <div style="font-size:12px;font-weight:700;color:var(--emas-terang);letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px;">🤲 Rekomendasi Terapi Dzikir</div>
-          <div id="rek-dzikir" style="font-size:13px;color:rgba(255,255,255,0.85);line-height:1.7;"></div>
+        <div class="card" style="background:linear-gradient(135deg,var(--g1),var(--g2));color:#fff;margin-bottom:14px;">
+          <div style="font-size:12px;font-weight:700;color:var(--emas2);letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px;">🤲 Rekomendasi Dzikir</div>
+          <div id="rek-dz" style="font-size:13px;color:rgba(255,255,255,.85);line-height:1.7;"></div>
         </div>
-
-        <div style="display:flex;gap:10px;margin-top:4px;">
-          <button class="btn-outline" onclick="resetForm()">Isi Ulang</button>
-          <button class="btn-primary" onclick="simpanHasil()"><i class="ti ti-device-floppy"></i> Simpan Hasil</button>
+        <div style="display:flex;gap:10px;">
+          <button class="btn-o" onclick="resetForm()">Isi Ulang</button>
+          <button class="btn-p" id="btn-save" onclick="simpanHasil()"><span class="spin2" id="sp3"></span><i class="ti ti-device-floppy"></i> Simpan Hasil</button>
         </div>
       </div>
     </div>
 
-    <!-- KOLOM KANAN -->
     <div>
-      <!-- PANDUAN SKALA -->
       <div class="card">
-        <div style="font-size:13px;font-weight:700;color:var(--hijau-tua);margin-bottom:12px;">📖 Panduan Menjawab</div>
-        <div style="font-size:12px;color:var(--text-mid);margin-bottom:10px;">Pilih angka yang paling sesuai dengan kondisi Anda <b>7 hari terakhir</b>:</div>
-        <div class="panduan-item"><div class="panduan-num">0</div><span><b>Tidak pernah</b> — Sama sekali tidak berlaku</span></div>
-        <div class="panduan-item"><div class="panduan-num">1</div><span><b>Kadang-kadang</b> — Berlaku sebagian besar waktu</span></div>
-        <div class="panduan-item"><div class="panduan-num">2</div><span><b>Lumayan sering</b> — Berlaku cukup sering</span></div>
-        <div class="panduan-item"><div class="panduan-num">3</div><span><b>Sangat sering</b> — Berlaku hampir sepanjang waktu</span></div>
+        <div style="font-size:13px;font-weight:700;color:var(--g1);margin-bottom:12px;">📖 Panduan Menjawab</div>
+        <div style="font-size:12px;color:var(--mid);margin-bottom:10px;">Kondisi <b>7 hari terakhir</b>:</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;gap:10px;align-items:center;font-size:12px;color:var(--mid);"><div style="width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,var(--g1),var(--g3));color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">0</div><span><b>Tidak pernah</b></span></div>
+          <div style="display:flex;gap:10px;align-items:center;font-size:12px;color:var(--mid);"><div style="width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,var(--g1),var(--g3));color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div><span><b>Kadang-kadang</b></span></div>
+          <div style="display:flex;gap:10px;align-items:center;font-size:12px;color:var(--mid);"><div style="width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,var(--g1),var(--g3));color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div><span><b>Lumayan sering</b></span></div>
+          <div style="display:flex;gap:10px;align-items:center;font-size:12px;color:var(--mid);"><div style="width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,var(--g1),var(--g3));color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div><span><b>Sangat sering</b></span></div>
+        </div>
       </div>
 
-      <!-- TABEL KATEGORI -->
       <div class="card">
-        <div style="font-size:13px;font-weight:700;color:var(--hijau-tua);margin-bottom:12px;">📊 Kategori Stres DASS-21</div>
+        <div style="font-size:13px;font-weight:700;color:var(--g1);margin-bottom:12px;">📊 Kategori Stres</div>
         <table style="width:100%;border-collapse:collapse;font-size:12px;">
-          <thead><tr style="background:var(--hijau-pucat);">
-            <th style="padding:7px 10px;text-align:left;color:var(--text-mid);font-weight:700;border-radius:8px 0 0 8px;">Kategori</th>
-            <th style="padding:7px 10px;text-align:center;color:var(--text-mid);font-weight:700;">Skor</th>
-          </tr></thead>
-          <tbody>
-            <tr><td style="padding:7px 10px;"><span class="badge badge-normal">Normal</span></td><td style="padding:7px 10px;text-align:center;color:var(--text-mid);">0 – 7</td></tr>
-            <tr><td style="padding:7px 10px;"><span class="badge badge-ringan">Ringan</span></td><td style="padding:7px 10px;text-align:center;color:var(--text-mid);">8 – 9</td></tr>
-            <tr><td style="padding:7px 10px;"><span class="badge badge-sedang">Sedang</span></td><td style="padding:7px 10px;text-align:center;color:var(--text-mid);">10 – 12</td></tr>
-            <tr><td style="padding:7px 10px;"><span class="badge badge-berat">Berat</span></td><td style="padding:7px 10px;text-align:center;color:var(--text-mid);">13 – 16</td></tr>
-            <tr><td style="padding:7px 10px;"><span class="badge badge-sangat-berat">Sangat Berat</span></td><td style="padding:7px 10px;text-align:center;color:var(--text-mid);">&gt; 16</td></tr>
-          </tbody>
+          <tr><td style="padding:6px 10px;"><span class="badge bn">Normal</span></td><td style="padding:6px;text-align:center;color:var(--mid);">0–14</td></tr>
+          <tr><td style="padding:6px 10px;"><span class="badge br">Ringan</span></td><td style="padding:6px;text-align:center;color:var(--mid);">15–18</td></tr>
+          <tr><td style="padding:6px 10px;"><span class="badge bs">Sedang</span></td><td style="padding:6px;text-align:center;color:var(--mid);">19–25</td></tr>
+          <tr><td style="padding:6px 10px;"><span class="badge bb">Berat</span></td><td style="padding:6px;text-align:center;color:var(--mid);">26–33</td></tr>
+          <tr><td style="padding:6px 10px;"><span class="badge bsb">Sangat Berat</span></td><td style="padding:6px;text-align:center;color:var(--mid);">&gt;33</td></tr>
         </table>
-        <div style="font-size:11px;color:#aaa;margin-top:10px;">*Skor subskala stres dikalikan 2 sesuai standar DASS-21</div>
+        <div style="font-size:11px;color:#aaa;margin-top:8px;">*Skor subskala x2 sesuai standar DASS-21</div>
       </div>
 
-      <!-- RIWAYAT -->
       <div class="card">
-        <div style="font-size:13px;font-weight:700;color:var(--hijau-tua);margin-bottom:12px;display:flex;align-items:center;gap:6px;">
-          <i class="ti ti-history" style="color:var(--hijau-mid);"></i> Riwayat Screening
-        </div>
-        <div id="riwayat-list">
-          <div style="font-size:12px;color:#b0b0b0;text-align:center;padding:16px;">Belum ada riwayat</div>
-        </div>
+        <div style="font-size:13px;font-weight:700;color:var(--g1);margin-bottom:12px;display:flex;align-items:center;gap:6px;"><i class="ti ti-history" style="color:var(--g3);"></i> Riwayat Screening</div>
+        <div id="riwayat"><div style="font-size:12px;color:#b0b0b0;text-align:center;padding:16px;">Belum ada riwayat</div></div>
       </div>
     </div>
   </div>
 </main>
 
-<script>
-// DASS-21: D=Depresi, A=Kecemasan, S=Stres
-// Nomor soal (1-based): D=3,5,10,13,16,17,21 | A=2,4,7,9,15,19,20 | S=1,6,8,11,12,14,18
-const SOAL = {
-  D: [
-    {no:3,  teks:'Saya sulit melihat hal yang positif dari suatu kejadian'},
-    {no:5,  teks:'Saya kesulitan untuk berinisiatif melakukan sesuatu'},
-    {no:10, teks:'Saya orang yang pesimis'},
-    {no:13, teks:'Saya merasa sedih dan murung'},
-    {no:16, teks:'Saya tidak bisa antusias/tertarik terhadap apapun'},
-    {no:17, teks:'Saya merasa saya tidak berharga'},
-    {no:21, teks:'Saya merasa bahwa hidup ini tidak berarti'},
-  ],
-  A: [
-    {no:2,  teks:'Saya menyadari mulut saya kering'},
-    {no:4,  teks:'Saya mengalami kesulitan bernafas (contoh: bernafas cepat dan berat, sulit bernafas saat tidak ada aktivitas fisik)'},
-    {no:7,  teks:'Saya mengalami gemetaran pada tangan'},
-    {no:9,  teks:'Saya merasa khawatir terhadap situasi yang membuat saya panik dan melakukan hal yang bodoh'},
-    {no:15, teks:'Saya merasa saya mudah panik'},
-    {no:19, teks:'Saya menyadari kerja jantung saya (berdebar-debar) saat tidak melakukan aktivitas fisik'},
-    {no:20, teks:'Saya merasa takut tanpa alasan yang jelas'},
-  ],
-  S: [
-    {no:1,  teks:'Saya sulit untuk beristirahat'},
-    {no:6,  teks:'Saya cenderung bereaksi berlebihan terhadap situasi'},
-    {no:8,  teks:'Saya merasakan menggunakan banyak energi untuk cemas'},
-    {no:11, teks:'Saya merasa gelisah'},
-    {no:12, teks:'Saya sulit untuk tenang/rileks'},
-    {no:14, teks:'Saya tidak toleran terhadap apapun yang mengganggu saya ketika saya sedang mengerjakan sesuatu'},
-    {no:18, teks:'Saya merasa saya mudah tersinggung'},
-  ]
-};
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, getDoc, updateDoc, addDoc, collection, query, orderBy, limit, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const SKALA = [
-  {val:0, label:'Tidak\nPernah'},
-  {val:1, label:'Kadang-\nKadang'},
-  {val:2, label:'Lumayan\nSering'},
-  {val:3, label:'Sangat\nSering'},
-];
+const firebaseConfig={apiKey:"GANTI_API_KEY",authDomain:"GANTI_PROJECT.firebaseapp.com",projectId:"GANTI_PROJECT_ID",storageBucket:"GANTI_PROJECT.appspot.com",messagingSenderId:"GANTI_SENDER_ID",appId:"GANTI_APP_ID"};
+const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
 
-// answers: {1: 0, 2: 1, ...} key = nomor soal
-let answers = {};
-let riwayat = [];
+const SOAL={D:[{no:3,t:'Saya sulit melihat hal yang positif dari suatu kejadian'},{no:5,t:'Saya kesulitan untuk berinisiatif melakukan sesuatu'},{no:10,t:'Saya merasa pesimis'},{no:13,t:'Saya merasa sedih dan murung'},{no:16,t:'Saya tidak bisa antusias terhadap apapun'},{no:17,t:'Saya merasa diri saya tidak berharga'},{no:21,t:'Saya merasa bahwa hidup tidak berarti'}],A:[{no:2,t:'Saya menyadari mulut saya kering'},{no:4,t:'Saya mengalami kesulitan bernafas (napas cepat, berat)'},{no:7,t:'Saya mengalami gemetar pada tangan'},{no:9,t:'Saya khawatir dalam situasi yang membuat saya panik'},{no:15,t:'Saya merasa mudah panik'},{no:19,t:'Saya menyadari denyut jantung berdetak kencang tanpa aktivitas fisik'},{no:20,t:'Saya merasa takut tanpa alasan yang jelas'}],S:[{no:1,t:'Saya sulit untuk beristirahat'},{no:6,t:'Saya cenderung bereaksi berlebihan terhadap situasi'},{no:8,t:'Saya merasa menggunakan banyak energi untuk cemas'},{no:11,t:'Saya merasa gelisah'},{no:12,t:'Saya sulit untuk tenang/rileks'},{no:14,t:'Saya tidak toleran terhadap apapun yang mengganggu saat bekerja'},{no:18,t:'Saya mudah tersinggung'}]};
+const SKALA=[{v:0,l:'Tidak\nPernah'},{v:1,l:'Kadang-\nKadang'},{v:2,l:'Lumayan\nSering'},{v:3,l:'Sangat\nSering'}];
 
-window.onload = () => {
-  setDate();
-  renderSoal();
-};
+let uid,answers={},lastHasil=null;
 
-function setDate(){
-  const now = new Date();
-  const days=['Ahad','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
-  const months=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-  document.getElementById('datestr').textContent = days[now.getDay()]+', '+now.getDate()+' '+months[now.getMonth()]+' '+now.getFullYear();
-}
+function toast(m){const e=document.getElementById('toast');e.textContent=m;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),3000);}
+function setDate(){const n=new Date();const d=['Ahad','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];const m=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];document.getElementById('tgl').textContent=d[n.getDay()]+', '+n.getDate()+' '+m[n.getMonth()]+' '+n.getFullYear();}
+
+onAuthStateChanged(auth,async user=>{
+  if(!user){window.location.href='login.html';return;}
+  uid=user.uid;
+  const snap=await getDoc(doc(db,'users',uid));
+  if(!snap.exists()){window.location.href='login.html';return;}
+  const p=snap.data();
+  const nm=p.namaDepan||p.namaLengkap?.split(' ')[0]||'Pasien';
+  document.getElementById('s-nm').textContent=nm;
+  document.getElementById('s-av').textContent=nm.charAt(0).toUpperCase();
+  setDate();renderSoal();loadRiwayat();
+  document.getElementById('ag').style.display='none';
+  document.getElementById('main').style.display='block';
+});
 
 function renderSoal(){
-  ['D','A','S'].forEach(sub => {
-    const container = document.getElementById('soal-'+sub);
-    container.innerHTML = '';
-    SOAL[sub].forEach(q => {
-      const div = document.createElement('div');
-      div.className = 'soal-item' + (answers[q.no] !== undefined ? ' answered' : '');
-      div.id = 'soal-wrap-'+q.no;
-      div.innerHTML = `
-        <div class="soal-num">Soal ${q.no} dari 21 · Subskala ${sub === 'D' ? 'Depresi' : sub === 'A' ? 'Kecemasan' : 'Stres'}</div>
-        <div class="soal-teks">${q.teks}</div>
-        <div class="skala-wrap">
-          ${SKALA.map(s => `
-            <div class="skala-btn ${answers[q.no] === s.val ? 'selected' : ''}" onclick="pilih(${q.no}, ${s.val}, this)">
-              <span class="skala-val">${s.val}</span>
-              ${s.label.replace('\n','<br>')}
-            </div>
-          `).join('')}
-        </div>
-      `;
-      container.appendChild(div);
-    });
+  ['D','A','S'].forEach(sub=>{
+    const el=document.getElementById('soal-'+sub);
+    el.innerHTML=SOAL[sub].map(q=>`<div class="soal${answers[q.no]!==undefined?' done':''}" id="sw-${q.no}">
+      <div class="s-no">Soal ${q.no} · ${sub==='D'?'Depresi':sub==='A'?'Kecemasan':'Stres'}</div>
+      <div class="s-teks">${q.t}</div>
+      <div class="skala">${SKALA.map(s=>`<div class="skala-btn${answers[q.no]===s.v?' sel':''}" onclick="pilih(${q.no},${s.v},this)"><span class="skala-v">${s.v}</span>${s.l.replace('\n','<br>')}</div>`).join('')}</div>
+    </div>`).join('');
   });
   updateProgress();
 }
 
-function pilih(no, val, el){
-  answers[no] = val;
-  const wrap = document.getElementById('soal-wrap-'+no);
-  wrap.classList.add('answered');
-  wrap.querySelectorAll('.skala-btn').forEach(b => b.classList.remove('selected'));
-  el.classList.add('selected');
+window.pilih=function(no,v,el){
+  answers[no]=v;
+  const w=document.getElementById('sw-'+no);
+  w.classList.add('done');
+  w.querySelectorAll('.skala-btn').forEach(b=>b.classList.remove('sel'));
+  el.classList.add('sel');
   updateProgress();
-}
+};
 
 function updateProgress(){
-  const total = 21;
-  const done = Object.keys(answers).length;
-  const pct = Math.round(done/total*100);
-  document.getElementById('prog-label').textContent = `${done} dari ${total} pertanyaan dijawab`;
-  document.getElementById('prog-pct').textContent = pct+'%';
-  document.getElementById('prog-fill').style.width = pct+'%';
-
-  // mini counter per subskala
-  ['D','A','S'].forEach(sub => {
-    const soalSub = SOAL[sub];
-    const doneSub = soalSub.filter(q => answers[q.no] !== undefined).length;
-    document.getElementById('mini-'+sub).textContent = doneSub+'/7';
-  });
+  const done=Object.keys(answers).length;const pct=Math.round(done/21*100);
+  document.getElementById('pb-lbl').textContent=`${done} dari 21 dijawab`;
+  document.getElementById('pb-pct').textContent=pct+'%';
+  document.getElementById('pb-fill').style.width=pct+'%';
+  ['D','A','S'].forEach(sub=>{const d=SOAL[sub].filter(q=>answers[q.no]!==undefined).length;document.getElementById('m'+sub.toLowerCase()).textContent=d+'/7';});
 }
 
-function hitungSkor(sub){
-  return SOAL[sub].reduce((sum, q) => sum + (answers[q.no] || 0), 0) * 2;
+function hitungSkor(sub){return SOAL[sub].reduce((s,q)=>s+(answers[q.no]||0),0)*2;}
+function getKat(skor,sub){
+  const cut={D:[{m:9,k:'Normal',c:'n'},{m:13,k:'Ringan',c:'r'},{m:20,k:'Sedang',c:'s'},{m:27,k:'Berat',c:'b'},{m:999,k:'Sangat Berat',c:'sb'}],A:[{m:7,k:'Normal',c:'n'},{m:9,k:'Ringan',c:'r'},{m:14,k:'Sedang',c:'s'},{m:19,k:'Berat',c:'b'},{m:999,k:'Sangat Berat',c:'sb'}],S:[{m:14,k:'Normal',c:'n'},{m:18,k:'Ringan',c:'r'},{m:25,k:'Sedang',c:'s'},{m:33,k:'Berat',c:'b'},{m:999,k:'Sangat Berat',c:'sb'}]};
+  return cut[sub].find(c=>skor<=c.m);
 }
 
-function getKategori(skor, sub){
-  // Cutoff DASS-21 (skor sudah x2)
-  const cut = {
-    D: [{max:9,'kat':'Normal','cls':'normal'},{max:13,'kat':'Ringan','cls':'ringan'},{max:20,'kat':'Sedang','cls':'sedang'},{max:27,'kat':'Berat','cls':'berat'},{max:999,'kat':'Sangat Berat','cls':'sangat-berat'}],
-    A: [{max:7,'kat':'Normal','cls':'normal'},{max:9,'kat':'Ringan','cls':'ringan'},{max:14,'kat':'Sedang','cls':'sedang'},{max:19,'kat':'Berat','cls':'berat'},{max:999,'kat':'Sangat Berat','cls':'sangat-berat'}],
-    S: [{max:14,'kat':'Normal','cls':'normal'},{max:18,'kat':'Ringan','cls':'ringan'},{max:25,'kat':'Sedang','cls':'sedang'},{max:33,'kat':'Berat','cls':'berat'},{max:999,'kat':'Sangat Berat','cls':'sangat-berat'}],
-  };
-  return cut[sub].find(c => skor <= c.max);
+window.hitungHasil=function(){
+  if(Object.keys(answers).length<21){toast('Harap jawab semua 21 pertanyaan dahulu.');return;}
+  const sD=hitungSkor('D'),sA=hitungSkor('A'),sS=hitungSkor('S');
+  const kD=getKat(sD,'D'),kA=getKat(sA,'A'),kS=getKat(sS,'S');
+  const bc={n:'bn',r:'br',s:'bs',b:'bb',sb:'bsb'};
+  document.getElementById('sub-grid').innerHTML=[{l:'Depresi',s:sD,k:kD},{l:'Kecemasan',s:sA,k:kA},{l:'Stres',s:sS,k:kS}].map(x=>`<div class="sub-item"><div class="sub-lbl">${x.l}</div><div class="sub-skor">${x.s}</div><span class="badge ${bc[x.k.c]}">${x.k.k}</span></div>`).join('');
+  const hb=document.getElementById('hasil-box');hb.className='hasil '+{n:'normal',r:'ringan',s:'sedang',b:'berat',sb:'sangat-berat'}[kS.c];
+  const em={n:'🌿',r:'😐',s:'⚠️',b:'😔',sb:'🆘'};
+  document.getElementById('h-emoji').textContent=em[kS.c];
+  document.getElementById('h-level').textContent='Stres '+kS.k;
+  document.getElementById('h-skor').textContent=sS;
+  const descs={n:'Kondisi stres Anda dalam batas normal. Pertahankan keseimbangan spiritual dan fisik.',r:'Stres ringan. Perlu perhatian agar tidak meningkat selama terapi HD.',s:'Stres sedang. Sangat dianjurkan memperbanyak dzikir dan konsultasi tenaga kesehatan.',b:'Stres berat. Segera konsultasikan dengan dokter atau psikolog Anda.',sb:'Stres sangat berat. Diperlukan penanganan segera dari profesional kesehatan mental.'};
+  document.getElementById('h-desc').textContent=descs[kS.c];
+  const recs={n:'✓ Lanjutkan dzikir rutin pagi dan petang<br>✓ Pertahankan jadwal HD yang konsisten',r:'✓ Perbanyak istighfar minimal 100x per hari<br>✓ Lakukan relaksasi napas dalam sebelum sesi HD',s:'✓ Dzikir intensif: Subhanallah, Alhamdulillah, Allahuakbar 33x tiap setelah sholat<br>✓ Konsultasi dengan perawat HD',b:'✓ Segera hubungi tenaga kesehatan di klinik HD Anda<br>✓ Minta pendampingan keluarga saat sesi HD',sb:'✓ Hubungi dokter atau psikolog SEGERA<br>✓ Jangan hadapi sendirian — minta dukungan keluarga'};
+  document.getElementById('h-rec').innerHTML=recs[kS.c];
+  const dzRek={n:'Pertahankan dzikir harian Anda! <b>Subhanallah 33x, Alhamdulillah 33x, Allahuakbar 33x</b> setelah sholat.',r:'Tambahkan <b>Astaghfirullah 100x</b> setiap hari. Kombinasikan dengan dzikir pagi dan petang.',s:'Fokus pada <b>La ilaha illallah 100x</b> per hari. Baca <b>Hasbunallah wa ni\'mal wakeel</b> saat cemas.',b:'Amalkan <b>sholat malam (tahajud)</b> minimal 2 rakaat dan perbanyak <b>istighfar & doa kesembuhan</b>.',sb:'Dianjurkan membaca <b>Al-Fatihah, Al-Falaq, An-Nas</b> dan <b>Ayat Kursi</b> setiap pagi.'};
+  document.getElementById('rek-dz').innerHTML=dzRek[kS.c];
+  lastHasil={sD,sA,sS,kD,kA,kS,jawaban:{...answers}};
+  document.getElementById('hasil-sec').style.display='block';
+  document.getElementById('hasil-sec').scrollIntoView({behavior:'smooth',block:'start'});
+};
+
+window.simpanHasil=async function(){
+  if(!lastHasil){return;}
+  const btn=document.getElementById('btn-save');
+  const sp=document.getElementById('sp3');
+  btn.disabled=true;sp.style.display='block';
+  try{
+    await addDoc(collection(db,'users',uid,'screening'),{...lastHasil,createdAt:serverTimestamp()});
+    await updateDoc(doc(db,'users',uid),{lastStres:lastHasil.sS,lastStresKat:lastHasil.kS.k,lastScreening:serverTimestamp()});
+    toast('Hasil berhasil disimpan ✓');
+    await loadRiwayat();
+    btn.innerHTML='<i class="ti ti-check"></i> Tersimpan!';
+    setTimeout(()=>{btn.innerHTML='<span class="spin2" id="sp3"></span><i class="ti ti-device-floppy"></i> Simpan Hasil';btn.disabled=false;},2000);
+  }catch(e){toast('Gagal menyimpan: '+e.message);btn.disabled=false;sp.style.display='none';}
+};
+
+async function loadRiwayat(){
+  const q=query(collection(db,'users',uid,'screening'),orderBy('createdAt','desc'),limit(5));
+  const snap=await getDocs(q);
+  const el=document.getElementById('riwayat');
+  if(snap.empty){el.innerHTML='<div style="font-size:12px;color:#b0b0b0;text-align:center;padding:16px;">Belum ada riwayat</div>';return;}
+  const bc={n:'bn',r:'br',s:'bs',b:'bb',sb:'bsb'};
+  el.innerHTML=snap.docs.map(d=>{
+    const r=d.data();const dt=r.createdAt?.toDate();
+    const tgl=dt?dt.toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}):'—';
+    return `<div class="rw-item"><div><div style="font-size:11px;color:var(--mid);">${tgl}</div><div style="font-size:13px;font-weight:600;color:var(--g1);">Stres: <span class="badge ${bc[r.kS?.c||'n']}">${r.kS?.k||'—'}</span></div></div><div style="font-size:18px;font-weight:700;color:var(--g1);">${r.sS||0}</div></div>`;
+  }).join('');
 }
 
-function hitungHasil(){
-  if(Object.keys(answers).length < 21){
-    alert('Harap jawab semua 21 pertanyaan terlebih dahulu.');
-    return;
-  }
-
-  const skorD = hitungSkor('D');
-  const skorA = hitungSkor('A');
-  const skorS = hitungSkor('S');
-  const katD = getKategori(skorD,'D');
-  const katA = getKategori(skorA,'A');
-  const katS = getKategori(skorS,'S');
-
-  // Subskala detail
-  const subskalaEl = document.getElementById('subskala-detail');
-  const badgeColors = {normal:'badge-normal',ringan:'badge-ringan',sedang:'badge-sedang',berat:'badge-berat','sangat-berat':'badge-sangat-berat'};
-  subskalaEl.innerHTML = [
-    {label:'Depresi',skor:skorD,kat:katD},
-    {label:'Kecemasan',skor:skorA,kat:katA},
-    {label:'Stres',skor:skorS,kat:katS},
-  ].map(s => `
-    <div class="subskala-item">
-      <div class="subskala-label">${s.label}</div>
-      <div class="subskala-skor">${s.skor}</div>
-      <span class="subskala-kat badge ${badgeColors[s.kat.cls]}">${s.kat.kat}</span>
-    </div>
-  `).join('');
-
-  // Hasil utama (fokus stres)
-  const hasilBox = document.getElementById('hasil-box');
-  hasilBox.className = 'hasil-box '+katS.cls;
-  const emojis = {normal:'🌿',ringan:'😐',sedang:'⚠️',berat:'😔','sangat-berat':'🆘'};
-  document.getElementById('hasil-emoji').textContent = emojis[katS.cls];
-  document.getElementById('hasil-level').textContent = 'Stres '+katS.kat;
-  document.getElementById('hasil-skor').textContent = skorS;
-
-  const descs = {
-    normal: 'Kondisi stres Anda dalam batas normal. Pertahankan keseimbangan spiritual dan fisik Anda.',
-    ringan: 'Anda mengalami stres ringan. Perlu perhatian agar tidak meningkat selama menjalani terapi HD.',
-    sedang: 'Stres sedang terdeteksi. Sangat dianjurkan memperbanyak dzikir dan berbicara dengan tenaga kesehatan.',
-    berat: 'Stres berat terdeteksi. Segera konsultasikan kondisi ini dengan dokter atau psikolog Anda.',
-    'sangat-berat': 'Stres sangat berat. Diperlukan penanganan segera dari tenaga profesional kesehatan mental.',
-  };
-  document.getElementById('hasil-desc').textContent = descs[katS.cls];
-
-  const recs = {
-    normal: '✓ Lanjutkan dzikir rutin pagi dan petang\n✓ Pertahankan jadwal HD yang konsisten\n✓ Isi ulang screening setiap minggu',
-    ringan: '✓ Perbanyak istighfar minimal 100x per hari\n✓ Lakukan relaksasi napas dalam sebelum sesi HD\n✓ Ceritakan perasaan Anda kepada keluarga',
-    sedang: '✓ Dzikir intensif: Subhanallah, Alhamdulillah, Allahuakbar 33x tiap setelah sholat\n✓ Konsultasi dengan perawat HD tentang kondisi psikologis\n✓ Hindari pikiran negatif, ganti dengan tawakkal',
-    berat: '✓ Segera hubungi tenaga kesehatan di klinik HD Anda\n✓ Minta pendampingan keluarga saat sesi HD\n✓ Baca Surah Ar-Ra\'d ayat 28 berulang kali\n✓ Pertimbangkan konsultasi psikolog',
-    'sangat-berat': '✓ Hubungi dokter atau psikolog SEGERA\n✓ Jangan menjalani tantangan sendirian — minta dukungan keluarga\n✓ Baca doa-doa ketenangan dan minta pertolongan Allah SWT',
-  };
-  document.getElementById('hasil-rec').innerHTML = recs[katS.cls].split('\n').join('<br>');
-
-  // Rekomendasi dzikir
-  const dzikirRek = {
-    normal: 'Pertahankan dzikir harian Anda! Baca <b>Subhanallah 33x, Alhamdulillah 33x, Allahuakbar 33x</b> setiap setelah sholat.',
-    ringan: 'Tambahkan <b>Astaghfirullah 100x</b> setiap hari untuk menenangkan hati. Kombinasikan dengan dzikir pagi dan petang.',
-    sedang: 'Fokus pada <b>dzikir ketenangan: La ilaha illallah 100x</b> per hari. Baca juga <b>Hasbunallah wa ni\'mal wakeel</b> saat cemas.',
-    berat: 'Amalkan <b>sholat malam (tahajud)</b> minimal 2 rakaat dan perbanyak <b>istighfar & doa kesembuhan</b>. Dzikir Al-Fatihah 7x tiap pagi.',
-    'sangat-berat': 'Dianjurkan ruqyah mandiri dengan membaca <b>Al-Fatihah, Al-Falaq, An-Nas</b> dan <b>Ayat Kursi</b>. Minta dibacakan kepada orang yang sholeh.',
-  };
-  document.getElementById('rek-dzikir').innerHTML = dzikirRek[katS.cls];
-
-  document.getElementById('hasil-section').style.display = 'block';
-  document.getElementById('hasil-section').scrollIntoView({behavior:'smooth', block:'start'});
-
-  // Simpan sementara untuk riwayat
-  window._lastHasil = {skorD, skorA, skorS, katD, katA, katS};
-}
-
-function simpanHasil(){
-  if(!window._lastHasil) return;
-  const {skorD, skorA, skorS, katS} = window._lastHasil;
-  const now = new Date();
-  const months=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
-  const tgl = now.getDate()+' '+months[now.getMonth()]+' '+now.getFullYear();
-  riwayat.unshift({tgl, skorS, katS});
-  renderRiwayat();
-  const btn = event.target;
-  btn.innerHTML = '<i class="ti ti-check"></i> Tersimpan!';
-  setTimeout(()=>{ btn.innerHTML = '<i class="ti ti-device-floppy"></i> Simpan Hasil'; }, 2000);
-}
-
-function renderRiwayat(){
-  const el = document.getElementById('riwayat-list');
-  if(!riwayat.length){
-    el.innerHTML = '<div style="font-size:12px;color:#b0b0b0;text-align:center;padding:16px;">Belum ada riwayat</div>';
-    return;
-  }
-  el.innerHTML = riwayat.map(r => `
-    <div class="riwayat-item">
-      <div>
-        <div class="riwayat-tgl">${r.tgl}</div>
-        <div class="riwayat-nama">Stres: <span class="badge badge-${r.katS.cls}">${r.katS.kat}</span></div>
-      </div>
-      <div style="font-size:18px;font-weight:700;color:var(--hijau-tua);">${r.skorS}</div>
-    </div>
-  `).join('');
-}
-
-function resetForm(){
-  answers = {};
-  window._lastHasil = null;
-  document.getElementById('hasil-section').style.display = 'none';
-  renderSoal();
-  window.scrollTo({top:0, behavior:'smooth'});
-}
+window.resetForm=function(){answers={};lastHasil=null;document.getElementById('hasil-sec').style.display='none';renderSoal();window.scrollTo({top:0,behavior:'smooth'});};
+window.doLogout=async function(){await signOut(auth);sessionStorage.clear();window.location.href='login.html';};
 </script>
 </body>
 </html>
