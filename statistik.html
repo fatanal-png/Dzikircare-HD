@@ -1,471 +1,226 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Statistik — DzikirCare HD</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box;}
-    :root{
-      --hijau-tua:#0d3b2e;
-      --hijau-gelap:#1a5c45;
-      --hijau-mid:#2e8b63;
-      --hijau-soft:#3dab7a;
-      --hijau-terang:#5ec995;
-      --hijau-pucat:#e8f7f0;
-      --emas:#c9a84c;
-      --emas-terang:#e8c96b;
-      --emas-muda:#faf0d7;
-      --text-dark:#1a3a1a;
-      --text-mid:#52796f;
-      --sidebar-w:224px;
-    }
-    body{font-family:'Plus Jakarta Sans',sans-serif;background:linear-gradient(135deg,#e8f5e9 0%,#f1f8e9 50%,#e0f2f1 100%);min-height:100vh;color:var(--text-dark);}
-
-    /* SIDEBAR */
-    .sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--sidebar-w);background:linear-gradient(180deg,#0d3b2e 0%,#1a5c45 60%,#2e8b63 100%);display:flex;flex-direction:column;padding:24px 0;z-index:100;box-shadow:4px 0 32px rgba(13,59,46,0.3);}
-    .logo{padding:0 20px 20px;border-bottom:.5px solid rgba(255,255,255,0.13);margin-bottom:12px;}
-    .logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--emas),var(--emas-terang));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:8px;}
-    .logo-title{font-family:'Amiri',serif;font-size:20px;color:#d8f3dc;font-weight:700;}
-    .logo-sub{font-size:10px;color:var(--emas-terang);letter-spacing:.08em;opacity:.8;}
-    .nav{display:flex;flex-direction:column;gap:2px;padding:0 12px;flex:1;overflow-y:auto;}
-    .nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;font-size:13px;color:#b7e4c7;cursor:pointer;transition:all .15s;text-decoration:none;width:100%;}
-    .nav-item:hover{background:rgba(255,255,255,0.1);color:#d8f3dc;}
-    .nav-item.active{background:linear-gradient(90deg,rgba(255,255,255,0.18),rgba(255,255,255,0.06));color:#d8f3dc;font-weight:600;border-left:3px solid var(--emas);}
-    .nav-item i{font-size:17px;flex-shrink:0;}
-    .nav-section{font-size:10px;color:var(--emas);letter-spacing:.1em;text-transform:uppercase;padding:10px 12px 4px;margin-top:6px;opacity:.8;}
-    .user-area{padding:14px 20px 0;border-top:.5px solid rgba(255,255,255,0.13);margin-top:auto;}
-    .avatar-sm{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--emas),var(--emas-terang));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#0d3b2e;flex-shrink:0;}
-    .username{font-size:13px;color:#d8f3dc;font-weight:600;}
-    .usertag{font-size:11px;color:var(--emas-terang);opacity:.8;}
-
-    /* MAIN */
-    .main{margin-left:var(--sidebar-w);padding:28px 28px 60px;min-height:100vh;}
-    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
-    .page-title{font-size:22px;font-weight:700;color:var(--hijau-tua);}
-    .page-sub{font-size:12.5px;color:var(--text-mid);margin-top:2px;}
-
-    /* FILTER PERIODE */
-    .filter-bar{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;align-items:center;}
-    .filter-label{font-size:12px;color:var(--text-mid);font-weight:600;}
-    .filter-btn{padding:7px 16px;border-radius:99px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid #c8e6c9;background:#fff;color:var(--text-mid);transition:all .2s;white-space:nowrap;}
-    .filter-btn:hover{border-color:var(--hijau-soft);color:var(--hijau-mid);}
-    .filter-btn.active{background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-mid));color:#fff;border-color:transparent;}
-
-    /* CARDS */
-    .card{background:linear-gradient(135deg,#fff,#f6fbf7);border-radius:16px;border:.5px solid #c8e6c9;padding:20px 22px;box-shadow:0 2px 14px rgba(27,67,50,0.07);margin-bottom:18px;}
-    .card-title{font-size:14px;font-weight:700;color:var(--hijau-tua);display:flex;align-items:center;gap:8px;margin-bottom:16px;}
-    .card-title i{color:var(--hijau-mid);font-size:16px;}
-
-    /* SUMMARY GRID */
-    .summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
-    .summary-card{background:#fff;border-radius:14px;border:.5px solid #c8e6c9;padding:16px;box-shadow:0 2px 10px rgba(27,67,50,0.06);}
-    .summary-icon{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:10px;}
-    .summary-icon.green{background:var(--hijau-pucat);color:var(--hijau-mid);}
-    .summary-icon.gold{background:var(--emas-muda);color:var(--emas);}
-    .summary-icon.blue{background:#dbeafe;color:#1d4ed8;}
-    .summary-icon.red{background:#fde8e8;color:#e05c5c;}
-    .summary-num{font-size:28px;font-weight:700;color:var(--hijau-tua);line-height:1;}
-    .summary-label{font-size:11.5px;color:var(--text-mid);margin-top:4px;}
-    .summary-trend{font-size:11px;margin-top:4px;display:flex;align-items:center;gap:3px;}
-    .trend-up{color:#22c55e;}
-    .trend-down{color:#ef4444;}
-    .trend-same{color:#94a3b8;}
-
-    /* CHART WRAPPER */
-    .chart-wrap{position:relative;width:100%;}
-    .chart-wrap canvas{max-height:220px;}
-
-    /* 2 KOLOM */
-    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;}
-
-    /* RIWAYAT TABLE */
-    .riwayat-table{width:100%;border-collapse:collapse;}
-    .riwayat-table th{font-size:11px;font-weight:700;color:var(--text-mid);text-transform:uppercase;letter-spacing:.04em;padding:8px 12px;text-align:left;border-bottom:1px solid #e8f5e9;background:var(--hijau-pucat);}
-    .riwayat-table td{padding:11px 12px;font-size:12.5px;border-bottom:.5px solid #f0faf2;vertical-align:middle;}
-    .riwayat-table tr:last-child td{border-bottom:none;}
-    .riwayat-table tr:hover td{background:#fafff8;}
-
-    /* BADGE */
-    .badge{display:inline-block;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:600;}
-    .badge-normal{background:#d8f3dc;color:#1a5c45;}
-    .badge-ringan{background:#c8f0dc;color:#1a5c45;}
-    .badge-sedang{background:#fff9c4;color:#856404;}
-    .badge-berat{background:#ffe0b2;color:#7a3900;}
-    .badge-sangat-berat{background:#fce4ec;color:#b71c1c;}
-
-    /* PROGRESS BAR MINI */
-    .prog-bar{height:6px;background:#e8f5e9;border-radius:99px;overflow:hidden;margin-top:4px;}
-    .prog-fill{height:100%;border-radius:99px;}
-    .prog-green{background:linear-gradient(90deg,var(--hijau-soft),var(--hijau-terang));}
-    .prog-gold{background:linear-gradient(90deg,var(--emas),var(--emas-terang));}
-    .prog-blue{background:linear-gradient(90deg,#3b82f6,#60a5fa);}
-
-    /* EXPORT */
-    .btn-export{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:var(--emas-muda);border:1.5px solid var(--emas);border-radius:10px;font-size:12px;font-weight:700;color:var(--hijau-tua);cursor:pointer;transition:all .2s;font-family:'Plus Jakarta Sans',sans-serif;}
-    .btn-export:hover{background:var(--emas);color:#fff;}
-
-    /* MOTIVASI */
-    .motivasi-box{background:linear-gradient(120deg,var(--hijau-tua),var(--hijau-gelap));border-radius:16px;padding:20px 24px;color:#fff;position:relative;overflow:hidden;}
-    .motivasi-box::before{content:'';position:absolute;right:-20px;top:-20px;width:100px;height:100px;border-radius:50%;background:rgba(201,168,76,0.1);}
-    .motivasi-emas{height:2px;background:linear-gradient(90deg,transparent,var(--emas),transparent);margin-bottom:14px;}
-
-    ::-webkit-scrollbar{width:4px;}
-    ::-webkit-scrollbar-track{background:transparent;}
-    ::-webkit-scrollbar-thumb{background:#b7e4c7;border-radius:99px;}
-  </style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Statistik — DzikirCare HD</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--g1:#0d3b2e;--g2:#1a5c45;--g3:#2e8b63;--g4:#52b788;--g5:#74c69d;--emas:#c9a84c;--emas2:#e8c96b;--emas-bg:#faf0d7;--text:#1a3a1a;--mid:#52796f;--pale:#f0faf2;--sidebar:224px;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:linear-gradient(135deg,#e8f5e9,#f1f8e9,#e0f2f1);min-height:100vh;color:var(--text);}
+#ag{position:fixed;inset:0;background:linear-gradient(135deg,var(--g1),var(--g2));z-index:999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;}
+#ag .sp{width:36px;height:36px;border:3px solid rgba(255,255,255,.2);border-top-color:var(--emas2);border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+#ag p{color:rgba(255,255,255,.6);font-size:13px;}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--sidebar);background:linear-gradient(180deg,var(--g1),var(--g2) 60%,var(--g3));display:flex;flex-direction:column;padding:24px 0;z-index:100;box-shadow:4px 0 32px rgba(13,59,46,.3);}
+.logo{padding:0 20px 20px;border-bottom:.5px solid rgba(255,255,255,.13);margin-bottom:12px;}
+.logo-ic{width:36px;height:36px;background:linear-gradient(135deg,var(--emas),var(--emas2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:8px;}
+.logo-t{font-family:'Amiri',serif;font-size:20px;color:#d8f3dc;font-weight:700;}
+.logo-s{font-size:10px;color:var(--emas2);letter-spacing:.08em;opacity:.8;}
+.nav{display:flex;flex-direction:column;gap:2px;padding:0 12px;flex:1;overflow-y:auto;}
+.nav a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;font-size:13px;color:#b7e4c7;text-decoration:none;transition:all .15s;}
+.nav a:hover{background:rgba(255,255,255,.1);}
+.nav a.active{background:linear-gradient(90deg,rgba(255,255,255,.18),rgba(255,255,255,.06));color:#d8f3dc;font-weight:600;border-left:3px solid var(--emas);}
+.nav a i{font-size:17px;flex-shrink:0;}
+.ns{font-size:10px;color:var(--emas);letter-spacing:.1em;text-transform:uppercase;padding:10px 12px 4px;margin-top:6px;opacity:.8;}
+.user-box{padding:14px 20px 0;border-top:.5px solid rgba(255,255,255,.13);margin-top:auto;}
+.avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--emas),var(--emas2));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--g1);}
+.btn-out{width:100%;margin-top:10px;padding:8px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:8px;color:rgba(255,255,255,.5);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;font-family:'Plus Jakarta Sans',sans-serif;}
+.main{margin-left:var(--sidebar);padding:28px 28px 60px;}
+.pt{font-size:22px;font-weight:700;color:var(--g1);}
+.ps{font-size:12.5px;color:var(--mid);margin-top:2px;margin-bottom:24px;}
+.card{background:linear-gradient(135deg,#fff,#f6fbf7);border-radius:16px;border:.5px solid #c8e6c9;padding:20px 22px;box-shadow:0 2px 14px rgba(27,67,50,.07);margin-bottom:16px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px;}
+.stat-c{background:linear-gradient(135deg,#fff,#f6fbf7);border-radius:14px;border:.5px solid #c8e6c9;padding:16px;text-align:center;box-shadow:0 2px 10px rgba(27,67,50,.05);}
+.stat-ic{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin:0 auto 8px;}
+.stat-num{font-size:28px;font-weight:700;color:var(--g1);line-height:1;}
+.stat-lbl{font-size:11px;color:var(--mid);margin-top:4px;}
+.stat-sub{font-size:10px;color:var(--g4);margin-top:2px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+.ct{font-size:14px;font-weight:700;color:var(--g1);display:flex;align-items:center;gap:8px;margin-bottom:14px;}
+.ct i{color:var(--g3);font-size:16px;}
+/* BAR CHART */
+.bar-wrap{display:flex;align-items:flex-end;gap:8px;height:120px;padding-bottom:4px;}
+.bar-col{display:flex;flex-direction:column;align-items:center;flex:1;gap:4px;height:100%;justify-content:flex-end;}
+.bar{border-radius:6px 6px 0 0;width:100%;background:linear-gradient(180deg,var(--g4),var(--g5));min-height:4px;transition:height .5s ease;}
+.bar-val{font-size:9.5px;color:var(--mid);}
+.bar-day{font-size:9.5px;color:var(--mid);}
+/* TREND */
+.trend-item{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:.5px solid #f0faf2;}
+.trend-item:last-child{border-bottom:none;}
+.trend-tgl{font-size:11px;color:var(--mid);}
+.trend-val{font-size:13px;font-weight:700;color:var(--g1);}
+.badge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:600;}
+.bn{background:#d8f3dc;color:#1a5c45;}.br{background:#c8f0dc;color:#1a5c45;}.bs{background:#fff9c4;color:#856404;}.bb{background:#ffe0b2;color:#7a3900;}.bsb{background:#fce4ec;color:#b71c1c;}
+/* RADAR / PIE SUBSTITUTE */
+.pie-wrap{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+.pie-item{background:var(--pale);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:8px;}
+.pie-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;}
+.pie-lbl{font-size:12px;color:var(--mid);}
+.pie-val{font-size:12px;font-weight:700;color:var(--g1);margin-left:auto;}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:#1a3a1a;color:#fff;padding:11px 22px;border-radius:99px;font-size:13px;font-weight:600;z-index:500;opacity:0;transition:all .3s;pointer-events:none;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-thumb{background:#b7e4c7;border-radius:99px;}
+</style>
 </head>
 <body>
-
-<!-- SIDEBAR -->
+<div id="ag"><div class="sp"></div><p>Memuat statistik...</p></div>
+<div class="toast" id="toast"></div>
 <div class="sidebar">
-  <div class="logo">
-    <div class="logo-icon">☪</div>
-    <div class="logo-title">DzikirCare HD</div>
-    <div class="logo-sub">HEMODIALISA & DZIKIR</div>
-  </div>
+  <div class="logo"><div class="logo-ic">☪</div><div class="logo-t">DzikirCare HD</div><div class="logo-s">HEMODIALISA & DZIKIR</div></div>
   <nav class="nav">
-    <div class="nav-section">Utama</div>
-    <a class="nav-item" href="dashboard.html"><i class="ti ti-layout-dashboard"></i> Dashboard</a>
-    <a class="nav-item" href="dzikir.html"><i class="ti ti-rosette"></i> Dzikir Digital</a>
-    <a class="nav-item" href="sholat.html"><i class="ti ti-clock"></i> Jadwal Sholat</a>
-    <div class="nav-section">Evaluasi Psikologis</div>
-    <a class="nav-item" href="screening.html"><i class="ti ti-heart-rate-monitor"></i> Screening Stres</a>
-    <a class="nav-item" href="selfefficacy.html"><i class="ti ti-brain"></i> Self-Efikasi</a>
-    <a class="nav-item" href="mood.html"><i class="ti ti-mood-smile"></i> Mood Tracker</a>
-    <div class="nav-section">Lainnya</div>
-    <a class="nav-item" href="edukasi.html"><i class="ti ti-book"></i> Edukasi</a>
-    <a class="nav-item active" href="statistik.html"><i class="ti ti-chart-bar"></i> Statistik</a>
-    <a class="nav-item" href="pengingat.html"><i class="ti ti-bell"></i> Pengingat</a>
-    <a class="nav-item" href="profil.html"><i class="ti ti-user-circle"></i> Profil Saya</a>
+    <div class="ns">Utama</div>
+    <a href="dashboard.html"><i class="ti ti-layout-dashboard"></i> Dashboard</a>
+    <a href="Dzikir.html"><i class="ti ti-rosette"></i> Dzikir Digital</a>
+    <a href="sholat.html"><i class="ti ti-clock"></i> Jadwal Sholat</a>
+    <div class="ns">Evaluasi Psikologis</div>
+    <a href="screening.html"><i class="ti ti-heart-rate-monitor"></i> Screening Stres</a>
+    <a href="selfefficacy.html"><i class="ti ti-brain"></i> Self-Efikasi</a>
+    <a href="mood.html"><i class="ti ti-mood-smile"></i> Mood Tracker</a>
+    <div class="ns">Lainnya</div>
+    <a href="edukasi.html"><i class="ti ti-book"></i> Edukasi</a>
+    <a href="statistik.html" class="active"><i class="ti ti-chart-bar"></i> Statistik</a>
+    <a href="pengingat.html"><i class="ti ti-bell"></i> Pengingat</a>
+    <a href="profil.html"><i class="ti ti-user-circle"></i> Profil Saya</a>
   </nav>
-  <div class="user-area">
-    <div style="display:flex;align-items:center;gap:10px;">
-      <div class="avatar-sm" id="sidebar-avatar">A</div>
-      <div>
-        <div class="username" id="sidebar-name">Pengguna</div>
-        <div class="usertag">Pasien Hemodialisa</div>
-      </div>
-    </div>
+  <div class="user-box">
+    <div style="display:flex;align-items:center;gap:10px;"><div class="avatar" id="s-av">?</div><div><div style="font-size:13px;color:#d8f3dc;font-weight:600;" id="s-nm">—</div><div style="font-size:11px;color:var(--emas2);opacity:.8;">Pasien Hemodialisa</div></div></div>
+    <button class="btn-out" onclick="doLogout()"><i class="ti ti-logout"></i> Keluar</button>
   </div>
 </div>
 
-<!-- MAIN -->
-<main class="main">
-  <div class="topbar">
-    <div>
-      <div class="page-title">📊 Statistik Perkembangan</div>
-      <div class="page-sub" id="user-greeting">Memuat data...</div>
-    </div>
-    <button class="btn-export" onclick="exportLaporan()"><i class="ti ti-file-export"></i> Export Laporan</button>
+<main class="main" id="main" style="display:none;">
+  <div class="pt">📊 Statistik Saya</div>
+  <div class="ps" id="ps-sub">Rekap perjalanan spiritual & kesehatan Anda</div>
+
+  <div class="g4">
+    <div class="stat-c"><div class="stat-ic" style="background:linear-gradient(135deg,#d8f3dc,#b7e4c7);color:var(--g2);">📿</div><div class="stat-num" id="st-dz">—</div><div class="stat-lbl">Total Dzikir</div><div class="stat-sub">sepanjang masa</div></div>
+    <div class="stat-c"><div class="stat-ic" style="background:linear-gradient(135deg,#faf0d7,#f5dfa0);color:var(--emas);">🔥</div><div class="stat-num" id="st-streak">—</div><div class="stat-lbl">Streak Konsisten</div><div class="stat-sub">hari berturut-turut</div></div>
+    <div class="stat-c"><div class="stat-ic" style="background:linear-gradient(135deg,#dbeafe,#93c5fd);color:#1d4ed8;">📋</div><div class="stat-num" id="st-scr">—</div><div class="stat-lbl">Screening</div><div class="stat-sub">sesi dilakukan</div></div>
+    <div class="stat-c"><div class="stat-ic" style="background:linear-gradient(135deg,#fde8e8,#fca5a5);color:#b91c1c;">😊</div><div class="stat-num" id="st-mood">—</div><div class="stat-lbl">Log Mood</div><div class="stat-sub">catatan tersimpan</div></div>
   </div>
 
-  <!-- FILTER PERIODE -->
-  <div class="filter-bar">
-    <span class="filter-label">Periode:</span>
-    <button class="filter-btn active" onclick="setPeriode(this,'minggu')">Minggu Ini</button>
-    <button class="filter-btn" onclick="setPeriode(this,'bulan')">Bulan Ini</button>
-    <button class="filter-btn" onclick="setPeriode(this,'3bulan')">3 Bulan</button>
-    <button class="filter-btn" onclick="setPeriode(this,'semua')">Semua</button>
-  </div>
-
-  <!-- SUMMARY -->
-  <div class="summary-grid">
-    <div class="summary-card">
-      <div class="summary-icon green"><i class="ti ti-rosette"></i></div>
-      <div class="summary-num" id="sum-dzikir">248</div>
-      <div class="summary-label">Total Dzikir</div>
-      <div class="summary-trend trend-up"><i class="ti ti-trending-up" style="font-size:12px;"></i> +12% minggu ini</div>
-    </div>
-    <div class="summary-card">
-      <div class="summary-icon gold"><i class="ti ti-heart-rate-monitor"></i></div>
-      <div class="summary-num" id="sum-stres">42</div>
-      <div class="summary-label">Skor Stres Terakhir</div>
-      <div class="summary-trend trend-down"><i class="ti ti-trending-down" style="font-size:12px;"></i> -8 dari sebelumnya</div>
-    </div>
-    <div class="summary-card">
-      <div class="summary-icon blue"><i class="ti ti-brain"></i></div>
-      <div class="summary-num" id="sum-efikasi">78%</div>
-      <div class="summary-label">Self-Efikasi Terakhir</div>
-      <div class="summary-trend trend-up"><i class="ti ti-trending-up" style="font-size:12px;"></i> +5% dari sebelumnya</div>
-    </div>
-    <div class="summary-card">
-      <div class="summary-icon red"><i class="ti ti-droplet"></i></div>
-      <div class="summary-num" id="sum-hd">12</div>
-      <div class="summary-label">Sesi HD Selesai</div>
-      <div class="summary-trend trend-same"><i class="ti ti-minus" style="font-size:12px;"></i> Konsisten 2x/minggu</div>
-    </div>
-  </div>
-
-  <!-- GRAFIK STRES & EFIKASI -->
-  <div class="grid-2">
+  <div class="g2">
     <div class="card">
-      <div class="card-title"><i class="ti ti-heart-rate-monitor"></i> Grafik Skor Stres (DASS-21)</div>
-      <div class="chart-wrap"><canvas id="chartStres"></canvas></div>
+      <div class="ct"><i class="ti ti-chart-bar"></i> Dzikir 7 Hari Terakhir</div>
+      <div class="bar-wrap" id="dz-bar-chart"></div>
     </div>
     <div class="card">
-      <div class="card-title"><i class="ti ti-brain"></i> Grafik Self-Efikasi (GSE)</div>
-      <div class="chart-wrap"><canvas id="chartEfikasi"></canvas></div>
+      <div class="ct"><i class="ti ti-mood-smile"></i> Distribusi Mood</div>
+      <div class="pie-wrap" id="mood-dist"></div>
     </div>
   </div>
 
-  <!-- GRAFIK DZIKIR -->
-  <div class="card">
-    <div class="card-title"><i class="ti ti-rosette"></i> Grafik Dzikir Mingguan</div>
-    <div class="chart-wrap"><canvas id="chartDzikir" style="max-height:180px;"></canvas></div>
-  </div>
-
-  <!-- RIWAYAT SKRINING + PROGRESS -->
-  <div class="grid-2">
-    <!-- RIWAYAT SKRINING -->
+  <div class="g2">
     <div class="card">
-      <div class="card-title"><i class="ti ti-history"></i> Riwayat Skrining Stres</div>
-      <table class="riwayat-table">
-        <thead><tr>
-          <th>Tanggal</th>
-          <th>Skor</th>
-          <th>Kategori</th>
-        </tr></thead>
-        <tbody id="tabel-riwayat-stres"></tbody>
-      </table>
+      <div class="ct"><i class="ti ti-heart-rate-monitor"></i> Tren Stres (DASS-21)</div>
+      <div id="stres-trend"><div style="font-size:12px;color:#b0b0b0;text-align:center;padding:20px;">Belum ada data screening</div></div>
     </div>
-
-    <!-- PROGRESS IBADAH -->
     <div class="card">
-      <div class="card-title"><i class="ti ti-chart-pie"></i> Progress Mingguan</div>
-
-      <div style="margin-bottom:14px;">
-        <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px;">
-          <span style="font-weight:600;color:var(--hijau-tua);">Target Dzikir Harian</span>
-          <span style="color:var(--hijau-mid);font-weight:700;" id="prog-dzikir-txt">83%</span>
-        </div>
-        <div class="prog-bar"><div class="prog-fill prog-green" id="prog-dzikir" style="width:83%"></div></div>
-        <div style="font-size:11px;color:var(--text-mid);margin-top:3px;">248 dari 300x target</div>
-      </div>
-
-      <div style="margin-bottom:14px;">
-        <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px;">
-          <span style="font-weight:600;color:var(--hijau-tua);">Penurunan Stres</span>
-          <span style="color:var(--emas);font-weight:700;">↓ 16%</span>
-        </div>
-        <div class="prog-bar"><div class="prog-fill prog-gold" style="width:16%"></div></div>
-        <div style="font-size:11px;color:var(--text-mid);margin-top:3px;">Dari skor 50 → 42</div>
-      </div>
-
-      <div style="margin-bottom:14px;">
-        <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px;">
-          <span style="font-weight:600;color:var(--hijau-tua);">Peningkatan Self-Efikasi</span>
-          <span style="color:#3b82f6;font-weight:700;">↑ 5%</span>
-        </div>
-        <div class="prog-bar"><div class="prog-fill prog-blue" style="width:78%"></div></div>
-        <div style="font-size:11px;color:var(--text-mid);margin-top:3px;">Dari 73% → 78%</div>
-      </div>
-
-      <div>
-        <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px;">
-          <span style="font-weight:600;color:var(--hijau-tua);">Kepatuhan Sesi HD</span>
-          <span style="color:var(--hijau-mid);font-weight:700;">100%</span>
-        </div>
-        <div class="prog-bar"><div class="prog-fill prog-green" style="width:100%"></div></div>
-        <div style="font-size:11px;color:var(--text-mid);margin-top:3px;">12 dari 12 sesi terjadwal</div>
-      </div>
+      <div class="ct"><i class="ti ti-brain"></i> Tren Self-Efikasi</div>
+      <div id="efikasi-trend"><div style="font-size:12px;color:#b0b0b0;text-align:center;padding:20px;">Belum ada data</div></div>
     </div>
   </div>
 
-  <!-- MOTIVASI -->
-  <div class="motivasi-box">
-    <div class="motivasi-emas"></div>
-    <div style="font-size:10px;font-weight:700;color:var(--emas-terang);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">✦ Motivasi untuk <span id="motivasi-nama">Anda</span></div>
-    <div style="font-family:'Amiri',serif;font-size:18px;color:#d8f3dc;line-height:1.6;" id="motivasi-text"></div>
-    <div style="font-size:11px;color:#74c69d;margin-top:8px;" id="motivasi-src"></div>
+  <div class="card" style="background:linear-gradient(135deg,var(--g1),var(--g2));">
+    <div style="height:1.5px;background:linear-gradient(90deg,transparent,var(--emas),transparent);margin-bottom:14px;"></div>
+    <div style="font-size:11px;font-weight:700;color:var(--emas2);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;">🏆 Pencapaian Spiritual Anda</div>
+    <div id="achievements" style="display:flex;gap:10px;flex-wrap:wrap;"></div>
   </div>
 </main>
 
-<script>
-const MOTIVASI = [
-  {text:'Sesungguhnya bersama kesulitan ada kemudahan.',src:'QS. Al-Insyirah: 6'},
-  {text:'Allah tidak membebani seseorang melainkan sesuai dengan kesanggupannya.',src:'QS. Al-Baqarah: 286'},
-  {text:'Ingatlah, hanya dengan mengingat Allah hati menjadi tenteram.',src:'QS. Ar-Ra\'d: 28'},
-  {text:'Sakit yang menimpa seorang muslim, Allah jadikan sebagai penghapus dosa-dosanya.',src:'HR. Bukhari & Muslim'},
-];
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, getDoc, collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const RIWAYAT_STRES = [
-  {tgl:'2 Jun 2025', skor:50, kat:'Sedang', cls:'sedang'},
-  {tgl:'9 Jun 2025', skor:46, kat:'Sedang', cls:'sedang'},
-  {tgl:'16 Jun 2025', skor:42, kat:'Sedang', cls:'sedang'},
-  {tgl:'23 Jun 2025', skor:36, kat:'Ringan', cls:'ringan'},
-  {tgl:'30 Jun 2025', skor:28, kat:'Ringan', cls:'ringan'},
-];
+const firebaseConfig={apiKey:"GANTI_API_KEY",authDomain:"GANTI_PROJECT.firebaseapp.com",projectId:"GANTI_PROJECT_ID",storageBucket:"GANTI_PROJECT.appspot.com",messagingSenderId:"GANTI_SENDER_ID",appId:"GANTI_APP_ID"};
+const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
+let uid;
 
-window.onload = () => {
-  // Ambil data pengguna
-  const nama = localStorage.getItem('dzikircare_user') || 'Pengguna';
-  const userdata = JSON.parse(localStorage.getItem('dzikircare_userdata') || '{}');
-  const namaLengkap = userdata.nama || nama;
+onAuthStateChanged(auth,async user=>{
+  if(!user){window.location.href='login.html';return;}
+  uid=user.uid;
+  const snap=await getDoc(doc(db,'users',uid));
+  if(!snap.exists()){window.location.href='login.html';return;}
+  const p=snap.data();const nm=p.namaDepan||p.namaLengkap?.split(' ')[0]||'Pasien';
+  document.getElementById('s-nm').textContent=nm;document.getElementById('s-av').textContent=nm.charAt(0).toUpperCase();
+  document.getElementById('ps-sub').textContent=`Perjalanan spiritual ${nm} dalam DzikirCare HD`;
+  // Stat utama
+  document.getElementById('st-dz').textContent=(p.totalDzikir||0).toLocaleString('id-ID');
+  document.getElementById('st-streak').textContent=p.streakHari||0;
+  await loadAllStats(uid);
+  document.getElementById('ag').style.display='none';document.getElementById('main').style.display='block';
+});
 
-  // Update UI nama
-  document.getElementById('sidebar-name').textContent = nama;
-  document.getElementById('sidebar-avatar').textContent = nama.charAt(0).toUpperCase();
-  document.getElementById('user-greeting').textContent = `Laporan perkembangan ${namaLengkap} — DzikirCare HD`;
-  document.getElementById('motivasi-nama').textContent = namaLengkap;
+async function loadAllStats(uid){
+  // Dzikir 7 hari
+  const days7=[];const today=new Date();
+  for(let i=6;i>=0;i--){const d=new Date(today);d.setDate(d.getDate()-i);days7.push(d.toISOString().split('T')[0]);}
+  const dzData=await Promise.all(days7.map(async dt=>{try{const s=await getDoc(doc(db,'users',uid,'daily',dt));return s.exists()?s.data().dzikirTotal||0:0;}catch{return 0;}}));
+  renderDzChart(days7,dzData);
 
-  // Motivasi random
-  const m = MOTIVASI[Math.floor(Math.random()*MOTIVASI.length)];
-  document.getElementById('motivasi-text').textContent = `"${m.text}"`;
-  document.getElementById('motivasi-src').textContent = `— ${m.src}`;
+  // Mood
+  const moodQ=query(collection(db,'users',uid,'moods'),orderBy('createdAt','desc'),limit(30));
+  const moodSnap=await getDocs(moodQ);
+  document.getElementById('st-mood').textContent=moodSnap.size;
+  renderMoodDist(moodSnap.docs.map(d=>d.data().moodVal||3));
 
-  renderRiwayatStres();
-  renderCharts();
-};
+  // Screening
+  const scrQ=query(collection(db,'users',uid,'screening'),orderBy('createdAt','desc'),limit(10));
+  const scrSnap=await getDocs(scrQ);
+  document.getElementById('st-scr').textContent=scrSnap.size;
+  renderTrend('stres-trend',scrSnap.docs.map(d=>{const r=d.data();const dt=r.createdAt?.toDate();return {tgl:dt?dt.toLocaleDateString('id-ID',{day:'numeric',month:'short'}):'—',val:r.sS||0,kat:r.kS?.k||'—',katC:r.kS?.c||'n'};}));
 
-function renderRiwayatStres(){
-  const tbody = document.getElementById('tabel-riwayat-stres');
-  tbody.innerHTML = RIWAYAT_STRES.map(r => `
-    <tr>
-      <td style="color:var(--text-mid);">${r.tgl}</td>
-      <td style="font-weight:700;color:var(--hijau-tua);">${r.skor}</td>
-      <td><span class="badge badge-${r.cls}">${r.kat}</span></td>
-    </tr>
-  `).join('');
+  // Efikasi
+  const efQ=query(collection(db,'users',uid,'selfefficacy'),orderBy('createdAt','desc'),limit(10));
+  const efSnap=await getDocs(efQ);
+  renderTrend('efikasi-trend',efSnap.docs.map(d=>{const r=d.data();const dt=r.createdAt?.toDate();return {tgl:dt?dt.toLocaleDateString('id-ID',{day:'numeric',month:'short'}):'—',val:(r.pct||0)+'%',kat:r.kat?.k||'—',katC:r.kat?.c||'r'};}),true);
+
+  // Achievements
+  renderAchievements({totalDzikir:parseInt(document.getElementById('st-dz').textContent.replace(/\./g,''))||0,streak:parseInt(document.getElementById('st-streak').textContent)||0,screenings:scrSnap.size,moods:moodSnap.size});
 }
 
-function renderCharts(){
-  const labels = ['2 Jun','9 Jun','16 Jun','23 Jun','30 Jun'];
-
-  // Chart Stres
-  new Chart(document.getElementById('chartStres'), {
-    type: 'line',
-    data: {
-      labels,
-      datasets: [{
-        label: 'Skor Stres',
-        data: [50, 46, 42, 36, 28],
-        borderColor: '#c9a84c',
-        backgroundColor: 'rgba(201,168,76,0.1)',
-        borderWidth: 2.5,
-        pointBackgroundColor: '#c9a84c',
-        pointRadius: 5,
-        tension: 0.4,
-        fill: true,
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {legend:{display:false}},
-      scales: {
-        y: {min:0, max:60, grid:{color:'rgba(0,0,0,0.05)'}, ticks:{font:{size:11}}},
-        x: {grid:{display:false}, ticks:{font:{size:11}}}
-      }
-    }
-  });
-
-  // Chart Self-Efikasi
-  new Chart(document.getElementById('chartEfikasi'), {
-    type: 'line',
-    data: {
-      labels,
-      datasets: [{
-        label: 'Self-Efikasi (%)',
-        data: [60, 65, 70, 73, 78],
-        borderColor: '#2e8b63',
-        backgroundColor: 'rgba(46,139,99,0.1)',
-        borderWidth: 2.5,
-        pointBackgroundColor: '#2e8b63',
-        pointRadius: 5,
-        tension: 0.4,
-        fill: true,
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {legend:{display:false}},
-      scales: {
-        y: {min:0, max:100, grid:{color:'rgba(0,0,0,0.05)'}, ticks:{font:{size:11}, callback: v => v+'%'}},
-        x: {grid:{display:false}, ticks:{font:{size:11}}}
-      }
-    }
-  });
-
-  // Chart Dzikir (Bar)
-  new Chart(document.getElementById('chartDzikir'), {
-    type: 'bar',
-    data: {
-      labels: ['Sen','Sel','Rab','Kam','Jum','Sab','Min'],
-      datasets: [{
-        label: 'Jumlah Dzikir',
-        data: [99, 120, 85, 110, 140, 95, 60],
-        backgroundColor: labels => {
-          const colors = ['rgba(46,139,99,0.7)','rgba(46,139,99,0.7)','rgba(46,139,99,0.5)','rgba(46,139,99,0.7)','rgba(46,139,99,0.9)','rgba(46,139,99,0.6)','rgba(46,139,99,0.4)'];
-          return colors;
-        },
-        borderRadius: 8,
-        borderSkipped: false,
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {legend:{display:false}},
-      scales: {
-        y: {min:0, max:160, grid:{color:'rgba(0,0,0,0.05)'}, ticks:{font:{size:11}}},
-        x: {grid:{display:false}, ticks:{font:{size:11}}}
-      }
-    }
-  });
+function renderDzChart(days,vals){
+  const max=Math.max(...vals,1);
+  const shortDays=['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
+  const el=document.getElementById('dz-bar-chart');
+  el.innerHTML=days.map((d,i)=>{
+    const h=Math.round(vals[i]/max*100);const day=new Date(d).getDay();
+    return `<div class="bar-col"><div class="bar-val">${vals[i]>0?vals[i]:''}</div><div class="bar" style="height:${h}%;background:${vals[i]>0?'linear-gradient(180deg,var(--g4),var(--g5))':'#e8f5e9'};"></div><div class="bar-day">${shortDays[day]}</div></div>`;
+  }).join('');
 }
 
-function setPeriode(el, periode){
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  el.classList.add('active');
-  // Di sini bisa diganti data sesuai periode
+function renderMoodDist(vals){
+  const count={5:0,4:0,3:0,2:0,1:0};vals.forEach(v=>count[v]=(count[v]||0)+1);
+  const total=vals.length||1;
+  const items=[{v:5,l:'Sangat Baik',c:'#2d6a4f'},{v:4,l:'Baik',c:'#40916c'},{v:3,l:'Biasa',c:'#74c69d'},{v:2,l:'Lelah',c:'#f4a261'},{v:1,l:'Berat',c:'#e76f51'}];
+  document.getElementById('mood-dist').innerHTML=items.map(i=>`<div class="pie-item"><div class="pie-dot" style="background:${i.c};"></div><div class="pie-lbl">${i.l}</div><div class="pie-val">${Math.round(count[i.v]/total*100)}%</div></div>`).join('');
 }
 
-function exportLaporan(){
-  const nama = localStorage.getItem('dzikircare_user') || 'Pengguna';
-  const userdata = JSON.parse(localStorage.getItem('dzikircare_userdata') || '{}');
-  const namaLengkap = userdata.nama || nama;
-  const tgl = new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
-
-  const isi = `LAPORAN PERKEMBANGAN DZIKIRCARE HD
-=====================================
-Nama Pasien : ${namaLengkap}
-Tanggal     : ${tgl}
-Jadwal HD   : ${userdata.jadwal || '-'}
-Rumah Sakit : ${userdata.rs || '-'}
-
-RINGKASAN
----------
-Total Dzikir     : 248x
-Skor Stres       : 42 (Sedang)
-Self-Efikasi     : 78%
-Sesi HD Selesai  : 12 sesi
-
-RIWAYAT SKRINING STRES (DASS-21)
----------------------------------
-2 Jun 2025  → Skor 50 (Sedang)
-9 Jun 2025  → Skor 46 (Sedang)
-16 Jun 2025 → Skor 42 (Sedang)
-23 Jun 2025 → Skor 36 (Ringan)
-30 Jun 2025 → Skor 28 (Ringan)
-
-CATATAN
--------
-Tren stres menunjukkan penurunan yang baik.
-Terus pertahankan dzikir rutin dan kepatuhan sesi HD.
-
------
-DzikirCare HD — Aplikasi Terapi Dzikir Pasien Hemodialisa`;
-
-  const blob = new Blob([isi], {type:'text/plain'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `Laporan_DzikirCareHD_${nama}_${tgl}.txt`;
-  a.click();
-  URL.revokeObjectURL(url);
+function renderTrend(elId,data,isPct=false){
+  const el=document.getElementById(elId);
+  if(!data.length){el.innerHTML='<div style="font-size:12px;color:#b0b0b0;text-align:center;padding:20px;">Belum ada data</div>';return;}
+  const bc={n:'bn',r:'br',s:'bs',b:'bb',sb:'bsb',st:'badge-st',t:'bn'};
+  el.innerHTML=data.map(d=>`<div class="trend-item"><div><div class="trend-tgl">${d.tgl}</div><span class="badge ${bc[d.katC]||'bn'}">${d.kat}</span></div><div class="trend-val">${d.val}</div></div>`).join('');
 }
+
+function renderAchievements({totalDzikir,streak,screenings,moods}){
+  const ach=[
+    {icon:'🌱',ttl:'Pemula Dzikir',desc:'Pertama kali dzikir',unlocked:totalDzikir>=1},
+    {icon:'📿',ttl:'100 Dzikir',desc:'Total 100 dzikir',unlocked:totalDzikir>=100},
+    {icon:'⭐',ttl:'1000 Dzikir',desc:'Total 1.000 dzikir',unlocked:totalDzikir>=1000},
+    {icon:'🏆',ttl:'10.000 Dzikir',desc:'Total 10.000 dzikir',unlocked:totalDzikir>=10000},
+    {icon:'🔥',ttl:'3 Hari Beruntun',desc:'Streak 3 hari',unlocked:streak>=3},
+    {icon:'💫',ttl:'7 Hari Beruntun',desc:'Streak 7 hari',unlocked:streak>=7},
+    {icon:'📋',ttl:'Screening Pertama',desc:'1 screening selesai',unlocked:screenings>=1},
+    {icon:'😊',ttl:'Rutin Catat Mood',desc:'10 log mood',unlocked:moods>=10},
+  ];
+  document.getElementById('achievements').innerHTML=ach.map(a=>`<div style="background:${a.unlocked?'rgba(255,255,255,.15)':'rgba(255,255,255,.05)'};border:1.5px solid ${a.unlocked?'var(--emas)':'rgba(255,255,255,.1)'};border-radius:12px;padding:10px 14px;text-align:center;min-width:90px;opacity:${a.unlocked?1:.4};"><div style="font-size:22px;margin-bottom:4px;">${a.icon}</div><div style="font-size:11px;font-weight:700;color:${a.unlocked?'var(--emas2)':'rgba(255,255,255,.5)'};">${a.ttl}</div><div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:2px;">${a.desc}</div></div>`).join('');
+}
+
+window.doLogout=async function(){await signOut(auth);sessionStorage.clear();window.location.href='login.html';};
 </script>
 </body>
 </html>
