@@ -1,406 +1,589 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Daftar Akun — DzikirCare HD</title>
-  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box;}
-    :root{
-      --hijau-tua:#0d3b2e;
-      --hijau-gelap:#1a5c45;
-      --hijau-mid:#2e8b63;
-      --hijau-soft:#3dab7a;
-      --hijau-terang:#5ec995;
-      --hijau-pucat:#e8f7f0;
-      --emas:#c9a84c;
-      --emas-terang:#e8c96b;
-      --emas-muda:#faf0d7;
-    }
-    body{
-      font-family:'Plus Jakarta Sans',sans-serif;
-      background:linear-gradient(135deg,#0d3b2e 0%,#1a5c45 50%,#2e8b63 100%);
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:20px;
-      position:relative;
-      overflow:hidden;
-    }
-    .bg-ornament{position:fixed;inset:0;pointer-events:none;}
-    .bg-ornament::before{content:'';position:absolute;width:500px;height:500px;border-radius:50%;border:1px solid rgba(201,168,76,0.07);top:-150px;right:-150px;}
-    .bg-ornament::after{content:'';position:absolute;width:350px;height:350px;border-radius:50%;border:1px solid rgba(201,168,76,0.05);bottom:-100px;left:-80px;}
-    .dot-pattern{position:absolute;width:100%;height:100%;background-image:radial-gradient(circle,rgba(201,168,76,0.05) 1px,transparent 1px);background-size:32px 32px;}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DzikirCare HD — Masuk / Daftar</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --g1:#0d3b2e;--g2:#1a5c45;--g3:#2e8b63;--g4:#52b788;
+  --emas:#c9a84c;--emas2:#e8c96b;--emas-bg:#faf0d7;
+  --err:#ef4444;--err-bg:#fef2f2;
+}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:linear-gradient(145deg,var(--g1) 0%,var(--g2) 50%,var(--g3) 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;overflow:hidden;}
 
-    .wrapper{position:relative;z-index:10;width:100%;max-width:460px;}
+/* ORNAMEN */
+.bg-o{position:fixed;inset:0;pointer-events:none;overflow:hidden;}
+.bg-o span{position:absolute;border-radius:50%;border:1px solid rgba(201,168,76,0.08);}
+.bg-o span:nth-child(1){width:700px;height:700px;top:-250px;right:-250px;}
+.bg-o span:nth-child(2){width:500px;height:500px;bottom:-200px;left:-150px;}
+.bg-o span:nth-child(3){width:250px;height:250px;top:40%;left:5%;}
+.dots{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(201,168,76,0.04) 1px,transparent 1px);background-size:28px 28px;}
 
-    /* STEPPER */
-    .stepper{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:20px;}
-    .step{display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(255,255,255,0.4);}
-    .step.active{color:#fff;font-weight:700;}
-    .step.done{color:var(--emas-terang);}
-    .step-dot{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,0.1);border:2px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;transition:all .3s;}
-    .step.active .step-dot{background:var(--emas);border-color:var(--emas);color:var(--hijau-tua);}
-    .step.done .step-dot{background:var(--hijau-soft);border-color:var(--hijau-soft);color:#fff;}
-    .step-line{width:40px;height:1px;background:rgba(255,255,255,0.15);margin:0 6px;}
-    .step.done + .step-line{background:var(--emas);opacity:.5;}
+/* LAYOUT 2 KOLOM */
+.page-wrap{position:relative;z-index:10;width:100%;max-width:940px;display:grid;grid-template-columns:1fr 1fr;border-radius:26px;overflow:hidden;box-shadow:0 28px 90px rgba(0,0,0,0.35);}
 
-    /* CARD */
-    .card{background:rgba(255,255,255,0.97);border-radius:24px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,0.3);}
+/* ===== KOLOM KIRI — FOTO ===== */
+.left-panel{position:relative;min-height:600px;background:linear-gradient(180deg,var(--g1),var(--g2));overflow:hidden;display:flex;flex-direction:column;}
 
-    .card-header{background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-gelap),var(--hijau-mid));padding:22px 28px 18px;position:relative;overflow:hidden;}
-    .card-header::before{content:'';position:absolute;right:-30px;top:-30px;width:120px;height:120px;border-radius:50%;background:rgba(201,168,76,0.07);}
-    .logo-row{display:flex;align-items:center;gap:10px;position:relative;z-index:1;}
-    .logo-icon{width:40px;height:40px;background:linear-gradient(135deg,var(--emas),var(--emas-terang));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 3px 12px rgba(201,168,76,0.4);}
-    .logo-txt .t1{font-family:'Amiri',serif;font-size:20px;color:#fff;font-weight:700;line-height:1;}
-    .logo-txt .t2{font-size:10px;color:var(--emas-terang);letter-spacing:.08em;opacity:.8;}
-    .emas-line{height:1.5px;background:linear-gradient(90deg,transparent,var(--emas),transparent);margin-top:14px;position:relative;z-index:1;}
+/* Area foto — klik untuk upload */
+.photo-area{flex:1;position:relative;cursor:pointer;overflow:hidden;}
+.photo-area img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s;}
+.photo-area:hover img{transform:scale(1.03);}
+.photo-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;min-height:340px;}
+.ph-ic{width:70px;height:70px;border-radius:50%;border:2px dashed rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-size:28px;}
+.ph-t{font-size:13px;color:rgba(255,255,255,.55);text-align:center;line-height:1.6;}
+.ph-btn{padding:9px 20px;border-radius:99px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);color:rgba(255,255,255,.8);font-size:12px;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s;}
+.ph-btn:hover{background:rgba(255,255,255,.2);}
+/* Overlay edit foto */
+.photo-overlay{position:absolute;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;flex-direction:column;gap:10px;}
+.photo-area:hover .photo-overlay{display:flex;}
+.photo-overlay span{color:#fff;font-size:13px;font-weight:600;}
+.photo-overlay .ov-ic{font-size:28px;}
+/* Hidden file input */
+#foto-input{display:none;}
 
-    .card-body{padding:24px 28px 20px;}
+/* Gradient bottom overlay di atas foto */
+.left-gradient{position:absolute;bottom:0;left:0;right:0;height:200px;background:linear-gradient(to top,var(--g1),transparent);pointer-events:none;}
 
-    /* STEP PAGES */
-    .step-page{display:none;}
-    .step-page.active{display:block;animation:fadeIn .35s ease;}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+/* Teks bawah panel kiri */
+.left-bottom{padding:22px 24px;position:relative;z-index:2;}
+.emas-line-h{height:1.5px;background:linear-gradient(90deg,transparent,var(--emas),transparent);margin-bottom:16px;}
+.left-quote{font-family:'Amiri',serif;font-size:19px;color:#d8f3dc;line-height:1.7;margin-bottom:6px;}
+.left-src{font-size:11px;color:var(--emas2);opacity:.8;}
+.left-tags{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
+.left-tag{background:rgba(255,255,255,.1);border-radius:8px;padding:4px 12px;font-size:11px;color:rgba(255,255,255,.7);}
+.left-tag.gold{background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.3);color:var(--emas2);}
 
-    .step-title{font-size:16px;font-weight:700;color:var(--hijau-tua);margin-bottom:4px;}
-    .step-sub{font-size:12px;color:#888;margin-bottom:20px;}
+/* ===== KOLOM KANAN — FORM ===== */
+.right-panel{background:rgba(255,255,255,0.97);display:flex;flex-direction:column;overflow-y:auto;max-height:90vh;}
+.card-head{background:linear-gradient(135deg,var(--g1),var(--g2),var(--g3));padding:18px 24px 14px;position:relative;overflow:hidden;flex-shrink:0;}
+.card-head::before{content:'';position:absolute;right:-40px;top:-40px;width:140px;height:140px;border-radius:50%;background:rgba(201,168,76,0.07);}
+.logo-row{display:flex;align-items:center;gap:10px;position:relative;z-index:1;}
+.logo-ic{width:38px;height:38px;background:linear-gradient(135deg,var(--emas),var(--emas2));border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 3px 10px rgba(201,168,76,0.4);}
+.logo-txt .n1{font-family:'Amiri',serif;font-size:19px;color:#fff;font-weight:700;line-height:1.1;}
+.logo-txt .n2{font-size:10px;color:var(--emas2);letter-spacing:.08em;opacity:.8;}
+.emas-line{height:1.5px;background:linear-gradient(90deg,transparent,var(--emas),transparent);margin-top:12px;position:relative;z-index:1;}
 
-    /* FORM */
-    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-    .form-group{margin-bottom:0;}
-    .form-group.full{grid-column:1/-1;}
-    .form-label{font-size:11px;font-weight:700;color:var(--hijau-gelap);margin-bottom:5px;display:block;text-transform:uppercase;letter-spacing:.04em;}
-    .form-input{width:100%;padding:10px 14px;border:1.5px solid #e0ede5;border-radius:10px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--hijau-tua);outline:none;transition:all .2s;background:#fafff8;}
-    .form-input:focus{border-color:var(--hijau-soft);box-shadow:0 0 0 3px rgba(46,139,99,0.1);}
-    select.form-input{cursor:pointer;}
-    .form-input.error{border-color:#f87171;background:#fff5f5;}
-    .err-msg{font-size:11px;color:#ef4444;margin-top:4px;display:none;}
+/* TAB */
+.tab-bar{display:flex;background:rgba(255,255,255,0.08);border-radius:10px;padding:4px;margin:14px 24px 0;gap:4px;}
+.tab{flex:1;padding:8px;text-align:center;font-size:12.5px;font-weight:600;color:rgba(255,255,255,0.5);border-radius:8px;cursor:pointer;transition:all .2s;}
+.tab.active{background:#fff;color:var(--g1);}
 
-    /* PASSWORD */
-    .pw-wrap{position:relative;}
-    .pw-wrap .form-input{padding-right:40px;}
-    .pw-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:16px;color:#bbb;background:none;border:none;}
+.card-body{padding:18px 24px 22px;flex:1;}
 
-    /* SYARAT */
-    .syarat-box{background:var(--hijau-pucat);border:1px solid #b7e4c7;border-radius:12px;padding:14px 16px;margin-bottom:16px;}
-    .syarat-title{font-size:12px;font-weight:700;color:var(--hijau-tua);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
-    .syarat-item{font-size:11.5px;color:#52796f;display:flex;align-items:flex-start;gap:6px;margin-bottom:5px;line-height:1.4;}
-    .syarat-item:last-child{margin-bottom:0;}
-    .syarat-icon{color:var(--hijau-soft);font-size:13px;flex-shrink:0;margin-top:1px;}
+/* STEPPER */
+.stepper{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:16px;}
+.st{display:flex;align-items:center;gap:5px;font-size:11px;color:rgba(0,0,0,0.35);}
+.st.active{color:var(--g1);font-weight:700;}
+.st.done{color:var(--g3);}
+.st-dot{width:22px;height:22px;border-radius:50%;background:#e8f5e9;border:2px solid #c8e6c9;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;transition:all .25s;}
+.st.active .st-dot{background:var(--emas);border-color:var(--emas);color:var(--g1);}
+.st.done .st-dot{background:var(--g3);border-color:var(--g3);color:#fff;}
+.st-line{width:28px;height:1px;background:#e0e0e0;}
+.prog-bar{height:3px;background:#e8f5e9;border-radius:99px;margin-bottom:16px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--emas),var(--emas2));border-radius:99px;transition:width .4s;}
 
-    /* CHECKBOX */
-    .checkbox-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:14px;}
-    .checkbox-row input[type=checkbox]{width:16px;height:16px;accent-color:var(--hijau-mid);flex-shrink:0;margin-top:2px;cursor:pointer;}
-    .checkbox-label{font-size:12px;color:#555;line-height:1.5;}
-    .checkbox-label a{color:var(--hijau-mid);text-decoration:none;font-weight:600;}
+/* FORM */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.fg{margin-bottom:12px;}
+.fg.full{grid-column:1/-1;}
+.fl{font-size:11px;font-weight:700;color:var(--g2);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em;}
+.fi{width:100%;padding:9px 12px;border:1.5px solid #e0ede5;border-radius:9px;font-size:12.5px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--g1);outline:none;transition:border-color .2s,box-shadow .2s;background:#fafff8;}
+.fi:focus{border-color:var(--g3);box-shadow:0 0 0 3px rgba(46,139,99,0.1);}
+.fi.err{border-color:var(--err);background:var(--err-bg);}
+.err-msg{font-size:11px;color:var(--err);margin-top:3px;display:none;}
+.pw-wrap{position:relative;}
+.pw-wrap .fi{padding-right:36px;}
+.pw-eye{position:absolute;right:10px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:14px;background:none;border:none;color:#bbb;}
 
-    /* TOMBOL */
-    .btn-next{width:100%;padding:13px;background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-mid));color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
-    .btn-next:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(13,59,46,0.3);}
-    .btn-back{width:100%;padding:11px;background:transparent;color:#888;border:1.5px solid #e0e0e0;border-radius:12px;font-size:13px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;margin-top:8px;transition:all .2s;}
-    .btn-back:hover{border-color:#b7e4c7;color:var(--hijau-mid);}
+/* INFO BOX */
+.info-box{background:#e8f7f0;border:1px solid #b7e4c7;border-radius:10px;padding:10px 12px;margin-bottom:12px;font-size:11.5px;color:#2d6a4f;line-height:1.6;}
+/* CHECKBOX */
+.ck-row{display:flex;align-items:flex-start;gap:8px;margin-bottom:12px;}
+.ck-row input{width:15px;height:15px;accent-color:var(--g3);flex-shrink:0;margin-top:2px;}
+.ck-row label{font-size:11.5px;color:#555;line-height:1.5;}
+.ck-row a{color:var(--g3);text-decoration:none;font-weight:600;}
 
-    /* SUCCESS */
-    .success-wrap{text-align:center;padding:10px 0;}
-    .success-icon{width:70px;height:70px;background:linear-gradient(135deg,var(--hijau-tua),var(--hijau-mid));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 16px;}
-    .success-title{font-family:'Amiri',serif;font-size:22px;font-weight:700;color:var(--hijau-tua);margin-bottom:6px;}
-    .success-desc{font-size:13px;color:#666;line-height:1.6;margin-bottom:20px;}
+/* TOMBOL */
+.btn-primary{width:100%;padding:11px;background:linear-gradient(135deg,var(--g1),var(--g3));color:#fff;border:none;border-radius:10px;font-size:13.5px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(13,59,46,.28);}
+.btn-primary:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+.btn-sec{width:100%;padding:9px;background:transparent;color:#888;border:1.5px solid #e0e0e0;border-radius:10px;font-size:12.5px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;margin-top:7px;transition:all .2s;}
+.btn-sec:hover{border-color:#b7e4c7;color:var(--g3);}
 
-    /* LOGIN LINK */
-    .login-link{text-align:center;font-size:12px;color:rgba(255,255,255,0.5);margin-top:14px;}
-    .login-link a{color:var(--emas-terang);font-weight:600;text-decoration:none;}
-    .login-link a:hover{text-decoration:underline;}
+/* SPINNER */
+.spin{width:15px;height:15px;border:2px solid rgba(255,255,255,0.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:none;}
+@keyframes spin{to{transform:rotate(360deg);}}
 
-    /* PROGRESS BAR STEP */
-    .step-progress{height:3px;background:rgba(255,255,255,0.1);margin-bottom:20px;border-radius:99px;overflow:hidden;}
-    .step-progress-fill{height:100%;background:linear-gradient(90deg,var(--emas),var(--emas-terang));border-radius:99px;transition:width .4s ease;}
-  </style>
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#1a3a1a;color:#fff;padding:11px 22px;border-radius:99px;font-size:13px;font-weight:600;z-index:999;opacity:0;transition:all .35s;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.err{background:#7f1d1d;}
+
+/* PAGE SWITCH */
+.page{display:none;}
+.page.active{display:block;}
+.step-page{display:none;animation:fadeUp .3s ease;}
+.step-page.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+/* SUKSES */
+.suk-icon{width:56px;height:56px;background:linear-gradient(135deg,var(--g1),var(--g3));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 12px;}
+
+/* RESPONSIVE */
+@media(max-width:700px){
+  .page-wrap{grid-template-columns:1fr;max-width:440px;}
+  .left-panel{min-height:220px;}
+  .photo-placeholder{min-height:180px;}
+  .right-panel{max-height:none;}
+}
+</style>
 </head>
 <body>
-<div class="bg-ornament"><div class="dot-pattern"></div></div>
+<div class="bg-o"><span></span><span></span><span></span><div class="dots"></div></div>
+<div class="toast" id="toast"></div>
 
-<div class="wrapper">
-  <!-- STEPPER -->
-  <div class="stepper" id="stepper-ui">
-    <div class="step active" id="st1"><div class="step-dot">1</div><span>Data Diri</span></div>
-    <div class="step-line"></div>
-    <div class="step" id="st2"><div class="step-dot">2</div><span>Akun</span></div>
-    <div class="step-line"></div>
-    <div class="step" id="st3"><div class="step-dot">3</div><span>Selesai</span></div>
+<div class="page-wrap">
+
+  <!-- ===== KIRI: PANEL FOTO ===== -->
+  <div class="left-panel">
+    <div class="photo-area" onclick="document.getElementById('foto-input').click()">
+      <!-- Placeholder sebelum ada foto -->
+      <div class="photo-placeholder" id="photo-placeholder">
+        <div class="ph-ic">🖼️</div>
+        <div class="ph-t">Tambahkan foto pasien<br>atau gambar motivasi di sini</div>
+        <button class="ph-btn" type="button">📷 Pilih Foto</button>
+      </div>
+      <!-- Foto setelah dipilih -->
+      <img id="foto-preview" src="" alt="Foto Pasien" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+      <!-- Overlay saat hover foto -->
+      <div class="photo-overlay" id="photo-overlay" style="display:none;">
+        <div class="ov-ic">📷</div>
+        <span>Ganti Foto</span>
+      </div>
+    </div>
+    <input type="file" id="foto-input" accept="image/*" onchange="gantiPhoto(this)">
+
+    <!-- Tombol hapus foto (muncul kalau ada foto) -->
+    <div id="hapus-foto-wrap" style="display:none;padding:8px 20px 0;position:relative;z-index:2;">
+      <button onclick="hapusFoto()" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:8px;color:rgba(255,255,255,.6);font-size:11.5px;padding:6px 14px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;">✕ Hapus Foto</button>
+    </div>
+
+    <div class="left-gradient"></div>
+    <div class="left-bottom">
+      <div class="emas-line-h"></div>
+      <div class="left-quote">وَإِذَا مَرِضْتُ فَهُوَ يَشْفِينِ</div>
+      <div class="left-src">"Dan apabila aku sakit, Dialah yang menyembuhkanku." — QS. Asy-Syu'ara: 80</div>
+      <div class="left-tags">
+        <span class="left-tag">💧 Hemodialisa</span>
+        <span class="left-tag">📿 Dzikir</span>
+        <span class="left-tag gold">✨ DzikirCare HD</span>
+      </div>
+    </div>
   </div>
 
-  <div class="card">
-    <div class="card-header">
+  <!-- ===== KANAN: FORM LOGIN/REGISTER ===== -->
+  <div class="right-panel">
+    <div class="card-head">
       <div class="logo-row">
-        <div class="logo-icon">☪</div>
+        <div class="logo-ic">☪</div>
         <div class="logo-txt">
-          <div class="t1">DzikirCare HD</div>
-          <div class="t2">DAFTAR AKUN BARU</div>
+          <div class="n1">DzikirCare HD</div>
+          <div class="n2" id="head-sub">MASUK KE AKUN ANDA</div>
         </div>
       </div>
       <div class="emas-line"></div>
     </div>
 
-    <div class="card-body">
-      <!-- Progress bar -->
-      <div class="step-progress"><div class="step-progress-fill" id="prog-fill" style="width:33%"></div></div>
-
-      <!-- ===== STEP 1: DATA DIRI ===== -->
-      <div class="step-page active" id="page-1">
-        <div class="step-title">Data Diri Pasien</div>
-        <div class="step-sub">Masukkan informasi dasar Anda sebagai pasien HD</div>
-        <div class="form-grid">
-          <div class="form-group full">
-            <label class="form-label">Nama Lengkap *</label>
-            <input type="text" class="form-input" id="reg-nama" placeholder="Contoh: Ahmad Fauzi">
-            <div class="err-msg" id="err-nama">Nama wajib diisi</div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Tanggal Lahir *</label>
-            <input type="date" class="form-input" id="reg-ttl">
-            <div class="err-msg" id="err-ttl">Tanggal lahir wajib diisi</div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Jenis Kelamin *</label>
-            <select class="form-input" id="reg-jk">
-              <option value="">-- Pilih --</option>
-              <option value="L">Laki-laki</option>
-              <option value="P">Perempuan</option>
-            </select>
-            <div class="err-msg" id="err-jk">Pilih jenis kelamin</div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">No. HP / WhatsApp *</label>
-            <input type="tel" class="form-input" id="reg-hp" placeholder="08xx-xxxx-xxxx">
-            <div class="err-msg" id="err-hp">No. HP wajib diisi</div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Jadwal Hemodialisa *</label>
-            <select class="form-input" id="reg-jadwal">
-              <option value="">-- Pilih --</option>
-              <option>Senin & Kamis</option>
-              <option>Selasa & Jumat</option>
-              <option>Rabu & Sabtu</option>
-              <option>Lainnya</option>
-            </select>
-            <div class="err-msg" id="err-jadwal">Pilih jadwal HD</div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Rumah Sakit HD *</label>
-            <input type="text" class="form-input" id="reg-rs" placeholder="Contoh: RSUD Wonosobo">
-            <div class="err-msg" id="err-rs">Nama RS wajib diisi</div>
-          </div>
-        </div>
-        <br>
-        <button class="btn-next" onclick="nextStep(1)">Lanjut — Buat Akun →</button>
-      </div>
-
-      <!-- ===== STEP 2: AKUN ===== -->
-      <div class="step-page" id="page-2">
-        <div class="step-title">Buat Akun Login</div>
-        <div class="step-sub">Username dan password untuk masuk ke DzikirCare HD</div>
-        <div class="form-grid">
-          <div class="form-group full">
-            <label class="form-label">Username *</label>
-            <input type="text" class="form-input" id="reg-user" placeholder="Contoh: ahmad123">
-            <div class="err-msg" id="err-user">Username wajib diisi (min. 4 karakter)</div>
-          </div>
-          <div class="form-group full">
-            <label class="form-label">Password *</label>
-            <div class="pw-wrap">
-              <input type="password" class="form-input" id="reg-pw" placeholder="Min. 6 karakter">
-              <button class="pw-toggle" onclick="togglePw('reg-pw',this)" type="button">👁</button>
-            </div>
-            <div class="err-msg" id="err-pw">Password min. 6 karakter</div>
-          </div>
-          <div class="form-group full">
-            <label class="form-label">Konfirmasi Password *</label>
-            <div class="pw-wrap">
-              <input type="password" class="form-input" id="reg-pw2" placeholder="Ulangi password">
-              <button class="pw-toggle" onclick="togglePw('reg-pw2',this)" type="button">👁</button>
-            </div>
-            <div class="err-msg" id="err-pw2">Password tidak cocok</div>
-          </div>
-        </div>
-
-        <br>
-        <div class="syarat-box">
-          <div class="syarat-title">🔒 Keamanan & Privasi</div>
-          <div class="syarat-item"><span class="syarat-icon">✓</span> Data Anda aman & hanya untuk kepentingan kesehatan</div>
-          <div class="syarat-item"><span class="syarat-icon">✓</span> Privasi terjamin sesuai regulasi kesehatan</div>
-          <div class="syarat-item"><span class="syarat-icon">✓</span> Data dienkripsi & tidak dibagikan pihak ketiga</div>
-        </div>
-
-        <div class="checkbox-row">
-          <input type="checkbox" id="reg-setuju">
-          <label class="checkbox-label" for="reg-setuju">Saya menyetujui <a href="#">Syarat & Ketentuan</a> dan <a href="#">Kebijakan Privasi</a> DzikirCare HD</label>
-        </div>
-
-        <button class="btn-next" onclick="nextStep(2)">✓ Daftarkan Akun Saya</button>
-        <button class="btn-back" onclick="backStep(2)">← Kembali</button>
-      </div>
-
-      <!-- ===== STEP 3: SUKSES ===== -->
-      <div class="step-page" id="page-3">
-        <div class="success-wrap">
-          <div class="success-icon">✓</div>
-          <div class="success-title">Pendaftaran Berhasil!</div>
-          <div class="success-desc">
-            Alhamdulillah, akun Anda telah berhasil dibuat.<br>
-            Selamat bergabung di <b>DzikirCare HD</b>.<br><br>
-            Lengkapi data diri Anda di halaman <b>Profil</b> setelah login.
-          </div>
-          <div style="background:var(--hijau-pucat);border-radius:12px;padding:14px 16px;margin-bottom:20px;text-align:left;">
-            <div style="font-size:11px;font-weight:700;color:var(--hijau-tua);margin-bottom:8px;">Info Akun Anda:</div>
-            <div style="font-size:13px;color:#333;display:flex;flex-direction:column;gap:4px;">
-              <span>👤 Nama: <b id="sukses-nama"></b></span>
-              <span>🔑 Username: <b id="sukses-user"></b></span>
-              <span>💧 Jadwal HD: <b id="sukses-jadwal"></b></span>
-              <span>🏥 RS: <b id="sukses-rs"></b></span>
-            </div>
-          </div>
-          <button class="btn-next" onclick="goLogin()">Masuk Sekarang →</button>
-        </div>
-      </div>
-
+    <!-- TAB -->
+    <div class="tab-bar" style="margin:12px 24px 0;">
+      <div class="tab active" id="tab-login" onclick="switchTab('login')">Masuk</div>
+      <div class="tab" id="tab-reg" onclick="switchTab('reg')">Daftar Akun</div>
     </div>
-  </div>
 
-  <div class="login-link">Sudah punya akun? <a href="index.html">Masuk di sini</a></div>
-</div>
+    <div class="card-body">
+
+      <!-- ===== HALAMAN LOGIN ===== -->
+      <div class="page active" id="page-login">
+        <div class="fg">
+          <label class="fl">Username</label>
+          <input class="fi" type="text" id="l-user" placeholder="Masukkan username Anda" autocomplete="username">
+          <div class="err-msg" id="l-user-err">Username wajib diisi</div>
+        </div>
+        <div class="fg">
+          <label class="fl">Password</label>
+          <div class="pw-wrap">
+            <input class="fi" type="password" id="l-pw" placeholder="Password Anda" autocomplete="current-password">
+            <button class="pw-eye" type="button" onclick="togglePw('l-pw')">👁</button>
+          </div>
+          <div class="err-msg" id="l-pw-err">Password min. 6 karakter</div>
+        </div>
+        <button class="btn-primary" id="btn-login" onclick="doLogin()">
+          <span class="spin" id="spin-login"></span>
+          <span>Masuk ke DzikirCare</span>
+        </button>
+        <div style="text-align:center;font-size:11.5px;color:#aaa;margin-top:12px;">
+          Belum punya akun? <a href="#" onclick="switchTab('reg')" style="color:var(--g3);font-weight:600;">Daftar di sini</a>
+        </div>
+      </div>
+
+      <!-- ===== HALAMAN REGISTER (3 STEP) ===== -->
+      <div class="page" id="page-reg">
+        <div class="stepper" id="reg-stepper">
+          <div class="st active" id="rst1"><div class="st-dot">1</div><span>Data Diri</span></div>
+          <div class="st-line"></div>
+          <div class="st" id="rst2"><div class="st-dot">2</div><span>Akun</span></div>
+          <div class="st-line"></div>
+          <div class="st" id="rst3"><div class="st-dot">3</div><span>Selesai</span></div>
+        </div>
+        <div class="prog-bar"><div class="prog-fill" id="reg-prog" style="width:33%"></div></div>
+
+        <!-- Step 1 -->
+        <div class="step-page active" id="rp1">
+          <div class="form-row">
+            <div class="fg full">
+              <label class="fl">Nama Lengkap *</label>
+              <input class="fi" type="text" id="r-nama" placeholder="Contoh: Ahmad Fauzi">
+              <div class="err-msg" id="r-nama-err">Nama min. 3 huruf</div>
+            </div>
+            <div class="fg">
+              <label class="fl">Tanggal Lahir *</label>
+              <input class="fi" type="date" id="r-ttl">
+              <div class="err-msg" id="r-ttl-err">Wajib diisi</div>
+            </div>
+            <div class="fg">
+              <label class="fl">Jenis Kelamin *</label>
+              <select class="fi" id="r-jk">
+                <option value="">— Pilih —</option>
+                <option value="L">Laki-laki</option>
+                <option value="P">Perempuan</option>
+              </select>
+              <div class="err-msg" id="r-jk-err">Pilih jenis kelamin</div>
+            </div>
+            <div class="fg">
+              <label class="fl">No. HP / WhatsApp *</label>
+              <input class="fi" type="tel" id="r-hp" placeholder="08xx-xxxx-xxxx">
+              <div class="err-msg" id="r-hp-err">No. HP tidak valid</div>
+            </div>
+            <div class="fg">
+              <label class="fl">Jadwal Hemodialisa *</label>
+              <select class="fi" id="r-jadwal">
+                <option value="">— Pilih —</option>
+                <option>Senin &amp; Kamis</option>
+                <option>Selasa &amp; Jumat</option>
+                <option>Rabu &amp; Sabtu</option>
+                <option>Lainnya</option>
+              </select>
+              <div class="err-msg" id="r-jadwal-err">Pilih jadwal HD</div>
+            </div>
+            <div class="fg">
+              <label class="fl">Rumah Sakit HD *</label>
+              <input class="fi" type="text" id="r-rs" placeholder="Contoh: RSUD Wonosobo">
+              <div class="err-msg" id="r-rs-err">Nama RS wajib diisi</div>
+            </div>
+          </div>
+          <button class="btn-primary" onclick="regNext(1)">Lanjut — Buat Akun →</button>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-page" id="rp2">
+          <div class="fg">
+            <label class="fl">Username *</label>
+            <input class="fi" type="text" id="r-user" placeholder="Contoh: ahmad123 (min. 4 karakter)" autocomplete="username">
+            <div class="err-msg" id="r-user-err">Username min. 4 karakter, hanya huruf/angka</div>
+          </div>
+          <div class="fg">
+            <label class="fl">Email (opsional)</label>
+            <input class="fi" type="email" id="r-email" placeholder="email@contoh.com" autocomplete="email">
+            <div class="err-msg" id="r-email-err">Format email tidak valid</div>
+          </div>
+          <div class="fg">
+            <label class="fl">Password *</label>
+            <div class="pw-wrap">
+              <input class="fi" type="password" id="r-pw" placeholder="Min. 6 karakter" autocomplete="new-password">
+              <button class="pw-eye" type="button" onclick="togglePw('r-pw')">👁</button>
+            </div>
+            <div class="err-msg" id="r-pw-err">Password min. 6 karakter</div>
+          </div>
+          <div class="fg">
+            <label class="fl">Konfirmasi Password *</label>
+            <div class="pw-wrap">
+              <input class="fi" type="password" id="r-pw2" placeholder="Ulangi password" autocomplete="new-password">
+              <button class="pw-eye" type="button" onclick="togglePw('r-pw2')">👁</button>
+            </div>
+            <div class="err-msg" id="r-pw2-err">Password tidak cocok</div>
+          </div>
+          <div class="info-box">🔒 <b>Data Anda aman.</b> Password dienkripsi Firebase Auth. Data hanya untuk kepentingan kesehatan.</div>
+          <div class="ck-row">
+            <input type="checkbox" id="r-setuju">
+            <label for="r-setuju">Saya menyetujui <a href="#">Syarat &amp; Ketentuan</a> dan <a href="#">Kebijakan Privasi</a> DzikirCare HD</label>
+          </div>
+          <button class="btn-primary" id="btn-reg" onclick="regNext(2)">
+            <span class="spin" id="spin-reg"></span>
+            <span>✓ Daftarkan Akun Saya</span>
+          </button>
+          <button class="btn-sec" onclick="regBack()">← Kembali</button>
+        </div>
+
+        <!-- Step 3: Sukses -->
+        <div class="step-page" id="rp3">
+          <div style="text-align:center;padding:6px 0;">
+            <div class="suk-icon">✓</div>
+            <div style="font-family:'Amiri',serif;font-size:20px;font-weight:700;color:var(--g1);margin-bottom:5px;">Pendaftaran Berhasil!</div>
+            <div style="font-size:12.5px;color:#666;line-height:1.7;margin-bottom:14px;">Alhamdulillah, akun Anda telah berhasil dibuat.<br>Selamat bergabung di <b>DzikirCare HD</b>.</div>
+            <div style="background:#e8f7f0;border-radius:11px;padding:12px;text-align:left;margin-bottom:16px;font-size:12.5px;color:#333;line-height:1.9;">
+              <span>👤 Nama: <b id="s-nama"></b></span><br>
+              <span>🔑 Username: <b id="s-user"></b></span><br>
+              <span>💧 Jadwal HD: <b id="s-jadwal"></b></span><br>
+              <span>🏥 RS: <b id="s-rs"></b></span>
+            </div>
+            <button class="btn-primary" onclick="goToDashboard()">Masuk ke Dashboard →</button>
+          </div>
+        </div>
+      </div><!-- /page-reg -->
+
+    </div><!-- /card-body -->
+  </div><!-- /right-panel -->
+
+</div><!-- /page-wrap -->
 
 <script>
-let currentStep = 1;
-let userData = {};
+// ── FOTO HANDLER (berjalan tanpa Firebase) ────────────────────
+window.gantiPhoto = function(input) {
+  if (!input.files || !input.files[0]) return;
+  const file = input.files[0];
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('foto-preview').src = e.target.result;
+    document.getElementById('foto-preview').style.display = 'block';
+    document.getElementById('photo-placeholder').style.display = 'none';
+    document.getElementById('photo-overlay').style.display = '';
+    document.getElementById('hapus-foto-wrap').style.display = 'block';
+    // Simpan ke localStorage agar tetap ada saat reload
+    try { localStorage.setItem('dc_foto', e.target.result); } catch {}
+  };
+  reader.readAsDataURL(file);
+};
 
-function nextStep(from) {
-  if(from === 1) {
-    // Validasi step 1
-    let valid = true;
-    const fields = [
-      {id:'reg-nama', err:'err-nama', min:2},
-      {id:'reg-ttl', err:'err-ttl'},
-      {id:'reg-jk', err:'err-jk'},
-      {id:'reg-hp', err:'err-hp', min:10},
-      {id:'reg-jadwal', err:'err-jadwal'},
-      {id:'reg-rs', err:'err-rs', min:3},
-    ];
-    fields.forEach(f => {
-      const el = document.getElementById(f.id);
-      const err = document.getElementById(f.err);
-      if(!el.value || (f.min && el.value.length < f.min)) {
-        el.classList.add('error');
-        err.style.display = 'block';
-        valid = false;
-      } else {
-        el.classList.remove('error');
-        err.style.display = 'none';
-      }
-    });
-    if(!valid) return;
+window.hapusFoto = function() {
+  document.getElementById('foto-preview').src = '';
+  document.getElementById('foto-preview').style.display = 'none';
+  document.getElementById('photo-placeholder').style.display = 'flex';
+  document.getElementById('photo-overlay').style.display = 'none';
+  document.getElementById('hapus-foto-wrap').style.display = 'none';
+  document.getElementById('foto-input').value = '';
+  try { localStorage.removeItem('dc_foto'); } catch {}
+};
 
-    userData.nama = document.getElementById('reg-nama').value.trim();
-    userData.ttl = document.getElementById('reg-ttl').value;
-    userData.jk = document.getElementById('reg-jk').value;
-    userData.hp = document.getElementById('reg-hp').value.trim();
-    userData.jadwal = document.getElementById('reg-jadwal').value;
-    userData.rs = document.getElementById('reg-rs').value.trim();
-    goToStep(2);
-
-  } else if(from === 2) {
-    // Validasi step 2
-    let valid = true;
-    const user = document.getElementById('reg-user').value.trim();
-    const pw = document.getElementById('reg-pw').value;
-    const pw2 = document.getElementById('reg-pw2').value;
-    const setuju = document.getElementById('reg-setuju').checked;
-
-    if(user.length < 4) {
-      document.getElementById('reg-user').classList.add('error');
-      document.getElementById('err-user').style.display = 'block';
-      valid = false;
-    } else {
-      document.getElementById('reg-user').classList.remove('error');
-      document.getElementById('err-user').style.display = 'none';
+// Muat foto yang sudah disimpan
+(function() {
+  try {
+    const saved = localStorage.getItem('dc_foto');
+    if (saved) {
+      document.getElementById('foto-preview').src = saved;
+      document.getElementById('foto-preview').style.display = 'block';
+      document.getElementById('photo-placeholder').style.display = 'none';
+      document.getElementById('photo-overlay').style.display = '';
+      document.getElementById('hapus-foto-wrap').style.display = 'block';
     }
-    if(pw.length < 6) {
-      document.getElementById('reg-pw').classList.add('error');
-      document.getElementById('err-pw').style.display = 'block';
-      valid = false;
-    } else {
-      document.getElementById('reg-pw').classList.remove('error');
-      document.getElementById('err-pw').style.display = 'none';
-    }
-    if(pw !== pw2) {
-      document.getElementById('reg-pw2').classList.add('error');
-      document.getElementById('err-pw2').style.display = 'block';
-      valid = false;
-    } else {
-      document.getElementById('reg-pw2').classList.remove('error');
-      document.getElementById('err-pw2').style.display = 'none';
-    }
-    if(!setuju) { alert('Harap centang persetujuan syarat & ketentuan.'); valid = false; }
-    if(!valid) return;
+  } catch {}
+})();
 
-    userData.username = user;
-    userData.password = pw;
-
-    // Simpan ke localStorage
-    localStorage.setItem('dzikircare_user', userData.nama.split(' ')[0]);
-    localStorage.setItem('dzikircare_userdata', JSON.stringify(userData));
-
-    // Tampilkan sukses
-    document.getElementById('sukses-nama').textContent = userData.nama;
-    document.getElementById('sukses-user').textContent = userData.username;
-    document.getElementById('sukses-jadwal').textContent = userData.jadwal;
-    document.getElementById('sukses-rs').textContent = userData.rs;
-
-    goToStep(3);
-  }
-}
-
-function backStep(from) {
-  if(from === 2) goToStep(1);
-}
-
-function goToStep(n) {
-  currentStep = n;
-  document.querySelectorAll('.step-page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-'+n).classList.add('active');
-
-  // Update stepper
-  for(let i=1;i<=3;i++){
-    const st = document.getElementById('st'+i);
-    st.classList.remove('active','done');
-    if(i < n) st.classList.add('done');
-    else if(i === n) st.classList.add('active');
-  }
-
-  // Update progress bar
-  const pcts = {1:'33%', 2:'66%', 3:'100%'};
-  document.getElementById('prog-fill').style.width = pcts[n];
-
-  window.scrollTo({top:0, behavior:'smooth'});
-}
-
-function goLogin() {
-  localStorage.setItem('dzikircare_login', 'true');
-  window.location.href = 'dashboard.html';
-}
-
-function togglePw(id, btn) {
+// ── TOGGLE PASSWORD ───────────────────────────────────────────
+window.togglePw = function(id) {
   const el = document.getElementById(id);
   el.type = el.type === 'password' ? 'text' : 'password';
+};
+
+// ── TAB SWITCH ────────────────────────────────────────────────
+window.switchTab = function(tab) {
+  document.getElementById('page-login').classList.toggle('active', tab === 'login');
+  document.getElementById('page-reg').classList.toggle('active', tab === 'reg');
+  document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+  document.getElementById('tab-reg').classList.toggle('active', tab === 'reg');
+  document.getElementById('head-sub').textContent = tab === 'login' ? 'MASUK KE AKUN ANDA' : 'DAFTAR AKUN BARU';
+};
+
+// ── TOAST ─────────────────────────────────────────────────────
+function toast(msg, isErr = false) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast' + (isErr ? ' err' : '') + ' show';
+  setTimeout(() => el.className = 'toast', 3000);
+}
+
+// ── LOADING ───────────────────────────────────────────────────
+function setLoading(btnId, spinId, on) {
+  document.getElementById(btnId).disabled = on;
+  document.getElementById(spinId).style.display = on ? 'block' : 'none';
+}
+
+// ── VALIDASI ──────────────────────────────────────────────────
+function validate(rules) {
+  let ok = true;
+  rules.forEach(({ id, errId, check, msg }) => {
+    const el = document.getElementById(id);
+    const err = document.getElementById(errId);
+    if (!check(el.value.trim(), el)) {
+      el.classList.add('err'); err.textContent = msg; err.style.display = 'block'; ok = false;
+    } else {
+      el.classList.remove('err'); err.style.display = 'none';
+    }
+  });
+  return ok;
+}
+
+// ── ENTER KEY LOGIN ────────────────────────────────────────────
+document.getElementById('l-pw').addEventListener('keydown', e => { if (e.key === 'Enter') window.doLogin(); });
+
+// ── REGISTER NAVIGASI ─────────────────────────────────────────
+window.regNext = function(step) {
+  if (step === 1) {
+    const ok = validate([
+      { id:'r-nama', errId:'r-nama-err', check: v => v.length >= 3, msg:'Nama min. 3 karakter' },
+      { id:'r-ttl',  errId:'r-ttl-err',  check: v => v !== '',       msg:'Tanggal lahir wajib diisi' },
+      { id:'r-jk',   errId:'r-jk-err',   check: v => v !== '',       msg:'Pilih jenis kelamin' },
+      { id:'r-hp',   errId:'r-hp-err',   check: v => /^0[0-9]{8,12}$/.test(v.replace(/[-\s]/g,'')), msg:'No. HP tidak valid' },
+      { id:'r-jadwal',errId:'r-jadwal-err',check:v=>v!=='',          msg:'Pilih jadwal HD' },
+      { id:'r-rs',   errId:'r-rs-err',   check: v => v.length >= 3, msg:'Nama RS min. 3 karakter' },
+    ]);
+    if (ok) goToRegStep(2);
+  } else if (step === 2) {
+    regSubmit();
+  }
+};
+window.regBack = function() { goToRegStep(1); };
+
+function goToRegStep(n) {
+  [1,2,3].forEach(i => {
+    document.getElementById('rp'+i).classList.toggle('active', i === n);
+    const st = document.getElementById('rst'+i);
+    st.classList.remove('active','done');
+    if (i < n) st.classList.add('done'); else if (i === n) st.classList.add('active');
+  });
+  document.getElementById('reg-prog').style.width = {1:'33%',2:'66%',3:'100%'}[n];
+}
+
+window.goToDashboard = function() { window.location.href = 'dashboard.html'; };
+</script>
+
+<script type="module">
+import { initializeApp }                              from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, setDoc, getDoc, query,
+         collection, where, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword,
+         createUserWithEmailAndPassword,
+         onAuthStateChanged }                          from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey:            "GANTI_API_KEY",
+  authDomain:        "GANTI_PROJECT.firebaseapp.com",
+  projectId:         "GANTI_PROJECT_ID",
+  storageBucket:     "GANTI_PROJECT.appspot.com",
+  messagingSenderId: "GANTI_SENDER_ID",
+  appId:             "GANTI_APP_ID"
+};
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+function toast(msg, isErr = false) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast' + (isErr ? ' err' : '') + ' show';
+  setTimeout(() => el.className = 'toast', 3000);
+}
+function setLoading(btnId, spinId, on) {
+  document.getElementById(btnId).disabled = on;
+  document.getElementById(spinId).style.display = on ? 'block' : 'none';
+}
+
+onAuthStateChanged(auth, user => {
+  if (user && sessionStorage.getItem('dc_profile')) window.location.href = 'dashboard.html';
+});
+
+// LOGIN
+window.doLogin = async function() {
+  const username = document.getElementById('l-user').value.trim();
+  const pw = document.getElementById('l-pw').value;
+  if (!username) { document.getElementById('l-user').classList.add('err'); document.getElementById('l-user-err').style.display='block'; return; }
+  if (pw.length < 6) { document.getElementById('l-pw').classList.add('err'); document.getElementById('l-pw-err').style.display='block'; return; }
+  setLoading('btn-login','spin-login',true);
+  try {
+    const q = query(collection(db,'users'), where('username','==',username));
+    const snap = await getDocs(q);
+    if (snap.empty) { toast('Username tidak ditemukan',true); return; }
+    const profile = snap.docs[0].data();
+    await signInWithEmailAndPassword(auth, profile.authEmail, pw);
+    sessionStorage.setItem('dc_profile', JSON.stringify({...profile, uid: snap.docs[0].id}));
+    toast('Selamat datang, ' + profile.namaDepan + '! 🌿');
+    setTimeout(() => window.location.href = 'dashboard.html', 900);
+  } catch(e) {
+    const msg = e.code==='auth/wrong-password'?'Password salah.':e.code==='auth/too-many-requests'?'Terlalu banyak percobaan. Coba lagi nanti.':'Login gagal. Periksa username & password.';
+    toast(msg, true);
+  } finally { setLoading('btn-login','spin-login',false); }
+};
+
+// REGISTER
+async function regSubmit() {
+  const pw  = document.getElementById('r-pw').value;
+  const pw2 = document.getElementById('r-pw2').value;
+  const email = document.getElementById('r-email').value.trim();
+  const user  = document.getElementById('r-user').value.trim();
+  const setuju = document.getElementById('r-setuju').checked;
+
+  let ok = true;
+  const rules = [
+    {id:'r-user',errId:'r-user-err',check:v=>/^[a-z0-9_]{4,}$/i.test(v),msg:'Username min. 4 karakter, hanya huruf/angka/_'},
+    {id:'r-email',errId:'r-email-err',check:v=>v===''||/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),msg:'Format email tidak valid'},
+    {id:'r-pw',errId:'r-pw-err',check:v=>v.length>=6,msg:'Password min. 6 karakter'},
+    {id:'r-pw2',errId:'r-pw2-err',check:()=>pw===pw2,msg:'Password tidak cocok'},
+  ];
+  rules.forEach(({id,errId,check,msg})=>{
+    const el=document.getElementById(id);const err=document.getElementById(errId);
+    if(!check(el.value.trim(),el)){el.classList.add('err');err.textContent=msg;err.style.display='block';ok=false;}
+    else{el.classList.remove('err');err.style.display='none';}
+  });
+  if (!ok) return;
+  if (!setuju) { toast('Harap centang persetujuan Syarat & Ketentuan', true); return; }
+
+  setLoading('btn-reg','spin-reg',true);
+  try {
+    const qU = query(collection(db,'users'), where('username','==',user));
+    const snapU = await getDocs(qU);
+    if (!snapU.empty) { document.getElementById('r-user').classList.add('err'); document.getElementById('r-user-err').textContent='Username sudah digunakan.'; document.getElementById('r-user-err').style.display='block'; return; }
+
+    const authEmail = email || `${user.toLowerCase()}@dzikircare.app`;
+    const cred = await createUserWithEmailAndPassword(auth, authEmail, pw);
+    const uid = cred.user.uid;
+    const nama = document.getElementById('r-nama').value.trim();
+    const profile = {uid,username:user,namaLengkap:nama,namaDepan:nama.split(' ')[0],authEmail,ttl:document.getElementById('r-ttl').value,jk:document.getElementById('r-jk').value,hp:document.getElementById('r-hp').value.trim(),jadwalHD:document.getElementById('r-jadwal').value,rumahSakit:document.getElementById('r-rs').value.trim(),createdAt:serverTimestamp(),lastLogin:serverTimestamp(),totalDzikir:0,streakHari:0,lastMood:null,lastScreening:null};
+    await setDoc(doc(db,'users',uid), profile);
+    sessionStorage.setItem('dc_profile', JSON.stringify({...profile,uid}));
+
+    document.getElementById('s-nama').textContent = nama;
+    document.getElementById('s-user').textContent = user;
+    document.getElementById('s-jadwal').textContent = document.getElementById('r-jadwal').value;
+    document.getElementById('s-rs').textContent = document.getElementById('r-rs').value.trim();
+    goToRegStep(3);
+  } catch(e) {
+    const msg = e.code==='auth/email-already-in-use'?'Username sudah terdaftar. Gunakan username lain.':e.code==='auth/weak-password'?'Password terlalu lemah.':'Pendaftaran gagal: '+e.message;
+    toast(msg, true);
+  } finally { setLoading('btn-reg','spin-reg',false); }
+}
+
+function goToRegStep(n) {
+  [1,2,3].forEach(i => {
+    document.getElementById('rp'+i).classList.toggle('active', i===n);
+    const st=document.getElementById('rst'+i);
+    st.classList.remove('active','done');
+    if(i<n)st.classList.add('done');else if(i===n)st.classList.add('active');
+  });
+  document.getElementById('reg-prog').style.width={1:'33%',2:'66%',3:'100%'}[n];
 }
 </script>
 </body>
 </html>
-HTMLEOF
-Keluaran
-exit code 0
-Selesai
-
-v
